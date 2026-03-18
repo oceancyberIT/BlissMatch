@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, ShieldCheck, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -45,55 +47,33 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-soft-ivory-white px-6">
-      {/* Subtle Background Watermark */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03] select-none">
-        <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-serif font-bold text-deep-midnight-navy">
+    <div className="relative flex min-h-screen items-center justify-center bg-soft-ivory-white px-6 font-sans">
+      {/* Subtle watermark */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.02] select-none">
+        <h2 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-serif font-bold text-deep-midnight-navy">
           Bliss
         </h2>
       </div>
 
-      <div className="relative w-full max-w-lg">
-        {/* Animated Border SVG */}
-        <div className="absolute -inset-4 pointer-events-none opacity-10">
-          <svg className="w-full h-full">
-            <rect
-              width="100%"
-              height="100%"
-              fill="none"
-              stroke="#1a2e4c"
-              strokeWidth="1"
-              strokeDasharray="60 200"
-              className="animate-border-trace"
-            />
-          </svg>
+      <div className="relative w-full max-w-sm">
+        {/* Top Branding Header */}
+        <div className="text-center mb-10 space-y-2">
+          <h1 className="text-3xl font-serif text-deep-midnight-navy tracking-tight">Admin Login</h1>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Enter your email and password.</p>
         </div>
 
-        <div className="bg-white p-10 md:p-16 shadow-2xl border border-stone-100">
-          <header className="text-center mb-10">
-            <span className="text-muted-burgundy-rose text-[10px] font-black uppercase tracking-[0.5em] mb-4 block">
-              Admin Gateway
-            </span>
-            <h1 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight">
-              The <span className="italic">Sanctuary</span> Console
-            </h1>
-            <div className="mt-4 flex justify-center items-center gap-2 text-stone-400">
-              <ShieldCheck size={14} className="text-muted-burgundy-rose" />
-              <p className="text-[11px] font-medium uppercase tracking-widest">
-                Secure Biometric Encryption Active
-              </p>
-            </div>
-          </header>
-
+        <div className="bg-white/80 backdrop-blur-md p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-white/50 rounded-2xl">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Email Field */}
-            <div className="relative border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-all pb-2 group">
-              <label className="text-[9px] uppercase tracking-widest text-stone-400 font-black block mb-1">
-                Security Identifier
+            <div className="space-y-1 group">
+              <label className="text-[9px] font-black uppercase tracking-widest text-stone-600 transition-colors group-focus-within:text-muted-burgundy-rose" htmlFor="email">
+                Email
               </label>
               <input
+                id="email"
                 type="email"
-                className="w-full bg-transparent outline-none text-deep-midnight-navy py-1 text-sm font-medium placeholder:text-stone-300"
+                autoComplete="email"
+                className="w-full bg-transparent border-b border-stone-100 py-2 text-sm text-deep-midnight-navy outline-none transition-all focus:border-muted-burgundy-rose placeholder:text-stone-400"
                 placeholder="admin@blissmatch.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -102,57 +82,55 @@ export default function AdminLoginPage() {
             </div>
 
             {/* Password Field */}
-            <div className="relative border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-all pb-2 group">
-              <label className="text-[9px] uppercase tracking-widest text-stone-400 font-black block mb-1">
-                Access Passphrase
+            <div className="space-y-1 group">
+              <label className="text-[9px] font-black uppercase tracking-widest text-stone-600 transition-colors group-focus-within:text-muted-burgundy-rose" htmlFor="password">
+                Password
               </label>
-              <input
-                type="password"
-                className="w-full bg-transparent outline-none text-deep-midnight-navy py-1 text-sm font-medium placeholder:text-stone-300"
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  className="w-full bg-transparent border-b border-stone-100 py-2 pr-10 text-sm text-deep-midnight-navy outline-none transition-all focus:border-muted-burgundy-rose placeholder:text-stone-400"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-stone-500 hover:text-muted-burgundy-rose transition-colors"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 text-red-600">
-                <div className="h-1 w-1 bg-red-600 rounded-full animate-pulse" />
-                <p className="text-[10px] font-black uppercase tracking-widest">{error}</p>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-red-500 uppercase tracking-widest animate-in fade-in slide-in-from-top-1">
+                <span className="h-1 w-1 rounded-full bg-red-500" />
+                {error}
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-between px-8 py-5 bg-deep-midnight-navy text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-muted-burgundy-rose transition-all duration-500 shadow-xl group disabled:opacity-50"
+              className="group relative w-full overflow-hidden rounded-full bg-deep-midnight-navy py-4 text-[10px] font-black uppercase tracking-[0.3em] text-white transition-all hover:bg-muted-burgundy-rose disabled:opacity-60"
             >
-              {loading ? 'Authenticating...' : 'Initiate Secure Session'}
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
+              <span className="relative z-10">
+                {loading ? "Logging in..." : "Login"}
+              </span>
             </button>
           </form>
-
-          <footer className="mt-12 text-center">
-            <p className="text-[9px] text-stone-400 uppercase tracking-[0.2em]">
-              Bliss Match Proprietary System &copy; 2026
-            </p>
-          </footer>
         </div>
-      </div>
 
-      <style jsx>{`
-        @keyframes border-trace {
-          from { stroke-dashoffset: 1000; }
-          to { stroke-dashoffset: 0; }
-        }
-        .animate-border-trace {
-          animation: border-trace 15s linear infinite;
-        }
-      `}</style>
+        <footer className="mt-12 text-center">
+          <p className="text-[9px] text-muted-burgundy-rose uppercase tracking-[0.4em]">Bliss Match Private Terminal</p>
+        </footer>
+      </div>
     </div>
   );
 }
