@@ -9,8 +9,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-blissmatch}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blissmatch_password}
       POSTGRES_DB: ${POSTGRES_DB:-blissmatch}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init:/docker-entrypoint-initdb.d
@@ -21,8 +19,6 @@ services:
     image: redis:7
     container_name: blissmatch-redis
     restart: unless-stopped
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     networks:
       - blissmatch-net
 
