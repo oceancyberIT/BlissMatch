@@ -4,10 +4,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    // Allow configured origin(s) or fall back to permissive CORS in production
-    origin: process.env.WEB_ORIGIN
-      ? process.env.WEB_ORIGIN.split(',').map((o) => o.trim())
-      : true,
+    // Fully open CORS for now so web ↔ API works behind Coolify
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
   });
   await app.listen(process.env.PORT ?? 3000);
 }
