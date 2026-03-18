@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+npm-debug.log
+Dockerfile*
+*.md
+*.log
+tmp
+.DS_Store
+

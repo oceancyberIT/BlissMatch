@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import ServicesHero from "../components/service_components/ServiceHero";
-import ServiceGrid from "../components/service_components/ServiceGrid";
-import SuccessStories from "../components/home_components/SuccessStories";
-import ConfidentialityCharter from "../components/service_components/ConfiDentialityCharter";
-import SocialImpact from "../components/service_components/SocialImpact";
+import ServicesHero from "../../components/ServiceHero";
+import ServiceGrid from "../../components/ServiceGrid";
+import SuccessStories from "../../components/SuccessStories";
+import ConfidentialityCharter from "../../components/ConfiDentialityCharter";
+import SocialImpact from "../../components/SocialImpact";
 
 const page = () => {
   return (

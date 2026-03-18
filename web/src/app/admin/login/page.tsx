@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -21,15 +21,13 @@ export default function AdminLoginPage() {
     try {
       const res = await fetch(`${API_URL}/auth/admin/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data?.message ?? 'Unable to sign in as admin.');
+        setError(data?.message ?? 'Unauthorized access.');
         setLoading(false);
         return;
       }
@@ -39,83 +37,124 @@ export default function AdminLoginPage() {
         localStorage.setItem('blissmatch_admin_token', data.accessToken);
         router.push('/admin');
       } else {
-        setError('Unexpected response from server.');
+        setError('Server authentication failed.');
         setLoading(false);
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Connection failed. Please try again.');
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-sand-50 px-4">
-      <div className="w-full max-w-md rounded-3xl border border-sand-100 bg-white/90 p-8 shadow-sm">
-        <p className="text-xs font-semibold tracking-[0.3em] text-gold-500 uppercase">
-          Bliss Match
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">
-          Admin sign in
-        </h1>
-        <p className="mt-1 text-sm text-charcoal-700">
-          Private console for the Bliss Match team.
-        </p>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div className="space-y-1.5">
-            <label
-              htmlFor="admin-email"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-charcoal-700"
-            >
-              Email
-            </label>
-            <input
-              id="admin-email"
-              type="email"
-              autoComplete="username"
-              className="w-full rounded-full border border-sand-100 bg-sand-50 px-4 py-2.5 text-sm outline-none ring-0 placeholder:text-charcoal-700/50"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label
-              htmlFor="admin-password"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-charcoal-700"
-            >
-              Password
-            </label>
-            <input
-              id="admin-password"
-              type="password"
-              autoComplete="current-password"
-              className="w-full rounded-full border border-sand-100 bg-sand-50 px-4 py-2.5 text-sm outline-none ring-0 placeholder:text-charcoal-700/50"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          {error && (
-            <p className="text-xs text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex w-full items-center justify-center rounded-full bg-charcoal-950 px-6 py-3 text-sm font-medium text-sand-50 shadow-sm transition hover:bg-charcoal-700 disabled:opacity-60"
-          >
-            {loading ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
+    <div className="flex min-h-screen items-center justify-center bg-soft-ivory-white px-6">
+      {/* Subtle Background Watermark */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03] select-none">
+        <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-serif font-bold text-deep-midnight-navy">
+          Bliss
+        </h2>
       </div>
+
+      <div className="relative w-full max-w-lg">
+        {/* Animated Border SVG */}
+        <div className="absolute -inset-4 pointer-events-none opacity-10">
+          <svg className="w-full h-full">
+            <rect
+              width="100%"
+              height="100%"
+              fill="none"
+              stroke="#1a2e4c"
+              strokeWidth="1"
+              strokeDasharray="60 200"
+              className="animate-border-trace"
+            />
+          </svg>
+        </div>
+
+        <div className="bg-white p-10 md:p-16 shadow-2xl border border-stone-100">
+          <header className="text-center mb-10">
+            <span className="text-muted-burgundy-rose text-[10px] font-black uppercase tracking-[0.5em] mb-4 block">
+              Admin Gateway
+            </span>
+            <h1 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight">
+              The <span className="italic">Sanctuary</span> Console
+            </h1>
+            <div className="mt-4 flex justify-center items-center gap-2 text-stone-400">
+              <ShieldCheck size={14} className="text-muted-burgundy-rose" />
+              <p className="text-[11px] font-medium uppercase tracking-widest">
+                Secure Biometric Encryption Active
+              </p>
+            </div>
+          </header>
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Email Field */}
+            <div className="relative border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-all pb-2 group">
+              <label className="text-[9px] uppercase tracking-widest text-stone-400 font-black block mb-1">
+                Security Identifier
+              </label>
+              <input
+                type="email"
+                className="w-full bg-transparent outline-none text-deep-midnight-navy py-1 text-sm font-medium placeholder:text-stone-300"
+                placeholder="admin@blissmatch.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="relative border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-all pb-2 group">
+              <label className="text-[9px] uppercase tracking-widest text-stone-400 font-black block mb-1">
+                Access Passphrase
+              </label>
+              <input
+                type="password"
+                className="w-full bg-transparent outline-none text-deep-midnight-navy py-1 text-sm font-medium placeholder:text-stone-300"
+                placeholder="••••••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="flex items-center gap-2 text-red-600">
+                <div className="h-1 w-1 bg-red-600 rounded-full animate-pulse" />
+                <p className="text-[10px] font-black uppercase tracking-widest">{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-between px-8 py-5 bg-deep-midnight-navy text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-muted-burgundy-rose transition-all duration-500 shadow-xl group disabled:opacity-50"
+            >
+              {loading ? 'Authenticating...' : 'Initiate Secure Session'}
+              <ArrowRight
+                size={16}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </button>
+          </form>
+
+          <footer className="mt-12 text-center">
+            <p className="text-[9px] text-stone-400 uppercase tracking-[0.2em]">
+              Bliss Match Proprietary System &copy; 2026
+            </p>
+          </footer>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes border-trace {
+          from { stroke-dashoffset: 1000; }
+          to { stroke-dashoffset: 0; }
+        }
+        .animate-border-trace {
+          animation: border-trace 15s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
-

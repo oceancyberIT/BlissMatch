@@ -1,8 +1,15 @@
-"use client";
+'use client';
 
-import Navbar from "./Navbar";
+import { usePathname } from 'next/navigation';
+import Navbar from './navbar';
 
 const Header = () => {
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <header className="fixed top-0 left-0 w-full z-[1000] shadow-sm">
       <div className="overflow-hidden bg-stone-950 text-white py-2 border-b border-white/5">
