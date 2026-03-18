@@ -14,5 +14,5 @@ echo "Listing dist contents..."
 ls -R dist || echo "No dist folder found."
 
 echo "Starting NestJS application..."
-node dist/main.js
+node dist/src/main.js
 
