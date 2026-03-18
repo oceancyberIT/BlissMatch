@@ -7,6 +7,9 @@ npx prisma migrate deploy
 echo "Running Prisma seed..."
 npx prisma db seed || echo "Prisma seed skipped or failed, continuing startup."
 
+echo "Building NestJS application (if needed)..."
+npm run build || echo "NestJS build failed or already built, attempting to start anyway."
+
 echo "Starting NestJS application..."
 node dist/main
 
