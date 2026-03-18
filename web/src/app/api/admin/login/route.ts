@@ -5,8 +5,8 @@ export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
 
     const backendUrl =
-      process.env.NEXT_PUBLIC_API_URL ??
       process.env.BACKEND_URL ??
+      process.env.NEXT_PUBLIC_API_URL ??
       "http://backend:4000";
 
     const res = await fetch(`${backendUrl}/auth/admin/login`, {
