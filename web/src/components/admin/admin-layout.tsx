@@ -109,10 +109,10 @@ export default function AdminLayout({
                     "flex items-center px-4 py-3 rounded-xl transition-all duration-300 group",
                     isActive 
                       ? "bg-muted-burgundy-rose text-white shadow-lg shadow-muted-burgundy-rose/20" 
-                      : "hover:text-white hover:bg-white/5"
+                      : "text-white hover:text-white hover:bg-white/5"
                   )}
                 >
-                  <item.icon className={cn("h-5 w-5 shrink-0 transition-transform group-hover:scale-110", isActive ? "text-white" : "text-stone-500")} />
+                  <item.icon className={cn("h-5 w-5 shrink-0 transition-transform group-hover:scale-110", isActive ? "text-white" : "text-white")} />
                   {!isCollapsed && (
                     <span className="ml-4 text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap">
                       {item.name}
