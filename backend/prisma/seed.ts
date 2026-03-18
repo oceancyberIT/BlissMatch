@@ -1,7 +1,3 @@
-import { PrismaClient, EnquiryStatus } from "../generated/prisma";
-
-const prisma = new PrismaClient();
-
 async function main() {
   // Add any required seed data here.
   // Currently, we do not create sample enquiries in production.
@@ -14,6 +10,6 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    // No resources to clean up yet.
   });
 
