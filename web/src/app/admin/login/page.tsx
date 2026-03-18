@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Lock, ShieldCheck, ArrowRight } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -19,29 +17,29 @@ export default function AdminLoginPage() {
     setError(null);
 
     try {
-      const res = await fetch(`${API_URL}/auth/admin/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data?.message ?? 'Unauthorized access.');
+        setError(data?.message ?? "Unauthorized access.");
         setLoading(false);
         return;
       }
 
       const data = await res.json();
       if (data?.accessToken) {
-        localStorage.setItem('blissmatch_admin_token', data.accessToken);
-        router.push('/admin');
+        localStorage.setItem("blissmatch_admin_token", data.accessToken);
+        router.push("/admin");
       } else {
-        setError('Server authentication failed.');
+        setError("Server authentication failed.");
         setLoading(false);
       }
     } catch (err) {
-      setError('Connection failed. Please try again.');
+      setError("Connection failed. Please try again.");
       setLoading(false);
     }
   }
