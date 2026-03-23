@@ -1,18 +1,35 @@
 "use client";
 import Image from "next/image";
+import { ServicesContent } from "@/components/admin/services-editor/types";
+import { INITIAL_SERVICES_CONTENT } from "@/components/admin/services-editor/constants";
 
-const ConfidentialityCharter = () => {
+type ConfidentialityCharterProps = {
+  data?: ServicesContent["confidentiality"];
+};
+
+const ConfidentialityCharter = ({ data }: ConfidentialityCharterProps) => {
+  const c = data ?? INITIAL_SERVICES_CONTENT.confidentiality;
+  const img = (src: string) => ({
+    src: src || "/image.png",
+    unoptimized: src.startsWith("data:"),
+  });
+
+  const topL = img(c.imageTopLeft);
+  const topR = img(c.imageTopRight);
+  const botR = img(c.imageBottomRight);
+  const botL = img(c.imageBottomLeft);
+
   return (
     <section className="relative bg-deep-midnight-navy py-18 lg:py-20 overflow-hidden group">
-      xw
       <div
         className="absolute -top-20 -left-12 w-60 h-96 overflow-hidden shadow-2xl border-t-2 border-muted-burgundy-rose
                       transition-transform duration-[2s] ease-out group-hover:-translate-y-8"
       >
         <Image
-          src="/image copy.png" // Suggestion: A refined, slow-motion detail of a professional handshake
+          src={topL.src}
           alt="Confidence and Trust"
           fill
+          unoptimized={topL.unoptimized}
           className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s]"
         />
         <div className="absolute inset-0 bg-linear-to-t from-deep-midnight-navy to-transparent opacity-60" />
@@ -22,9 +39,10 @@ const ConfidentialityCharter = () => {
                       transition-transform duration-[2s] ease-out group-hover:-translate-y-6"
       >
         <Image
-          src="/image copy.png" // Suggestion: A refined, slow-motion detail of a professional handshake
+          src={topR.src}
           alt="Confidence and Trust"
           fill
+          unoptimized={topR.unoptimized}
           className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s]"
         />
         <div className="absolute inset-0 bg-linear-to-t from-deep-midnight-navy to-transparent opacity-60" />
@@ -34,9 +52,10 @@ const ConfidentialityCharter = () => {
                       transition-transform duration-[2s] ease-out group-hover:translate-y-8"
       >
         <Image
-          src="/image.png" // Suggestion: A high-end portrait (maybe a silhouette or out of focus detail)
+          src={botR.src}
           alt="Discretion and Privacy"
           fill
+          unoptimized={botR.unoptimized}
           className="object-cover"
         />
         <div className="absolute inset-0 bg-deep-midnight-navy opacity-50" />
@@ -59,9 +78,10 @@ const ConfidentialityCharter = () => {
                       transition-transform duration-[2s] ease-out group-hover:translate-y-8"
       >
         <Image
-          src="/image.png" // Suggestion: A high-end portrait (maybe a silhouette or out of focus detail)
+          src={botL.src}
           alt="Discretion and Privacy"
           fill
+          unoptimized={botL.unoptimized}
           className="object-cover"
         />
         <div className="absolute inset-0 bg-deep-midnight-navy opacity-50" />
@@ -81,20 +101,14 @@ const ConfidentialityCharter = () => {
       </div>
       <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
         <h2 className="text-white font-serif text-4xl md:text-5xl mb-6">
-          Confidentiality Charter
+          {c.title}
         </h2>
         <p className="text-muted-burgundy-rose font-bold tracking-[0.3em] uppercase text-xs mb-20">
-          Discretion is not a courtesy — it is our code
+          {c.subtitle}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-12 text-left bg-white/5 p-12 backdrop-blur-sm border border-white/10 rounded-sm">
-          {[
-            "Strict Non-Disclosure Agreements for all data.",
-            "Zero client disclosure without explicit consent.",
-            "Binding commitments from all partners.",
-            "Private, appointment-only consultations.",
-            "Highest ethical standards in image safeguarding.",
-          ].map((text, i) => (
+          {c.bullets.map((text, i) => (
             <div
               key={i}
               className="flex gap-4 items-start border-b border-white/5 pb-4 transition-colors hover:border-muted-burgundy-rose/40 group/item"

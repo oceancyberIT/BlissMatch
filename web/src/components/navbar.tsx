@@ -4,10 +4,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone } from "lucide-react";
+import { mergeNavigation } from "@/lib/site-settings-merge";
+import { INITIAL_NAVIGATION } from "@/lib/site-settings-defaults";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [nav, setNav] = useState(() => INITIAL_NAVIGATION);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/site-settings/navigation", {
+          cache: "no-store",
+        });
+        const data = await res.json().catch(() => null);
+        if (!cancelled) setNav(mergeNavigation(data));
+      } catch {
+        if (!cancelled) setNav(INITIAL_NAVIGATION);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const navLinks = nav.items.map((item) => ({
+    name: item.name,
+    href: item.href,
+  }));
 
   // Close menu when clicking a link
   const handleLinkClick = () => setIsOpen(false);
@@ -20,14 +46,6 @@ const Navbar = () => {
       document.body.style.overflow = "unset";
     }
   }, [isOpen]);
-
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
-    { name: "Appointment", href: "/appointment" },
-  ];
 
   return (
     // Changed to fixed and ensured solid bg-white
@@ -82,13 +100,13 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col">
               <span className="uppercase text-[10px] font-bold tracking-widest text-stone-400">
-                Book an Appointment
+                {nav.phoneLabel}
               </span>
               <a
-                href="tel:+448881234587"
+                href={nav.phoneHref}
                 className="text-[15px] font-bold text-deep-midnight-navy hover:text-muted-burgundy-rose transition-colors"
               >
-                +44 888 123 4587
+                {nav.phoneNumber}
               </a>
             </div>
           </div>
@@ -140,10 +158,10 @@ const Navbar = () => {
               <Phone size={20} />
             </div>
             <a
-              href="tel:+448881234587"
+              href={nav.phoneHref}
               className="text-deep-midnight-navy font-bold tracking-widest"
             >
-              +44 888 123 4587
+              {nav.phoneNumber}
             </a>
           </div>
         </div>

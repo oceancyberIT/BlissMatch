@@ -2,8 +2,21 @@
 import React from "react";
 import Image from "next/image";
 import { images } from "@/app/data/constant";
+import { HomeContent } from "@/components/admin/home-editor/types";
 
-const LoveConnectionSection = () => {
+type LoveConnectionSectionProps = {
+  data?: HomeContent["loveConnection"];
+};
+
+const LoveConnectionSection = ({ data }: LoveConnectionSectionProps) => {
+  const heading = data?.heading || "Discover Lasting Love & Connection";
+  const subtext =
+    data?.subtext ||
+    "Investing in learning about relationships is the key to unlocking enduring love and meaningful connections.";
+  const imageItems = data?.images?.length
+    ? data.images.map((img) => ({ src: img.url, alt: img.alt }))
+    : images;
+
   return (
     <section className="relative bg-white py-20 lg:py-16 px-6 overflow-hidden">
       <div className="absolute inset-4 pointer-events-none z-0">
@@ -34,17 +47,16 @@ const LoveConnectionSection = () => {
       <div className="relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy mb-4">
-            Discover Lasting Love & Connection
+            {heading}
           </h2>
           <p className="text-stone-500 text-sm md:text-base leading-relaxed font-medium">
-            Investing in learning about relationships is the key to unlocking
-            enduring love and meaningful connections.
+            {subtext}
           </p>
         </div>
 
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-            {images.map((img, index) => (
+            {imageItems.map((img, index) => (
               <div
                 key={index}
                 className={`relative aspect-4/5 overflow-hidden shadow-xl

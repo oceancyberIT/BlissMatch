@@ -1,63 +1,89 @@
-
 'use client';
 
-import { useEffect, useState } from 'react';
-import {
-  Users,
-  Heart,
-  ShieldCheck,
-  Mail,
-  Calendar as CalendarIcon,
-  TrendingUp,
-  Clock,
-  RefreshCw,
-  ChevronRight,
-  UserCheck,
-  Lock,
-  MessageSquare,
-  Layout,
-  BookOpen,
-  Briefcase,
-} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import AdminLayout from '@/components/admin/admin-layout';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import AdminLayout from '@/components/admin/admin-layout';
-
-// Note: Replace with your actual database fetching logic
-// For this example, we maintain the structure you provided.
+import type { EnquiryRow } from '@/lib/site-settings-types';
+import { getAdminToken } from '@/lib/admin-site-settings';
+import {
+  Mail,
+  CalendarClock,
+  MessageSquare,
+  ChevronRight,
+  RefreshCw,
+  PanelTop,
+  PanelBottom,
+  LayoutTemplate,
+  BookOpen,
+  Briefcase,
+  Sparkles,
+  Shield,
+} from 'lucide-react';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [rows, setRows] = useState<EnquiryRow[]>([]);
+
+  async function loadEnquiries(silent = false) {
+    const token = getAdminToken();
+    if (!token) {
+      router.push('/admin/login');
+      return;
+    }
+    if (!silent) setRefreshing(true);
+    try {
+      const res = await fetch('/api/admin/enquiries', {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+      if (res.status === 401) {
+        router.push('/admin/login');
+        return;
+      }
+      const data = await res.json().catch(() => null);
+      if (res.ok && Array.isArray(data)) {
+        setRows(data as EnquiryRow[]);
+      }
+    } finally {
+      if (!silent) setRefreshing(false);
+    }
+  }
 
   useEffect(() => {
-    // Simulate loading/fetching
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    let active = true;
+    (async () => {
+      try {
+        await loadEnquiries(true);
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [router]);
 
-  if (loading) {
-    return (
-      <AdminLayout
-        title="Command Overview"
-        description="Synchronizing dossiers and refreshing the console."
-      >
-        <div className="flex flex-col items-center justify-center h-[80vh] bg-stone-50">
-        <div className="animate-pulse space-y-4 text-center">
-          <div className="h-1 w-48 bg-muted-burgundy-rose/20 mx-auto overflow-hidden">
-             <div className="h-full bg-muted-burgundy-rose animate-progress-line w-full"></div>
-          </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-deep-midnight-navy/40">
-            Secure Entry Point: Synchronizing Dossiers
-          </p>
-        </div>
-        </div>
-      </AdminLayout>
-    );
-  }
+  const metrics = useMemo(() => {
+    const total = rows.length;
+    const newCount = rows.filter((r) => r.status === 'NEW').length;
+    const inProgressCount = rows.filter((r) => r.status === 'IN_PROGRESS').length;
+    const appt = rows.filter((r) => r.source === 'APPOINTMENT').length;
+    const contact = rows.filter((r) => r.source === 'CONTACT').length;
+    return { total, newCount, inProgressCount, appt, contact };
+  }, [rows]);
+
+  const latest = rows.slice(0, 6);
+  const appointments = rows
+    .filter((r) => r.source === 'APPOINTMENT')
+    .slice(0, 3);
+  const contacts = rows
+    .filter((r) => r.source === 'CONTACT')
+    .slice(0, 3);
 
   return (
     <AdminLayout
@@ -65,7 +91,6 @@ export default function AdminDashboard() {
       description="Confidential console for Bliss Match."
     >
       <div className="min-h-screen bg-soft-ivory-white p-6 lg:p-10 space-y-10">
-        {/* SUMMARY STRIP */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-stone-200 pb-8">
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-burgundy-rose">
@@ -75,217 +100,218 @@ export default function AdminDashboard() {
               Bliss Match at a glance
             </h1>
             <p className="max-w-xl text-xs md:text-sm text-stone-500">
-              A quick snapshot of your key public pages, active forms, and
-              where your visitors are reaching out from.
+              Live overview for submissions, page editors, and content blocks.
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              className="rounded-full border-stone-200 text-deep-midnight-navy uppercase text-[9px] font-black tracking-widest h-10 px-5 hover:bg-stone-50"
-            >
-              Site Status: Live
-            </Button>
-            <Button className="rounded-full bg-deep-midnight-navy text-white uppercase text-[9px] font-black tracking-widest h-10 px-5 hover:bg-muted-burgundy-rose transition-all flex gap-2">
-              <RefreshCw size={12} /> Refresh Data
-            </Button>
-          </div>
+          <Button
+            onClick={() => loadEnquiries()}
+            className="rounded-full bg-deep-midnight-navy text-white uppercase text-[9px] font-black tracking-widest h-10 px-5 hover:bg-muted-burgundy-rose transition-all flex gap-2"
+          >
+            <RefreshCw size={12} className={cn(refreshing && 'animate-spin')} />{' '}
+            {refreshing ? 'Refreshing...' : 'Refresh Data'}
+          </Button>
         </div>
 
-        {/* PRIMARY METRICS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            {
-              label: 'Public pages',
-              val: '5',
-              icon: Layout,
-              color: 'text-deep-midnight-navy',
-            },
-            {
-              label: 'Homepage sections',
-              val: '6',
-              icon: BookOpen,
-              color: 'text-muted-burgundy-rose',
-            },
-            {
-              label: 'Active forms',
-              val: '2',
-              icon: Mail,
-              color: 'text-deep-midnight-navy',
-            },
-            {
-              label: 'Service suites',
-              val: '3',
-              icon: Briefcase,
-              color: 'text-stone-400',
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white border border-stone-100 p-8 shadow-sm group hover:border-muted-burgundy-rose transition-all"
-            >
-              <item.icon
-                className={cn(
-                  'h-5 w-5 mb-6 opacity-40 group-hover:opacity-100 transition-opacity',
-                  item.color,
-                )}
-              />
+            { label: 'Total submissions', val: metrics.total, icon: MessageSquare },
+            { label: 'New submissions', val: metrics.newCount, icon: Mail },
+            { label: 'In progress', val: metrics.inProgressCount, icon: Shield },
+            { label: 'Appointments', val: metrics.appt, icon: CalendarClock },
+          ].map((item) => (
+            <div key={item.label} className="bg-white border border-stone-100 p-8 shadow-sm">
+              <item.icon className="h-5 w-5 mb-4 text-muted-burgundy-rose" />
               <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">
                 {item.label}
               </p>
-              <p className="text-4xl font-serif text-deep-midnight-navy">
-                {item.val}
-              </p>
+              <p className="text-4xl font-serif text-deep-midnight-navy">{item.val}</p>
             </div>
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* RECENT FORM ACTIVITY */}
           <div className="lg:col-span-8 bg-white border border-stone-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-stone-50 flex justify-between items-center">
               <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy flex items-center gap-3">
-                <MessageSquare
-                  size={14}
-                  className="text-muted-burgundy-rose"
-                />{' '}
+                <MessageSquare size={14} className="text-muted-burgundy-rose" />
                 Latest enquiries & requests
               </h3>
-              <div className="flex gap-3 text-[10px] font-bold uppercase tracking-widest">
-                <Link
-                  href="/admin/contact"
-                  className="text-stone-400 hover:text-muted-burgundy-rose transition-colors"
-                >
-                  Contact inbox
-                </Link>
-                <span className="text-stone-300">•</span>
-                <Link
-                  href="/admin/appointment"
-                  className="text-stone-400 hover:text-muted-burgundy-rose transition-colors"
-                >
-                  Appointment requests
-                </Link>
-              </div>
+              <Link
+                href="/admin/submissions"
+                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+              >
+                Open submissions inbox
+              </Link>
             </div>
 
             <div className="divide-y divide-stone-50">
-              {[
-                {
-                  name: 'Homepage enquiry',
-                  subject: 'Appointment form (Private consultation)',
-                  from: 'Appointment page',
-                  status: 'New',
-                  time: 'Just now',
-                },
-                {
-                  name: 'Contact form',
-                  subject: 'General matchmaking enquiry',
-                  from: 'Contact page',
-                  status: 'In review',
-                  time: '3h ago',
-                },
-                {
-                  name: 'Services interest',
-                  subject: 'Bliss Circle membership',
-                  from: 'Services page',
-                  status: 'Awaiting reply',
-                  time: 'Yesterday',
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 flex items-center justify-between hover:bg-stone-50 transition-colors cursor-pointer group"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-semibold text-deep-midnight-navy">
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-stone-500">{item.subject}</p>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-stone-400">
-                      Source: {item.from}
-                    </p>
+              {loading ? (
+                <div className="p-6 text-sm text-stone-500">Loading submissions…</div>
+              ) : latest.length === 0 ? (
+                <div className="p-6 text-sm text-stone-500">No submissions yet.</div>
+              ) : (
+                latest.map((item) => (
+                  <div key={item.id} className="p-6 flex items-center justify-between">
+                    <div className="space-y-1 min-w-0">
+                      <p className="text-sm font-semibold text-deep-midnight-navy">{item.fullName}</p>
+                      <p className="text-xs text-stone-500 truncate">{item.subject || item.inquiryType || item.message}</p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-stone-400">
+                        Source: {item.source === 'APPOINTMENT' ? 'Appointment' : 'Contact'}
+                      </p>
+                    </div>
+                    <div className="text-right space-y-2">
+                      <span
+                        className={cn(
+                          'inline-flex rounded-full px-3 py-1 text-[9px] uppercase tracking-widest font-bold',
+                          item.status === 'NEW'
+                            ? 'bg-muted-burgundy-rose/10 text-muted-burgundy-rose'
+                            : item.status === 'IN_PROGRESS'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-emerald-100 text-emerald-700',
+                        )}
+                      >
+                        {item.status === 'IN_PROGRESS' ? 'IN PROGRESS' : item.status}
+                      </span>
+                      <p className="text-[10px] text-stone-300 italic">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right space-y-2">
-                    <Badge
-                      className={cn(
-                        'rounded-full px-3 py-1 text-[9px] uppercase tracking-widest font-bold',
-                        idx === 0
-                          ? 'bg-muted-burgundy-rose/10 text-muted-burgundy-rose'
-                          : 'bg-deep-midnight-navy/5 text-deep-midnight-navy',
-                      )}
-                    >
-                      {item.status}
-                    </Badge>
-                    <p className="text-[10px] text-stone-300 italic">
-                      {item.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
-          {/* QUICK LINKS TO EDIT PAGES */}
           <div className="lg:col-span-4 space-y-6">
             <div className="bg-deep-midnight-navy p-8 text-white space-y-6">
               <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-stone-400 border-b border-white/10 pb-4">
-                Manage site content
+                Main Editors
               </h3>
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  {
-                    name: 'Homepage',
-                    href: '/admin/home',
-                    icon: Layout,
-                  },
-                  {
-                    name: 'About editorial',
-                    href: '/admin/about',
-                    icon: BookOpen,
-                  },
-                  {
-                    name: 'Service suites',
-                    href: '/admin/services',
-                    icon: Briefcase,
-                  },
-                  {
-                    name: 'Contact page',
-                    href: '/admin/contact',
-                    icon: Mail,
-                  },
-                ].map((link) => (
+                  { name: 'Homepage', href: '/admin/home', icon: LayoutTemplate },
+                  { name: 'About', href: '/admin/about', icon: BookOpen },
+                  { name: 'Services', href: '/admin/services', icon: Briefcase },
+                  { name: 'Appointments', href: '/admin/appointment' },
+                  { name: 'Contact', href: '/admin/contact' },
+                  { name: 'Submissions', href: '/admin/submissions' },
+                ].map((link: any) => (
                   <Link
                     key={link.name}
                     href={link.href}
                     className="group flex items-center justify-between p-3 border border-white/5 hover:border-muted-burgundy-rose transition-all"
                   >
-                    <div className="flex items-center gap-3">
-                      <link.icon
-                        size={14}
-                        className="text-stone-500 group-hover:text-muted-burgundy-rose"
-                      />
-                      <span className="text-[10px] font-bold uppercase tracking-widest">
-                        {link.name}
-                      </span>
+                    <div className="flex items-center gap-2">
+                      {link.icon ? <link.icon size={12} className="text-muted-burgundy-rose" /> : null}
+                      <span className="text-[10px] font-bold uppercase tracking-widest">{link.name}</span>
                     </div>
-                    <ChevronRight
-                      size={12}
-                      className="opacity-0 group-hover:opacity-100 transition-all text-muted-burgundy-rose"
-                    />
+                    <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-all text-muted-burgundy-rose" />
                   </Link>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white border border-stone-100 p-8">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy mb-4">
-                Content note
-              </h4>
-              <p className="font-serif text-stone-500 leading-relaxed text-sm">
-                Use this dashboard as a quick jumping-off point: if something
-                on the public site needs to be refreshed, there should be a
-                direct path to it from here.
-              </p>
+            <div className="bg-white border border-stone-100 p-8 space-y-4">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+                Site Structure
+              </h3>
+              {[
+                { name: 'Navigation', href: '/admin/navigation', icon: PanelTop },
+                { name: 'Footer', href: '/admin/footer', icon: PanelBottom },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="group flex items-center justify-between p-3 border border-stone-100 hover:border-muted-burgundy-rose transition-all"
+                >
+                  <div className="flex items-center gap-2">
+                    <link.icon size={13} className="text-muted-burgundy-rose" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-deep-midnight-navy">
+                      {link.name}
+                    </span>
+                  </div>
+                  <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-all text-muted-burgundy-rose" />
+                </Link>
+              ))}
+            </div>
+
+            <div className="bg-white border border-stone-100 p-8 space-y-4">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+                Component Editors
+              </h3>
+              {[
+                { name: 'Home Blocks', href: '/admin/discover-lasting-love', icon: Sparkles },
+                { name: 'About Sections', href: '/admin/about-philosophy', icon: BookOpen },
+                { name: 'Services Sections', href: '/admin/services-grid', icon: Briefcase },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="group flex items-center justify-between p-3 border border-stone-100 hover:border-muted-burgundy-rose transition-all"
+                >
+                  <div className="flex items-center gap-2">
+                    <link.icon size={13} className="text-muted-burgundy-rose" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-deep-midnight-navy">
+                      {link.name}
+                    </span>
+                  </div>
+                  <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-all text-muted-burgundy-rose" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white border border-stone-100 p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+                Recent appointment requests
+              </h3>
+              <Link
+                href="/admin/submissions"
+                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+              >
+                View all
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {appointments.length === 0 ? (
+                <p className="text-sm text-stone-500">No appointment requests yet.</p>
+              ) : (
+                appointments.map((item) => (
+                  <div key={item.id} className="border border-stone-100 p-3">
+                    <p className="text-sm font-semibold text-deep-midnight-navy">{item.fullName}</p>
+                    <p className="text-xs text-stone-500 truncate">{item.inquiryType || item.message}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white border border-stone-100 p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+                Recent contact requests
+              </h3>
+              <Link
+                href="/admin/submissions"
+                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+              >
+                View all
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {contacts.length === 0 ? (
+                <p className="text-sm text-stone-500">No contact requests yet.</p>
+              ) : (
+                contacts.map((item) => (
+                  <div key={item.id} className="border border-stone-100 p-3">
+                    <p className="text-sm font-semibold text-deep-midnight-navy">{item.fullName}</p>
+                    <p className="text-xs text-stone-500 truncate">{item.subject || item.message}</p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

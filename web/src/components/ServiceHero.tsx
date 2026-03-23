@@ -1,13 +1,22 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useHeroConfig } from "@/hooks/use-hero-config";
 
 const ServicesHero = () => {
+  const config = useHeroConfig("/admin/services");
+  const title = config?.title || "Our Services";
+  const subtitle = config?.subtitle || "The BlissMatch Suite";
+  const body =
+    config?.body ||
+    "A bespoke collection of consultancy services designed for the discerning individual seeking depth, discretion, and a crafted path to love.";
+  const imageUrl = config?.imageUrl || "/image.png";
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-start overflow-hidden pt-32 md:pt-48">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/image.png"
+          src={imageUrl}
           alt="BlissMatch Service Sanctuary"
           fill
           className="object-cover brightness-[0.4] scale-105"
@@ -35,16 +44,13 @@ const ServicesHero = () => {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
           <div className="max-w-2xl bg-white/5 backdrop-blur-md p-8 mt-8 md:mt-0 mb-4 md:mb-0 md:p-12 border border-white/10 rounded-sm">
             <span className="text-white text-xs border border-muted-burgundy-rose p-2 font-bold uppercase tracking-[0.2em] mb-6 inline-block">
-              The BlissMatch Suite
+              {subtitle}
             </span>
             <h1 className="text-5xl md:text-6xl font-serif text-white leading-[0.9] mb-8">
-              Our <br />
-              <span className="italic text-muted-burgundy-rose">Services</span>
+              {title}
             </h1>
             <p className="text-stone-300 text-lg md:text-xl font-light leading-relaxed max-w-md">
-              A bespoke collection of consultancy services designed for the
-              discerning individual seeking depth, discretion, and a crafted
-              path to love.
+              {body}
             </p>
           </div>
 

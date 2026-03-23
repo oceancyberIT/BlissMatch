@@ -4,8 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -18,6 +17,10 @@ model Enquiry {
   email       String
   location    String?
   message     String
+  /// CONTACT | APPOINTMENT
+  source      String   @default("CONTACT")
+  subject     String?
+  inquiryType String?
   status      EnquiryStatus @default(NEW)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -27,4 +30,59 @@ enum EnquiryStatus {
   NEW
   IN_PROGRESS
   CLOSED
+}
+
+model HeroSection {
+  id        String   @id @default(cuid())
+  route     String   @unique
+  title     String
+  subtitle  String?
+  body      String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HomePage {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SuccessStory {
+  id        String   @id @default(cuid())
+  quote     String
+  author    String
+  location  String
+  stars     Int      @default(5)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AboutPage {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServicesPage {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// navigation | footer | appointment | contact
+model SiteSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

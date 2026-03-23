@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { ShieldCheck, Sparkles } from "lucide-react";
+import { AboutContent } from "@/components/admin/about-editor/types";
 
-const Philosophy = () => {
+type PhilosophyProps = {
+  data?: AboutContent["philosophy"];
+};
+
+const Philosophy = ({ data }: PhilosophyProps) => {
   return (
     <section className="bg-white py-20 lg:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -9,25 +14,24 @@ const Philosophy = () => {
           <div className="lg:col-span-6 space-y-8">
             <div>
               <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.4em] mb-6 block">
-                Our Philosophy
+                {data?.eyebrow ?? "Our Philosophy"}
               </span>
               <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight">
-                We believe that <br />
+                {data?.headingMain ?? "We believe that"} <br />
                 <span className="italic text-muted-burgundy-rose">
-                  love is deliberate.
+                  {data?.headingAccent ?? "love is deliberate."}
                 </span>
               </h2>
             </div>
 
             <div className="border-l-2 border-muted-burgundy-rose/20 pl-8 space-y-5">
               <p className="text-xl text-stone-600 leading-relaxed font-light italic">
-                "It starts with self-awareness, deepens through shared values,
-                and endures through emotional intelligence."
+                "{data?.quote ??
+                  "It starts with self-awareness, deepens through shared values, and endures through emotional intelligence."}"
               </p>
               <p className="text-stone-500 leading-relaxed max-w-md">
-                We combine psychological insight with refined matchmaking
-                practice to help clients connect on every level — intellectual,
-                emotional, and spiritual.
+                {data?.body ??
+                  "We combine psychological insight with refined matchmaking practice to help clients connect on every level — intellectual, emotional, and spiritual."}
               </p>
             </div>
           </div>
@@ -35,7 +39,7 @@ const Philosophy = () => {
           <div className="lg:col-span-5 flex items-center justify-center gap-4 h-100 md:h-100">
             <div className="relative w-1/3 h-[60%] rounded-t-full overflow-hidden shadow-2xl self-start">
               <Image
-                src="/image.png"
+                src={data?.imageLeft ?? "/image.png"}
                 alt="Perspective"
                 fill
                 className="object-cover"
@@ -51,7 +55,7 @@ const Philosophy = () => {
                 style={{ borderRadius: "inherit" }}
               >
                 <Image
-                  src="/image copy 4.png"
+                  src={data?.imageCenter ?? "/image copy 4.png"}
                   alt="Connection"
                   fill
                   className="object-cover"
@@ -61,7 +65,7 @@ const Philosophy = () => {
 
             <div className="relative w-1/4 h-[50%] rounded-sm overflow-hidden shadow-xl self-center border-l-4 border-muted-burgundy-rose">
               <Image
-                src="/image copy 3.png"
+                src={data?.imageRight ?? "/image copy 3.png"}
                 alt="Detail"
                 fill
                 className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
@@ -130,11 +134,10 @@ const Philosophy = () => {
               size={24}
             />
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy mb-3 relative z-10">
-              Our Promise
+              {data?.promiseTitle ?? "Our Promise"}
             </h3>
             <p className="text-lg md:text-xl font-serif text-deep-midnight-navy leading-tight mb-4 relative z-10">
-              We don’t introduce many. <br />
-              <span className="italic">We introduce meaningfully.</span>
+              {data?.promiseText ?? "We don’t introduce many. We introduce meaningfully."}
             </p>
             <div className="w-10 h-px bg-muted-burgundy-rose group-hover:w-full transition-all duration-700 opacity-30 relative z-10" />
           </div>
@@ -159,14 +162,14 @@ const Philosophy = () => {
               size={24}
             />
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-3 relative z-10">
-              Discretion & Trust
+              {data?.trustTitle ?? "Discretion & Trust"}
             </h3>
             <p className="text-stone-300 text-sm md:text-base leading-relaxed mb-4 relative z-10">
-              Every client engagement is strictly confidential. We operate
-              quietly, respectfully, and by appointment only.
+              {data?.trustText ??
+                "Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only."}
             </p>
             <p className="text-white font-serif italic text-base relative z-10 opacity-90">
-              Ensuring professionalism, privacy, and care.
+              {data?.trustSubtext ?? "Ensuring professionalism, privacy, and care."}
             </p>
           </div>
         </div>

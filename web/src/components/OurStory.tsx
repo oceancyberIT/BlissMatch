@@ -2,8 +2,28 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { HomeContent } from "@/components/admin/home-editor/types";
 
-const OurStory = () => {
+type OurStoryProps = {
+  data?: HomeContent["ourStory"];
+};
+
+const OurStory = ({ data }: OurStoryProps) => {
+  const content = data ?? {
+    eyebrow: "Our Story",
+    headingMain: "Restoring authenticity to",
+    headingAccent: "modern connection.",
+    paragraphOne:
+      "BlissMatch was founded by two lifelong friends, uniting backgrounds in Human Behaviour and Business Law to create a sanctuary for meaningful love in a digital world.",
+    quote: "We don’t introduce many. We introduce meaningfully.",
+    paragraphTwo:
+      "Our philosophy is simple: Love is deliberate. We combine psychological insight with refined matchmaking to help you connect on every level—intellectual, emotional, and spiritual.",
+    ctaLabel: "Discover Our Full Philosophy",
+    ctaHref: "/about",
+    imageUrl: "/founders-working.png",
+    imageAlt: "BlissMatch Founders",
+  };
+
   return (
     <section className="bg-white py-10 lg:py-12 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 lg:px-0">
@@ -11,8 +31,8 @@ const OurStory = () => {
           <div className="relative">
             <div className="relative aspect-4/5 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
               <Image
-                src="/founders-working.png"
-                alt="BlissMatch Founders"
+                src={content.imageUrl}
+                alt={content.imageAlt || "BlissMatch image"}
                 fill
                 className="object-cover"
               />
@@ -23,47 +43,30 @@ const OurStory = () => {
 
           <div className="flex flex-col">
             <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.3em] mb-4">
-              Our Story
+              {content.eyebrow}
             </span>
 
             <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-6">
-              Restoring authenticity to <br />
-              <span className="italic">modern connection.</span>
+              {content.headingMain} <br />
+              <span className="italic">{content.headingAccent}</span>
             </h2>
 
             <div className="space-y-6 text-stone-600 leading-relaxed max-w-lg">
-              <p>
-                BlissMatch was founded by two lifelong friends, uniting
-                backgrounds in
-                <span className="text-deep-midnight-navy font-medium">
-                  {" "}
-                  Human Behaviour
-                </span>{" "}
-                and
-                <span className="text-deep-midnight-navy font-medium">
-                  {" "}
-                  Business Law
-                </span>{" "}
-                to create a sanctuary for meaningful love in a digital world.
-              </p>
+              <p>{content.paragraphOne}</p>
 
               <blockquote className="border-l-2 border-muted-burgundy-rose pl-6 py-2 italic text-deep-midnight-navy font-serif text-lg">
-                "We don’t introduce many. We introduce meaningfully."
+                "{content.quote}"
               </blockquote>
 
-              <p className="text-sm">
-                Our philosophy is simple: Love is deliberate. We combine
-                psychological insight with refined matchmaking to help you
-                connect on every level—intellectual, emotional, and spiritual.
-              </p>
+              <p className="text-sm">{content.paragraphTwo}</p>
             </div>
 
             <div className="mt-8">
               <Link
-                href="/about"
+                href={content.ctaHref || "/about"}
                 className="inline-flex items-center group text-deep-midnight-navy font-bold uppercase text-xs tracking-widest border-b border-stone-200 pb-2 hover:border-muted-burgundy-rose transition-all"
               >
-                Discover Our Full Philosophy
+                {content.ctaLabel}
                 <ArrowRight className="ml-3 w-4 h-4 transition-transform group-hover:translate-x-2 text-muted-burgundy-rose" />
               </Link>
             </div>

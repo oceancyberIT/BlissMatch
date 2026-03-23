@@ -1,9 +1,17 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
 
-const stories = [
+type Story = {
+  id?: string;
+  quote: string;
+  author: string;
+  location: string;
+  stars: number;
+};
+
+const fallbackStories: Story[] = [
   {
     quote:
       "I had forgotten what it felt like to be seen. BlissMatch reminded me that love can be elegant and kind.",
@@ -28,6 +36,38 @@ const stories = [
 ];
 
 const SuccessStories = () => {
+  const [stories, setStories] = useState<Story[]>(fallbackStories);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadStories() {
+      try {
+        const res = await fetch("/api/admin/success-stories");
+        const data = await res.json().catch(() => []);
+        if (!active) return;
+        if (res.ok && Array.isArray(data) && data.length) {
+          setStories(
+            data.map((story: any) => ({
+              id: story.id,
+              quote: story.quote ?? "",
+              author: story.author ?? "",
+              location: story.location ?? "",
+              stars: Number(story.stars ?? 5),
+            })),
+          );
+        }
+      } catch {
+        // Keep fallback content
+      }
+    }
+
+    loadStories();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <section className="bg-[#F9F7F5] py-20 lg:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -46,7 +86,7 @@ const SuccessStories = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stories.map((story, index) => (
             <motion.div
-              key={story.author}
+              key={story.id ?? `${story.author}-${index}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}

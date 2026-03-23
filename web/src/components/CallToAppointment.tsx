@@ -2,9 +2,14 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { AboutContent } from "@/components/admin/about-editor/types";
 
-const CallToAppointment = () => {
-  const couples = [
+type CallToAppointmentProps = {
+  data?: AboutContent["cta"];
+};
+
+const CallToAppointment = ({ data }: CallToAppointmentProps) => {
+  const couples = data?.images ?? [
     { src: "/image copy 2.png", alt: "Authentic couple sharing a laugh" },
     {
       src: "/image copy 4.png",
@@ -22,31 +27,30 @@ const CallToAppointment = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div className="space-y-10 max-w-xl">
             <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.4em] mb-6 block">
-              Connection Begins with a Conversation
+              {data?.eyebrow ?? "Connection Begins with a Conversation"}
             </span>
 
             <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-8">
-              Are you ready for a <br />
+              {data?.headingMain ?? "Are you ready for a"} <br />
               <span className="italic text-muted-burgundy-rose">
-                meaningful
+                {data?.headingAccent ?? "meaningful"}
               </span>{" "}
               introduction?
             </h2>
 
             <div className="space-y-6 text-stone-600 text-lg md:text-xl leading-relaxed font-light">
               <p>
-                The journey to a purposeful relationship is not found in an
-                algorithm. It is curated with intention, discretion, and a deep
-                understanding of who you are.
+                {data?.paragraph ??
+                  "The journey to a purposeful relationship is not found in an algorithm. It is curated with intention, discretion, and a deep understanding of who you are."}
               </p>
             </div>
 
             <div className="pt-5">
               <Link
-                href="/appointment"
+                href={data?.buttonHref ?? "/appointment"}
                 className="inline-flex items-center gap-4 px-10 py-5 bg-deep-midnight-navy text-white text-xs font-bold uppercase tracking-widest shadow-xl hover:bg-muted-burgundy-rose transition-all duration-500"
               >
-                Book a Private Consultation
+                {data?.buttonLabel ?? "Book a Private Consultation"}
                 <span className="text-white/80">
                   <ArrowRight size={16} className="" />
                 </span>
@@ -102,15 +106,15 @@ const CallToAppointment = () => {
       <div className="mt-20 lg:mt-10 w-full flex justify-center">
         <div className="flex items-center gap-8 opacity-70">
           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-800">
-            London
+            {(data?.locations?.[0] ?? "London").toUpperCase()}
           </span>
           <div className="w-1.5 h-1.5 rounded-full bg-muted-burgundy-rose" />
           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-800">
-            Accra
+            {(data?.locations?.[1] ?? "Accra").toUpperCase()}
           </span>
           <div className="w-1.5 h-1.5 rounded-full bg-muted-burgundy-rose" />
           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-800">
-            Paris
+            {(data?.locations?.[2] ?? "Paris").toUpperCase()}
           </span>
         </div>
       </div>

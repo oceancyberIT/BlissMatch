@@ -1,619 +1,426 @@
-// 'use client';
-
-// import { useState } from 'react';
-// import AdminLayout from '@/components/admin/admin-layout';
-// import { Button } from '@/components/ui/button';
-
-// export default function AdminHomePage() {
-//   const [message, setMessage] = useState<string | null>(null);
-
-//   const [heroTagline, setHeroTagline] = useState('Where Love Meets Intention');
-//   const [heroTitle, setHeroTitle] = useState(
-//     'Building great relationships leads to an amazing life!',
-//   );
-//   const [heroSubtitle, setHeroSubtitle] = useState(
-//     'Expert relationship consultancy designed to help you navigate the complexities of love, connection, and lasting partnership.',
-//   );
-//   const [heroPrimaryCta, setHeroPrimaryCta] = useState(
-//     'Book a Private Consultation',
-//   );
-//   const [heroSecondaryCta, setHeroSecondaryCta] = useState(
-//     'Explore Services',
-//   );
-
-//   const [storyHeading, setStoryHeading] = useState('Our Story');
-//   const [storyBody, setStoryBody] = useState(
-//     'Bliss Match is a private matchmaking consultancy in London serving discerning clients who value intentional, values-led relationships.',
-//   );
-
-//   const [serviceHeading, setServiceHeading] = useState(
-//     'How we can support you',
-//   );
-//   const [serviceIntro, setServiceIntro] = useState(
-//     'From private matchmaking to relationship coaching, each offering is designed to meet you where you are.',
-//   );
-
-//   const [loveHeading, setLoveHeading] = useState('Love, but more intentional');
-//   const [loveBody, setLoveBody] = useState(
-//     'We prioritise values, lifestyle, and long-term compatibility over quick matches.',
-//   );
-
-//   const [blissCircleHeading, setBlissCircleHeading] = useState(
-//     'The Bliss Circle',
-//   );
-//   const [blissCircleBody, setBlissCircleBody] = useState(
-//     'An intimate circle for clients ready to invest deeply in their search for lasting partnership.',
-//   );
-
-//   const [whyHeading, setWhyHeading] = useState('Why clients choose Bliss Match');
-//   const [whyPoints, setWhyPoints] = useState(
-//     'Discreet and personal service\nValues-led matching\nThoughtful, human guidance at every step',
-//   );
-
-//   const [successHeading, setSuccessHeading] = useState('Success stories');
-//   const [successIntro, setSuccessIntro] = useState(
-//     'A glimpse into lives quietly transformed through Bliss Match.',
-//   );
-
-//   function handleSaveLocally() {
-//     setMessage(
-//       'Changes saved in this admin view. Next step is wiring these fields to your backend and homepage components.',
-//     );
-//   }
-
-//   return (
-//     <AdminLayout
-//       title="Home Page"
-//       description="Edit the hero, story, and key sections shown on the public homepage."
-//     >
-//       <div className="space-y-10">
-//         {/* HERO */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Hero section
-//           </h2>
-//           <div className="grid gap-4 md:grid-cols-2">
-//             <div className="space-y-2">
-//               <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//                 Tagline (eyebrow)
-//               </label>
-//               <input
-//                 value={heroTagline}
-//                 onChange={(e) => setHeroTagline(e.target.value)}
-//                 className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//                 Main title
-//               </label>
-//               <input
-//                 value={heroTitle}
-//                 onChange={(e) => setHeroTitle(e.target.value)}
-//                 className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//               />
-//             </div>
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Supporting paragraph
-//             </label>
-//             <textarea
-//               value={heroSubtitle}
-//               onChange={(e) => setHeroSubtitle(e.target.value)}
-//               rows={3}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="grid gap-4 md:grid-cols-2">
-//             <div className="space-y-2">
-//               <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//                 Primary button label
-//               </label>
-//               <input
-//                 value={heroPrimaryCta}
-//                 onChange={(e) => setHeroPrimaryCta(e.target.value)}
-//                 className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//                 Secondary button label
-//               </label>
-//               <input
-//                 value={heroSecondaryCta}
-//                 onChange={(e) => setHeroSecondaryCta(e.target.value)}
-//                 className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//               />
-//             </div>
-//           </div>
-//         </section>
-
-//         {/* OUR STORY */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Our Story
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Section heading
-//             </label>
-//             <input
-//               value={storyHeading}
-//               onChange={(e) => setStoryHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Main copy
-//             </label>
-//             <textarea
-//               value={storyBody}
-//               onChange={(e) => setStoryBody(e.target.value)}
-//               rows={4}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         {/* SERVICES OVERVIEW */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Services overview
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Section heading
-//             </label>
-//             <input
-//               value={serviceHeading}
-//               onChange={(e) => setServiceHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Intro copy
-//             </label>
-//             <textarea
-//               value={serviceIntro}
-//               onChange={(e) => setServiceIntro(e.target.value)}
-//               rows={3}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         {/* LOVE CONNECTION SECTION */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Love connection section
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Heading
-//             </label>
-//             <input
-//               value={loveHeading}
-//               onChange={(e) => setLoveHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Supporting copy
-//             </label>
-//             <textarea
-//               value={loveBody}
-//               onChange={(e) => setLoveBody(e.target.value)}
-//               rows={3}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         {/* BLISS CIRCLE */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Bliss Circle highlight
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Heading
-//             </label>
-//             <input
-//               value={blissCircleHeading}
-//               onChange={(e) => setBlissCircleHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Intro copy
-//             </label>
-//             <textarea
-//               value={blissCircleBody}
-//               onChange={(e) => setBlissCircleBody(e.target.value)}
-//               rows={3}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         {/* WHY CHOOSE US */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Why choose us
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Section heading
-//             </label>
-//             <input
-//               value={whyHeading}
-//               onChange={(e) => setWhyHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Key points (one per line)
-//             </label>
-//             <textarea
-//               value={whyPoints}
-//               onChange={(e) => setWhyPoints(e.target.value)}
-//               rows={4}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         {/* SUCCESS STORIES */}
-//         <section className="space-y-4">
-//           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">
-//             Success stories
-//           </h2>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Section heading
-//             </label>
-//             <input
-//               value={successHeading}
-//               onChange={(e) => setSuccessHeading(e.target.value)}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//           <div className="space-y-2">
-//             <label className="text-[11px] font-semibold uppercase tracking-[0.25em] text-stone-500">
-//               Intro copy
-//             </label>
-//             <textarea
-//               value={successIntro}
-//               onChange={(e) => setSuccessIntro(e.target.value)}
-//               rows={3}
-//               className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-deep-midnight-navy"
-//             />
-//           </div>
-//         </section>
-
-//         <div className="flex items-center justify-between pt-4 border-t border-stone-100">
-//           {message && (
-//             <p className="text-xs text-stone-500 max-w-md">{message}</p>
-//           )}
-//           <Button
-//             type="button"
-//             onClick={handleSaveLocally}
-//             className="rounded-full bg-deep-midnight-navy text-white px-6 py-2 text-xs font-semibold uppercase tracking-[0.24em] hover:bg-muted-burgundy-rose"
-//           >
-//             Save homepage content
-//           </Button>
-//         </div>
-//       </div>
-//     </AdminLayout>
-//   );
-// }
-
-// // 'use client';
-
-// // import AdminLayout from '@/components/admin/admin-layout';
-
-// // export default function AdminHomeEditPage() {
-// //   return (
-// //     <AdminLayout
-// //       title="Home Page"
-// //       description="Edit the hero, story, and key sections shown on the public homepage."
-// //     >
-// //       <div className="space-y-4">
-// //         <p className="text-sm text-stone-600">
-// //           This area will let you adjust the main hero copy, featured sections
-// //           (Our Story, Services overview, Bliss Circle, and success stories),
-// //           so the front page always reflects your current focus.
-// //         </p>
-// //         <p className="text-xs text-stone-400">
-// //           Coming next: structured controls for headings, subcopy, CTAs, and
-// //           imagery pulled from the live homepage.
-// //         </p>
-// //       </div>
-// //     </AdminLayout>
-// //   );
-// // }
-
-
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/admin-layout';
 import { Button } from '@/components/ui/button';
-import { Save, Layout as LayoutIcon, Type, MousePointer2 } from 'lucide-react';
+import { Save, Sparkles, LayoutPanelLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { HomeContent, SectionKey } from '@/components/admin/home-editor/types';
+import {
+  BlissCircleSection,
+  INITIAL_CONTENT,
+  LoveConnectionSection,
+  OurStorySection,
+  SECTION_TABS,
+  ServicesOverviewSection,
+  WhyChooseUsSection,
+} from '@/components/admin/home-editor/sections';
 
 export default function AdminHomePage() {
+  // --- State Management ---
+  const router = useRouter();
+  const [queryTab, setQueryTab] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<SectionKey>('ourStory');
+  const [content, setContent] = useState<HomeContent>(INITIAL_CONTENT);
   const [message, setMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
-  // State Logic (Unchanged)
-  const [heroTagline, setHeroTagline] = useState('Where Love Meets Intention');
-  const [heroTitle, setHeroTitle] = useState('Building great relationships leads to an amazing life!');
-  const [heroSubtitle, setHeroSubtitle] = useState('Expert relationship consultancy designed to help you navigate the complexities of love, connection, and lasting partnership.');
-  const [heroPrimaryCta, setHeroPrimaryCta] = useState('Book a Private Consultation');
-  const [heroSecondaryCta, setHeroSecondaryCta] = useState('Explore Services');
-  const [storyHeading, setStoryHeading] = useState('Our Story');
-  const [storyBody, setStoryBody] = useState('Bliss Match is a private matchmaking consultancy in London serving discerning clients who value intentional, values-led relationships.');
-  const [serviceHeading, setServiceHeading] = useState('How we can support you');
-  const [serviceIntro, setServiceIntro] = useState('From private matchmaking to relationship coaching, each offering is designed to meet you where you are.');
-  const [loveHeading, setLoveHeading] = useState('Love, but more intentional');
-  const [loveBody, setLoveBody] = useState('We prioritise values, lifestyle, and long-term compatibility over quick matches.');
-  const [blissCircleHeading, setBlissCircleHeading] = useState('The Bliss Circle');
-  const [blissCircleBody, setBlissCircleBody] = useState('An intimate circle for clients ready to invest deeply in their search for lasting partnership.');
-  const [whyHeading, setWhyHeading] = useState('Why clients choose Bliss Match');
-  const [whyPoints, setWhyPoints] = useState('Discreet and personal service\nValues-led matching\nThoughtful, human guidance at every step');
-  const [successHeading, setSuccessHeading] = useState('Success stories');
-  const [successIntro, setSuccessIntro] = useState('A glimpse into lives quietly transformed through Bliss Match.');
+  // Refs to avoid re-creating save handlers on every keystroke.
+  const latestContentRef = useRef<HomeContent>(INITIAL_CONTENT);
+  const lastSavedContentRef = useRef<string>(JSON.stringify(INITIAL_CONTENT));
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function handleSaveLocally() {
-    setMessage('Changes saved in this admin view. Next step: backend integration.');
-    setTimeout(() => setMessage(null), 5000);
-  }
+  // Index trackers for nested arrays
+  const [indices, setIndices] = useState({
+    service: 0,
+    love: 0,
+    badge: 0,
+    value: 0,
+  });
 
-  // Sub-component for form rows to keep the JSX clean
-  const FormField = ({ label, children, description }: any) => (
-    <div className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
-          {label}
-        </label>
-        {description && <span className="text-[9px] text-stone-300 italic">{description}</span>}
-      </div>
-      {children}
-    </div>
+  // --- Helpers ---
+  const activeMeta = useMemo(
+    () => SECTION_TABS.find((s) => s.key === activeTab) ?? SECTION_TABS[0],
+    [activeTab]
   );
+
+  const updateSection = useCallback((section: SectionKey, patch: any) => {
+    setContent((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], ...patch },
+    }));
+  }, []);
+
+  // Keep a stable reference for the latest content.
+  useEffect(() => {
+    latestContentRef.current = content;
+  }, [content]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const urlTab = new URLSearchParams(window.location.search).get('tab');
+    setQueryTab(urlTab);
+  });
+
+  useEffect(() => {
+    const urlTab = queryTab;
+    if (!urlTab) return;
+    const isValidTab = SECTION_TABS.some((section) => section.key === urlTab);
+    if (isValidTab) {
+      setActiveTab(urlTab as SectionKey);
+    }
+  }, [queryTab]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function load() {
+      try {
+        const res = await fetch('/api/admin/home');
+        const data = await res.json().catch(() => null);
+        if (!active) return;
+        if (res.ok && data) {
+          latestContentRef.current = data;
+          setContent(data);
+          lastSavedContentRef.current = JSON.stringify(data);
+          setMessage('Loaded.');
+          setTimeout(() => setMessage(null), 2000);
+        }
+      } catch {
+        // Keep the default INITIAL_CONTENT for testing
+      } finally {
+        if (active) setLoaded(true);
+      }
+    }
+
+    load();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const handleSave = useCallback(async (toastMessage = 'Saved.') => {
+    const token =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('blissmatch_admin_token')
+        : null;
+
+    if (!token) {
+      setMessage('Login first.');
+      setToast({ type: 'error', message: 'Login first.' });
+      setTimeout(() => setMessage(null), 3000);
+      router.push('/admin/login');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/home', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(latestContentRef.current),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          window.localStorage.removeItem('blissmatch_admin_token');
+          setMessage('Login again.');
+          setToast({ type: 'error', message: 'Session expired. Login again.' });
+          setTimeout(() => setMessage(null), 3000);
+          router.push('/admin/login');
+          return;
+        }
+
+        const errMessage = data?.message || 'Could not save changes.';
+        setMessage(errMessage);
+        setToast({ type: 'error', message: errMessage });
+        setTimeout(() => setMessage(null), 3000);
+        return;
+      }
+
+      // Keep track of the last saved content snapshot to power auto-save.
+      lastSavedContentRef.current = JSON.stringify(latestContentRef.current);
+      setMessage(toastMessage);
+      setToast({ type: 'success', message: toastMessage });
+      setTimeout(() => setMessage(null), 3000);
+    } finally {
+      setSaving(false);
+    }
+  }, [router]);
+
+  // Auto-save any Home section after the admin stops typing.
+  useEffect(() => {
+    if (!loaded) return;
+
+    const snapshot = JSON.stringify(content);
+    if (snapshot === lastSavedContentRef.current) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      setMessage('Saving component...');
+      handleSave('Component saved.');
+    }, 1200);
+
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    };
+  }, [content, handleSave, loaded]);
+
+  // --- Section Specific Handlers (Refactored for clarity) ---
+  const handlers = {
+    services: {
+      add: () => {
+        const nextCards = [...content.servicesOverview.cards, { 
+          id: `${String(content.servicesOverview.cards.length + 1).padStart(2, '0')}.`,
+          title: 'New Service', description: '', ctaLabel: "Let's Talk" 
+        }];
+        updateSection('servicesOverview', { cards: nextCards });
+        setIndices(prev => ({ ...prev, service: nextCards.length - 1 }));
+      },
+      delete: (index: number) => {
+        const nextCards = content.servicesOverview.cards.filter((_, i) => i !== index);
+        updateSection('servicesOverview', { cards: nextCards });
+        setIndices(prev => ({ ...prev, service: Math.max(0, index - 1) }));
+      }
+    },
+    // Note: You can follow this pattern to collapse other add/delete functions 
+    // to keep the main component body lean.
+  };
+
+  /**
+   * Section Map: This replaces the long if/else chain in the JSX.
+   * It makes adding new sections as simple as adding a line here.
+   */
+  const renderActiveSection = () => {
+    const props: Record<SectionKey, any> = {
+      ourStory: {
+        data: content.ourStory,
+        onFieldChange: (f: string, v: string) => updateSection('ourStory', { [f]: v }),
+      },
+      servicesOverview: {
+        data: content.servicesOverview,
+        selectedIndex: indices.service,
+        setSelectedIndex: (i: number) => setIndices(p => ({ ...p, service: i })),
+        onHeadingChange: (v: string) => updateSection('servicesOverview', { heading: v }),
+        onAdd: handlers.services.add,
+        onDelete: handlers.services.delete,
+        onUpdateCard: (index: number, patch: any) => {
+          const next = [...content.servicesOverview.cards];
+          next[index] = { ...next[index], ...patch };
+          updateSection('servicesOverview', { cards: next });
+        }
+      },
+      loveConnection: {
+        data: content.loveConnection,
+        selectedIndex: indices.love,
+        setSelectedIndex: (i: number) => setIndices(p => ({ ...p, love: i })),
+        onFieldChange: (f: string, v: string) => updateSection('loveConnection', { [f]: v }),
+        onAdd: () => {
+          const next = [...content.loveConnection.images, { url: '', alt: '' }];
+          updateSection('loveConnection', { images: next });
+          setIndices(p => ({ ...p, love: next.length - 1 }));
+        },
+        onDelete: (idx: number) => {
+          const next = content.loveConnection.images.filter((_, i) => i !== idx);
+          updateSection('loveConnection', { images: next });
+          setIndices(p => ({ ...p, love: Math.max(0, idx - 1) }));
+        },
+        onUpdateImage: (idx: number, patch: any) => {
+          const next = [...content.loveConnection.images];
+          next[idx] = { ...next[idx], ...patch };
+          updateSection('loveConnection', { images: next });
+        }
+      },
+      blissCircle: {
+        data: content.blissCircle,
+        selectedBadgeIndex: indices.badge,
+        setSelectedBadgeIndex: (i: number) => setIndices(p => ({ ...p, badge: i })),
+        onFieldChange: (f: string, v: string) => updateSection('blissCircle', { [f]: v }),
+        onAddBadge: () => {
+          const next = [...content.blissCircle.badges, { label: 'New Badge' }];
+          updateSection('blissCircle', { badges: next });
+          setIndices(p => ({ ...p, badge: next.length - 1 }));
+        },
+        onDeleteBadge: (idx: number) => {
+          const next = content.blissCircle.badges.filter((_, i) => i !== idx);
+          updateSection('blissCircle', { badges: next });
+          setIndices(p => ({ ...p, badge: Math.max(0, idx - 1) }));
+        },
+        onUpdateBadge: (idx: number, patch: any) => {
+          const next = [...content.blissCircle.badges];
+          next[idx] = { ...next[idx], ...patch };
+          updateSection('blissCircle', { badges: next });
+        }
+      },
+      whyChooseUs: {
+        data: content.whyChooseUs,
+        selectedIndex: indices.value,
+        setSelectedIndex: (i: number) => setIndices(p => ({ ...p, value: i })),
+        onFieldChange: (f: string, v: string) => updateSection('whyChooseUs', { [f]: v }),
+        onAddValueCard: () => {
+          const next = [...content.whyChooseUs.valueCards, { title: 'New Value', description: '' }];
+          updateSection('whyChooseUs', { valueCards: next });
+          setIndices(p => ({ ...p, value: next.length - 1 }));
+        },
+        onDeleteValueCard: (idx: number) => {
+          const next = content.whyChooseUs.valueCards.filter((_, i) => i !== idx);
+          updateSection('whyChooseUs', { valueCards: next });
+          setIndices(p => ({ ...p, value: Math.max(0, idx - 1) }));
+        },
+        onUpdateValueCard: (idx: number, patch: any) => {
+          const next = [...content.whyChooseUs.valueCards];
+          next[idx] = { ...next[idx], ...patch };
+          updateSection('whyChooseUs', { valueCards: next });
+        }
+      }
+    };
+
+    const ActiveComponent = {
+      ourStory: OurStorySection,
+      servicesOverview: ServicesOverviewSection,
+      loveConnection: LoveConnectionSection,
+      blissCircle: BlissCircleSection,
+      whyChooseUs: WhyChooseUsSection,
+    }[activeTab];
+
+    return ActiveComponent ? <ActiveComponent {...props[activeTab]} /> : null;
+  };
 
   return (
     <AdminLayout
       title="Homepage Editor"
-      description="Manage the narrative and visual cues of your digital storefront."
+      description="Manage visual blocks and narrative sections."
     >
-      <div className="max-w-5xl space-y-12 p-5">
+      {toast && (
+        <div
+          className={cn(
+            'fixed top-5 right-5 z-[9999] rounded-lg px-4 py-3 text-sm shadow-lg border',
+            toast.type === 'success'
+              ? 'bg-green-50 text-green-700 border-green-200'
+              : 'bg-red-50 text-red-700 border-red-200',
+          )}
+        >
+          {toast.message}
+        </div>
+      )}
+      <div className="max-w-6xl mx-auto space-y-8 pb-20">
         
-        {/* HERO SECTION */}
-        <div className="rounded-2xl border border-stone-100 bg-white p-8 shadow-sm">
-          <div className="mb-8 flex items-center gap-3 border-b border-stone-50 pb-5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-50 text-stone-400">
-              <LayoutIcon size={16} />
-            </div>
-            <h2 className="font-serif text-xl text-deep-midnight-navy">Hero Narrative</h2>
+        {/* --- Header Dashboard Card --- */}
+        <div className="bg-[#0F172A] rounded-2xl p-8 text-white relative overflow-hidden shadow-xl shadow-stone-200/50">
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <LayoutPanelLeft size={120} />
           </div>
-          
-          <div className="grid gap-8">
-            <div className="grid gap-6 md:grid-cols-2">
-              <FormField label="Tagline / Eyebrow">
-                <input
-                  value={heroTagline}
-                  onChange={(e) => setHeroTagline(e.target.value)}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm transition-colors focus:border-muted-burgundy-rose outline-none"
-                />
-              </FormField>
-              <FormField label="Main Heading Title">
-                <input
-                  value={heroTitle}
-                  onChange={(e) => setHeroTitle(e.target.value)}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm transition-colors focus:border-muted-burgundy-rose outline-none font-serif italic"
-                />
-              </FormField>
-            </div>
-
-            <FormField label="Supporting Subtext">
-              <textarea
-                value={heroSubtitle}
-                onChange={(e) => setHeroSubtitle(e.target.value)}
-                rows={2}
-                className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm transition-colors focus:border-muted-burgundy-rose outline-none resize-none"
-              />
-            </FormField>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FormField label="Primary CTA" description="Main action button">
-                <div className="flex items-center gap-2 border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-colors">
-                  <MousePointer2 size={12} className="text-stone-300" />
-                  <input
-                    value={heroPrimaryCta}
-                    onChange={(e) => setHeroPrimaryCta(e.target.value)}
-                    className="w-full bg-transparent py-2 text-sm outline-none"
-                  />
-                </div>
-              </FormField>
-              <FormField label="Secondary CTA" description="Alternative link">
-                <div className="flex items-center gap-2 border-b border-stone-200 focus-within:border-muted-burgundy-rose transition-colors">
-                  <MousePointer2 size={12} className="text-stone-300" />
-                  <input
-                    value={heroSecondaryCta}
-                    onChange={(e) => setHeroSecondaryCta(e.target.value)}
-                    className="w-full bg-transparent py-2 text-sm outline-none"
-                  />
-                </div>
-              </FormField>
-            </div>
-          </div>
-        </div>
-
-        {/* CORE STORY & PHILOSOPHY */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Story Card */}
-          <div className="rounded-2xl border border-stone-100 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 font-serif text-lg text-deep-midnight-navy">Brand Story</h2>
-            <div className="space-y-6">
-              <FormField label="Heading">
-                <input
-                  value={storyHeading}
-                  onChange={(e) => setStoryHeading(e.target.value)}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-              <FormField label="Body Copy">
-                <textarea
-                  value={storyBody}
-                  onChange={(e) => setStoryBody(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose leading-relaxed"
-                />
-              </FormField>
-            </div>
-          </div>
-
-          {/* Love Connection Card */}
-          <div className="rounded-2xl border border-stone-100 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 font-serif text-lg text-deep-midnight-navy">Intentionality Section</h2>
-            <div className="space-y-6">
-              <FormField label="Section Heading">
-                <input
-                  value={loveHeading}
-                  onChange={(e) => setLoveHeading(e.target.value)}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-              <FormField label="Supporting Statement">
-                <textarea
-                  value={loveBody}
-                  onChange={(e) => setLoveBody(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-none border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose leading-relaxed"
-                />
-              </FormField>
-            </div>
-          </div>
-        </div>
-
-        {/* SERVICE OFFERINGS & BLISS CIRCLE */}
-        <div className="rounded-2xl border border-stone-100 bg-stone-900 p-8 shadow-sm text-white">
-          <div className="mb-8 border-b border-white/10 pb-5">
-            <h2 className="font-serif text-xl">Service Strategy</h2>
-          </div>
-          <div className="grid gap-10 md:grid-cols-2">
-            <div className="space-y-6">
-              <FormField label="Service Intro Heading">
-                <input
-                  value={serviceHeading}
-                  onChange={(e) => setServiceHeading(e.target.value)}
-                  className="w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-              <FormField label="Introduction Text">
-                <textarea
-                  value={serviceIntro}
-                  onChange={(e) => setServiceIntro(e.target.value)}
-                  rows={3}
-                  className="w-full border-b border-white/20 bg-transparent py-2 text-sm text-stone-300 outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-            </div>
-            <div className="space-y-6 border-l border-white/10 pl-10">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-burgundy-rose" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-burgundy-rose">Premium Tier</span>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-muted-burgundy-rose">
+                <Sparkles size={14} />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em]">Editing</span>
               </div>
-              <FormField label="The Bliss Circle Heading">
-                <input
-                  value={blissCircleHeading}
-                  onChange={(e) => setBlissCircleHeading(e.target.value)}
-                  className="w-full border-b border-white/20 bg-transparent py-2 text-sm text-white outline-none focus:border-muted-burgundy-rose font-serif italic"
-                />
-              </FormField>
-              <FormField label="Circle Description">
-                <textarea
-                  value={blissCircleBody}
-                  onChange={(e) => setBlissCircleBody(e.target.value)}
-                  rows={3}
-                  className="w-full border-b border-white/20 bg-transparent py-2 text-sm text-stone-300 outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
+              <h2 className="text-3xl font-black italic uppercase tracking-tight">Homepage</h2>
+              <p className="text-stone-400 text-[11px] font-medium uppercase tracking-widest">
+                Update text and images on your homepage
+              </p>
+            </div>
+
+            <div className="flex flex-col items-end gap-2">
+               <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest italic">{message ?? 'Ready'}</span>
+               <Button
+                onClick={() => handleSave()}
+                disabled={saving}
+                className="bg-muted-burgundy-rose rounded-md hover:bg-white hover:text-deep-midnight-navy text-white px-5 py-4 font-black text-[8px] uppercase tracking-[0.2em] transition-all shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <Save className="mr-2 h-4 w-4" />
+                Save Changes
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* TRUST SIGNALS: WHY & SUCCESS */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-2xl border border-stone-100 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 font-serif text-lg text-deep-midnight-navy">Trust Factors</h2>
+        {/* --- Main Workspace --- */}
             <div className="space-y-6">
-              <FormField label="Why Us Heading">
-                <input
-                  value={whyHeading}
-                  onChange={(e) => setWhyHeading(e.target.value)}
-                  className="w-full border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-              <FormField label="Values / Points" description="Standard list view">
-                <textarea
-                  value={whyPoints}
-                  onChange={(e) => setWhyPoints(e.target.value)}
-                  rows={4}
-                  className="w-full border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose font-mono text-xs tracking-tight"
-                />
-              </FormField>
+          {/* Horizontal Navigation */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-md border border-stone-200 px-4 py-3 shadow-sm ring-1 ring-stone-100/50">
+            <div className="flex flex-wrap items-center gap-2">
+              {SECTION_TABS.map((tab) => {
+                const isActive = tab.key === activeTab;
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => {
+                      setActiveTab(tab.key);
+                      setQueryTab(tab.key);
+                      router.replace(`/admin/home?tab=${tab.key}`);
+                    }}
+                    className={cn(
+                      'group relative flex items-center gap-3 rounded-md px-4 py-2 transition-all duration-300 border',
+                      isActive
+                        ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-lg shadow-stone-200/50'
+                        : 'bg-white text-stone-500 border-stone-200 hover:bg-stone-50 hover:text-deep-midnight-navy',
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        'flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-300',
+                        isActive
+                          ? 'bg-white/10 ring-1 ring-white/20'
+                          : 'bg-stone-100 group-hover:bg-white',
+                      )}
+                    >
+                      <tab.icon
+                        className={cn(
+                          'h-4 w-4 transition-colors',
+                          isActive
+                            ? 'text-muted-burgundy-rose'
+                            : 'text-stone-400 group-hover:text-muted-burgundy-rose',
+                        )}
+                      />
+                    </div>
+                    <span className="text-[11px] font-black tracking-widest">
+                      {tab.label}
+                    </span>
+                    {isActive && (
+                      <span className="ml-1 h-1.5 w-1.5 rounded-full bg-muted-burgundy-rose animate-pulse" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-stone-100 bg-white p-8 shadow-sm">
-            <h2 className="mb-6 font-serif text-lg text-deep-midnight-navy">Social Proof</h2>
-            <div className="space-y-6">
-              <FormField label="Success Heading">
-                <input
-                  value={successHeading}
-                  onChange={(e) => setSuccessHeading(e.target.value)}
-                  className="w-full border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose"
-                />
-              </FormField>
-              <FormField label="Stories Introduction">
-                <textarea
-                  value={successIntro}
-                  onChange={(e) => setSuccessIntro(e.target.value)}
-                  rows={4}
-                  className="w-full border-b border-stone-200 bg-transparent py-2 text-sm outline-none focus:border-muted-burgundy-rose leading-relaxed"
-                />
-              </FormField>
+          {/* Active Configuration Panel */}
+          <main className="bg-white rounded-md border border-stone-200 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
+            <div className="bg-stone-50/50 border-b border-stone-100 px-8 py-5 flex items-center justify-between">
+                <div>
+                    <h3 className="text-sm font-black text-deep-midnight-navy uppercase tracking-widest">{activeMeta.label}</h3>
+                    <p className="text-[10px] font-medium text-stone-400">Choose a section to edit</p>
             </div>
+                <div className="px-3 py-1 bg-white border border-stone-200 rounded text-[9px] font-black text-stone-400 uppercase">
+                    Ref: {activeTab}
           </div>
         </div>
 
-        {/* FIXED FOOTER ACTION BAR */}
-        <div className=" bottom-0 left-0 right-0 z-50 ml-0 flex items-center justify-between border-t border-stone-100 bg-white/80 px-12 py-4 backdrop-blur-md md:left-72">
-          <div className="flex items-center gap-3">
-            {message ? (
-              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-burgundy-rose">
-                <div className="h-1 w-1 animate-pulse rounded-full bg-muted-burgundy-rose" />
-                {message}
-              </div>
-            ) : (
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-300">Unsaved Session</span>
-            )}
-          </div>
-          <Button
-            type="button"
-            onClick={handleSaveLocally}
-            className="group flex items-center gap-3 rounded-full bg-deep-midnight-navy px-8 py-6 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-xl transition-all hover:bg-muted-burgundy-rose"
-          >
-            <Save size={14} className="transition-transform group-hover:-translate-y-0.5" />
-            Publish Changes
-          </Button>
+            <div className="p-8 flex-1">
+                {renderActiveSection()}
+            </div>
+          </main>
         </div>
       </div>
     </AdminLayout>

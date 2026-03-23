@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchBackend } from "@/lib/backend-proxy";
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
-    const backendUrl =
-      process.env.BACKEND_URL ??
-      process.env.NEXT_PUBLIC_API_URL ??
-      "http://backend:4000";
-
-    const res = await fetch(`${backendUrl}/auth/admin/login`, {
+    const res = await fetchBackend(`/auth/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

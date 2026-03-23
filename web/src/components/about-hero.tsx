@@ -1,12 +1,32 @@
 "use client";
 import Image from "next/image";
+import { useHeroConfig } from "@/hooks/use-hero-config";
+import { AboutContent } from "@/components/admin/about-editor/types";
 
-const AboutHero = () => {
+type AboutHeroProps = {
+  data?: AboutContent["hero"];
+};
+
+const AboutHero = ({ data }: AboutHeroProps) => {
+  const config = useHeroConfig("/admin/about");
+  const title = data?.title || config?.title || "Our Story";
+  const subtitle = data?.subtitle || config?.subtitle || "Established in Connection";
+  const body =
+    data?.body ||
+    config?.body ||
+    "BlissMatch was founded by two best friends—one from a background in Human Behaviour Studies, the other in Business and Law—united by a vision to restore authenticity to modern relationships.";
+  const imageUrl = data?.sideImageUrl || config?.imageUrl || "/image.png";
+  const backgroundImage = data?.backgroundImageUrl || "/image copy 2.png";
+  const sideNote =
+    data?.sideNote ||
+    "In a fast, digital world, real connection had become rare. We built BlissMatch as a sanctuary for meaningful love—a private consultancy rooted in discretion and human understanding.";
+  const quote = data?.quote || "Restoring the art of human connection.";
+
   return (
     <section className="relative min-h-[95vh] flex items-center pt-38 pb-20 lg:pt-42 lg:pb-24 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/image copy 2.png"
+          src={backgroundImage}
           alt="BlissMatch Sanctuary"
           fill
           className="object-cover brightness-[0.4] scale-105"
@@ -36,29 +56,16 @@ const AboutHero = () => {
           <div className="max-w-2xl">
             {/* Tag now clearly visible below the header */}
             <span className="text-white border border-muted-burgundy-rose px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] mb-8 inline-block">
-              Established in Connection
+              {subtitle}
             </span>
             <h1 className="text-5xl md:text-7xl font-serif text-white leading-[1.1] mb-6 tracking-tighter">
-              Our <span className="italic text-muted-burgundy-rose">Story</span>
+              {title}
             </h1>
 
             <div className="space-y-6 text-stone-200 text-lg md:text-xl leading-relaxed">
-              <p>
-                BlissMatch was founded by two best friends—one from a background
-                in
-                <span className="text-white font-medium">
-                  {" "}
-                  Human Behaviour Studies
-                </span>
-                , the other in{" "}
-                <span className="text-white font-medium">Business and Law</span>
-                —united by a vision to restore authenticity to modern
-                relationships.
-              </p>
+              <p>{body}</p>
               <p className="text-base text-stone-300 font-light max-w-lg italic border-l border-muted-burgundy-rose/30 pl-6">
-                In a fast, digital world, real connection had become rare. We
-                built BlissMatch as a sanctuary for meaningful love—a private
-                consultancy rooted in discretion and human understanding.
+                {sideNote}
               </p>
             </div>
           </div>
@@ -67,7 +74,7 @@ const AboutHero = () => {
             {/* Arched image container */}
             <div className="relative aspect-3/4 w-full max-w-sm mx-auto lg:ml-auto overflow-hidden shadow-2xl rounded-t-full border-[12px] border-white/10 backdrop-blur-sm">
               <Image
-                src="/image.png"
+                src={imageUrl}
                 alt="BlissMatch Founders"
                 fill
                 className="object-cover transition-transform duration-1000 hover:scale-105"
@@ -77,7 +84,7 @@ const AboutHero = () => {
             {/* Desktop Quote Box */}
             <div className="absolute -bottom-6 -left-6 bg-white p-8 shadow-2xl max-w-[240px] hidden md:block border-t-4 border-muted-burgundy-rose">
               <p className="font-serif italic text-deep-midnight-navy text-lg leading-snug">
-                "Restoring the art of human connection."
+                "{quote}"
               </p>
             </div>
           </div>

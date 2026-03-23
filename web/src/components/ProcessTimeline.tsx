@@ -3,10 +3,11 @@ import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AboutContent } from "@/components/admin/about-editor/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const processSteps = [
+const processStepsDefault = [
   {
     id: "01",
     title: "Private Consultation",
@@ -39,7 +40,11 @@ const processSteps = [
   },
 ];
 
-const ProcessTimeline = () => {
+type ProcessTimelineProps = {
+  data?: AboutContent["process"];
+};
+
+const ProcessTimeline = ({ data }: ProcessTimelineProps) => {
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
 
@@ -70,7 +75,7 @@ const ProcessTimeline = () => {
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/image.png"
+          src={data?.backgroundImageUrl ?? "/image.png"}
           alt="Couple holding hands"
           fill
           className="object-cover"
@@ -82,10 +87,10 @@ const ProcessTimeline = () => {
       {/* Header - Reduced top padding and text size */}
       <div className="absolute top-10 md:top-12 left-1/2 -translate-x-1/2 z-20 text-center w-full px-6">
         <span className="text-muted-burgundy-rose text-[10px] font-black uppercase tracking-[0.4em] mb-2 block">
-          The Journey
+          {data?.eyebrow ?? "The Journey"}
         </span>
         <h2 className="text-3xl md:text-4xl font-serif text-white tracking-tight">
-          Our Five-Step Process
+          {data?.heading ?? "Our Five-Step Process"}
         </h2>
       </div>
 
@@ -94,7 +99,7 @@ const ProcessTimeline = () => {
         ref={sectionRef}
         className="flex relative z-10 w-[350vw] h-[98%] items-center"
       >
-        {processSteps.map((step) => (
+        {(data?.steps ?? processStepsDefault).map((step) => (
           <div
             key={step.id}
             className="w-[65vw] h-full flex flex-col justify-center items-center px-4 md:px-10"
