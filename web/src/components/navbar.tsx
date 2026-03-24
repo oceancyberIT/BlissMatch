@@ -3,14 +3,32 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone } from "lucide-react";
-import { mergeNavigation } from "@/lib/site-settings-merge";
-import { INITIAL_NAVIGATION } from "@/lib/site-settings-defaults";
+import {
+  BriefcaseBusiness,
+  Home,
+  Info,
+  Instagram,
+  Linkedin,
+  Mail,
+  Menu,
+  MessageSquareText,
+  X,
+} from "lucide-react";
+import { mergeFooter, mergeNavigation } from "@/lib/site-settings-merge";
+import { INITIAL_FOOTER, INITIAL_NAVIGATION } from "@/lib/site-settings-defaults";
+
+const MOBILE_TABS = [
+  { name: "Home", href: "/", icon: Home },
+  { name: "About", href: "/about", icon: Info },
+  { name: "Services", href: "/services", icon: BriefcaseBusiness },
+  { name: "Contact", href: "/contact", icon: MessageSquareText },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [nav, setNav] = useState(() => INITIAL_NAVIGATION);
+  const [socialLinks, setSocialLinks] = useState(() => INITIAL_FOOTER.social);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,6 +41,25 @@ const Navbar = () => {
         if (!cancelled) setNav(mergeNavigation(data));
       } catch {
         if (!cancelled) setNav(INITIAL_NAVIGATION);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/site-settings/footer", {
+          cache: "no-store",
+        });
+        const data = await res.json().catch(() => null);
+        const merged = mergeFooter(data);
+        if (!cancelled) setSocialLinks(merged.social);
+      } catch {
+        if (!cancelled) setSocialLinks(INITIAL_FOOTER.social);
       }
     })();
     return () => {
@@ -93,22 +130,29 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Desktop Contact Info */}
-          <div className="hidden lg:flex items-center gap-4 border-l border-stone-200 pl-8">
-            <div className="bg-muted-burgundy-rose p-2.5 rounded-full text-white shadow-md shadow-rose-100">
-              <Phone size={16} fill="currentColor" />
-            </div>
-            <div className="flex flex-col">
-              <span className="uppercase text-[10px] font-bold tracking-widest text-stone-400">
-                {nav.phoneLabel}
-              </span>
-              <a
-                href={nav.phoneHref}
-                className="text-[15px] font-bold text-deep-midnight-navy hover:text-muted-burgundy-rose transition-colors"
-              >
-                {nav.phoneNumber}
-              </a>
-            </div>
+          <div className="hidden lg:flex items-center gap-3 border-l border-stone-200 pl-8">
+            {socialLinks.map((social, index) => {
+              const key = `desktop-${social.icon}-${index}`;
+              const lower = String(social.icon || "").toLowerCase();
+              const Icon =
+                lower === "instagram"
+                  ? Instagram
+                  : lower === "linkedin"
+                    ? Linkedin
+                    : Mail;
+              return (
+                <a
+                  key={key}
+                  href={social.href}
+                  target={social.href?.startsWith("http") ? "_blank" : undefined}
+                  rel={social.href?.startsWith("http") ? "noreferrer" : undefined}
+                  className="bg-muted-burgundy-rose/10 p-2.5 rounded-full text-muted-burgundy-rose hover:bg-muted-burgundy-rose hover:text-white transition-colors"
+                  aria-label={social.icon}
+                >
+                  <Icon size={16} />
+                </a>
+              );
+            })}
           </div>
 
           {/* Mobile Toggle */}
@@ -152,18 +196,62 @@ const Navbar = () => {
             );
           })}
 
-          {/* Added mobile phone contact to the menu */}
-          <div className="mt-4 pt-5 border-t border-stone-100 flex items-center gap-4">
-            <div className="bg-muted-burgundy-rose/10 p-3 rounded-full text-muted-burgundy-rose">
-              <Phone size={20} />
+          <div className="mt-4 pt-5 border-t border-stone-100">
+            <div className="text-[10px] uppercase font-bold tracking-[0.18em] text-stone-400 mb-3">
+              Follow us
             </div>
-            <a
-              href={nav.phoneHref}
-              className="text-deep-midnight-navy font-bold tracking-widest"
-            >
-              {nav.phoneNumber}
-            </a>
+            <div className="flex items-center gap-3">
+              {socialLinks.map((social, index) => {
+                const key = `${social.icon}-${index}`;
+                const lower = String(social.icon || "").toLowerCase();
+                const Icon =
+                  lower === "instagram"
+                    ? Instagram
+                    : lower === "linkedin"
+                      ? Linkedin
+                      : Mail;
+                return (
+                  <a
+                    key={key}
+                    href={social.href}
+                    target={social.href?.startsWith("http") ? "_blank" : undefined}
+                    rel={social.href?.startsWith("http") ? "noreferrer" : undefined}
+                    className="bg-muted-burgundy-rose/10 p-3 rounded-full text-muted-burgundy-rose hover:bg-muted-burgundy-rose hover:text-white transition-colors"
+                    aria-label={social.icon}
+                  >
+                    <Icon size={18} />
+                  </a>
+                );
+              })}
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile bottom tabs */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[900] border-t border-stone-200 bg-white/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-4">
+          {MOBILE_TABS.map((tab) => {
+            const isActive =
+              pathname === tab.href ||
+              (tab.href !== "/" && pathname.startsWith(tab.href));
+            const Icon = tab.icon;
+            return (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                className={`flex flex-col items-center justify-center gap-1 py-2 transition-colors ${
+                  isActive
+                    ? "text-muted-burgundy-rose"
+                    : "text-slate-500 hover:text-deep-midnight-navy"
+                }`}
+                onClick={handleLinkClick}
+              >
+                <Icon size={21} />
+                <span className="text-[11px] font-bold">{tab.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </nav>

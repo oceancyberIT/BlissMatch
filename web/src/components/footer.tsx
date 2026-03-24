@@ -2,28 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { mergeFooter } from "@/lib/site-settings-merge";
-import { INITIAL_FOOTER } from "@/lib/site-settings-defaults";
+import { mergeFooter, mergeNavigation } from "@/lib/site-settings-merge";
+import { INITIAL_FOOTER, INITIAL_NAVIGATION } from "@/lib/site-settings-defaults";
 import type { FooterContent } from "@/lib/site-settings-types";
 
-const socialIcon = (icon: FooterContent["social"][0]["icon"]) => {
-  switch (icon) {
-    case "instagram":
-      return Instagram;
-    case "linkedin":
-      return Linkedin;
-    case "mail":
-      return Mail;
-    default:
-      return Mail;
-  }
-};
+const COUPLES_GALLERY = ["/image.png", "/image copy 6.png", "/image copy 7.png"];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [f, setF] = useState<FooterContent>(() => INITIAL_FOOTER);
+  const [nav, setNav] = useState(() => INITIAL_NAVIGATION);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +32,24 @@ const Footer = () => {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/site-settings/navigation", {
+          cache: "no-store",
+        });
+        const data = await res.json().catch(() => null);
+        if (!cancelled) setNav(mergeNavigation(data));
+      } catch {
+        if (!cancelled) setNav(INITIAL_NAVIGATION);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <footer className="bg-deep-midnight-navy text-white pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -55,21 +62,6 @@ const Footer = () => {
               {f.ctaTitle}
             </h2>
           </div>
-
-          <Link
-            href={f.ctaButtonHref}
-            className="group relative flex items-center justify-center px-20  w-20 h-10 bg-muted-burgundy-rose transition-transform hover:scale-105 duration-500 shrink-0"
-          >
-            <div className="text-center flex flex-col items-center">
-              <span className="text-[9px] font-black uppercase tracking-widest">
-                {f.ctaButtonLabel}
-              </span>
-              <ArrowUpRight
-                size={16}
-                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </div>
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-10">
@@ -124,23 +116,30 @@ const Footer = () => {
               >
                 {f.email}
               </a>
+              <a
+                href={nav.phoneHref}
+                className="block hover:text-white transition-colors"
+              >
+                {nav.phoneNumber}
+              </a>
             </div>
           </div>
 
-          <div className="lg:col-span-3 flex lg:justify-end items-start pt-2">
-            <div className="flex gap-4 opacity-70">
-              {f.social.map((s, idx) => {
-                const Icon = socialIcon(s.icon);
-                return (
-                  <Link
-                    key={`${s.icon}-${idx}`}
-                    href={s.href}
-                    className="hover:text-muted-burgundy-rose transition-colors"
-                  >
-                    <Icon size={18} />
-                  </Link>
-                );
-              })}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-[9px] font-black uppercase tracking-widest text-stone-300 lg:text-right">
+              Couples Gallery
+            </h4>
+            <div className="grid grid-cols-3 gap-2 lg:justify-items-end">
+              {COUPLES_GALLERY.map((src, idx) => (
+                <div key={src} className="relative w-20 h-20 overflow-hidden rounded-md border border-white/10">
+                  <Image
+                    src={src}
+                    alt={`Couple ${idx + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
