@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "BlissMatch",
       images: [
         {
-          url: "/logo1.png",
+          url: "/logo.jpeg",
           width: 1200,
           height: 630,
           alt: "BlissMatch",
@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Bliss Match — Private Matchmaking Consultancy",
       description:
         "Where love meets intention. Discreet, deeply human matchmaking for discerning individuals in London and worldwide.",
-      images: ["/logo1.png"],
+      images: ["/logo.jpeg"],
     },
   };
 }
