@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import { PT_Serif } from "next/font/google";
 import Header from "../components/header";
@@ -9,44 +10,52 @@ const ptSerif = PT_Serif({
   weight: ["400", "700"],
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.NEXT_PUBLIC_APP_URL ||
-  "https://blissmatch.com";
+export async function generateMetadata(): Promise<Metadata> {
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host");
+  const protocol = h.get("x-forwarded-proto") ?? "https";
+  const metadataBase = host
+    ? new URL(`${protocol}://${host}`)
+    : new URL(
+        process.env.NEXT_PUBLIC_SITE_URL ||
+          process.env.NEXT_PUBLIC_APP_URL ||
+          "https://blissmatch.com",
+      );
 
-export const metadata: Metadata = {
-  title: "Bliss Match — Private Matchmaking Consultancy",
-  description:
-    "Bliss Match is a private matchmaking consultancy in London serving global clients, specialising in intentional, values-led relationships.",
-  metadataBase: new URL(siteUrl),
-  icons: {
-    icon: "/logo1.png",
-    shortcut: "/logo1.png",
-    apple: "/logo1.png",
-  },
-  openGraph: {
+  return {
     title: "Bliss Match — Private Matchmaking Consultancy",
     description:
-      "Where love meets intention. Discreet, deeply human matchmaking for discerning individuals in London and worldwide.",
-    type: "website",
-    siteName: "BlissMatch",
-    images: [
-      {
-        url: "/logo1.png",
-        width: 1200,
-        height: 630,
-        alt: "BlissMatch",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Bliss Match — Private Matchmaking Consultancy",
-    description:
-      "Where love meets intention. Discreet, deeply human matchmaking for discerning individuals in London and worldwide.",
-    images: ["/logo1.png"],
-  },
-};
+      "Bliss Match is a private matchmaking consultancy in London serving global clients, specialising in intentional, values-led relationships.",
+    metadataBase,
+    icons: {
+      icon: "/logo1.png",
+      shortcut: "/logo1.png",
+      apple: "/logo1.png",
+    },
+    openGraph: {
+      title: "Bliss Match — Private Matchmaking Consultancy",
+      description:
+        "Where love meets intention. Discreet, deeply human matchmaking for discerning individuals in London and worldwide.",
+      type: "website",
+      siteName: "BlissMatch",
+      images: [
+        {
+          url: "/logo1.png",
+          width: 1200,
+          height: 630,
+          alt: "BlissMatch",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Bliss Match — Private Matchmaking Consultancy",
+      description:
+        "Where love meets intention. Discreet, deeply human matchmaking for discerning individuals in London and worldwide.",
+      images: ["/logo1.png"],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
