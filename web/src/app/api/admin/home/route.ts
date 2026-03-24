@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const backendUrl =
-  process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://backend:4000';
+import { fetchBackend } from '@/lib/backend-proxy';
+import { INITIAL_CONTENT } from '@/components/admin/home-editor/constants';
 
 export async function GET() {
   try {
-    const res = await fetch(`${backendUrl}/admin/home`);
+    const res = await fetchBackend('/admin/home', { cache: 'no-store' });
     const data = await res.json().catch(() => null);
-    return NextResponse.json(data, { status: res.status });
+    if (!res.ok || !data) {
+      return NextResponse.json(INITIAL_CONTENT, { status: 200 });
+    }
+    return NextResponse.json(data, { status: 200 });
   } catch {
-    return NextResponse.json(
-      { message: 'Could not load home content.' },
-      { status: 500 },
-    );
+    return NextResponse.json(INITIAL_CONTENT, { status: 200 });
   }
 }
 
@@ -28,7 +27,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const res = await fetch(`${backendUrl}/admin/home`, {
+    const res = await fetchBackend('/admin/home', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
