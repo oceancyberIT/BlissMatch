@@ -48,6 +48,30 @@ export function AdminHeroManager() {
     message: string;
   } | null>(null);
 
+  const defaultHeroByRoute: Record<string, HeroConfig> = {
+    "/admin/home": {
+      route: "/admin/home",
+      title: "Building great relationships leads to an amazing life!",
+      subtitle: "Where Love Meets Intention",
+      body: "Expert relationship consultancy designed to help you navigate the complexities of love, connection, and lasting partnership.",
+      imageUrl: "/background.png",
+    },
+    "/admin/about": {
+      route: "/admin/about",
+      title: "Our Story",
+      subtitle: "Established in Connection",
+      body: "BlissMatch was founded by two best friends—one from a background in Human Behaviour Studies, the other in Business and Law—united by a vision to restore authenticity to modern relationships.",
+      imageUrl: "/image.png",
+    },
+    "/admin/services": {
+      route: "/admin/services",
+      title: "Our Services",
+      subtitle: "The BlissMatch Suite",
+      body: "A bespoke collection of consultancy services designed for the discerning individual seeking depth, discretion, and a crafted path to love.",
+      imageUrl: "/image.png",
+    },
+  };
+
   const fieldMeta = useMemo(() => {
     if (route === "/admin/home") {
       return {
@@ -150,13 +174,15 @@ export function AdminHeroManager() {
             imageUrl: data.imageUrl ?? "",
           });
         } else {
-          setConfig({
-            route,
-            title: "",
-            subtitle: "",
-            body: "",
-            imageUrl: "",
-          });
+          setConfig(
+            defaultHeroByRoute[route] ?? {
+              route,
+              title: "",
+              subtitle: "",
+              body: "",
+              imageUrl: "",
+            },
+          );
         }
       } finally {
         setLoading(false);
@@ -165,6 +191,62 @@ export function AdminHeroManager() {
 
     loadConfig();
   }, [route]);
+
+  const saveMediaAsset = async (url?: string, name?: string) => {
+    const token =
+      typeof window !== "undefined"
+        ? window.localStorage.getItem("blissmatch_admin_token")
+        : null;
+    if (!token || !url) return;
+    await fetch("/api/admin/media", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name: name || "Hero image", url }),
+    });
+  };
+
+  const syncMainHeroes = async () => {
+    const token =
+      typeof window !== "undefined"
+        ? window.localStorage.getItem("blissmatch_admin_token")
+        : null;
+    if (!token) {
+      setToast({
+        type: "error",
+        message: "Admin session expired. Please login again.",
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const targets = ["/admin/home", "/admin/about", "/admin/services"];
+      for (const r of targets) {
+        const payload = defaultHeroByRoute[r];
+        await fetch("/api/admin/hero", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        await saveMediaAsset(payload.imageUrl, `${r.replace("/admin/", "")}-hero`);
+      }
+      if (targets.includes(route)) {
+        setConfig(defaultHeroByRoute[route]);
+      }
+      setToast({
+        type: "success",
+        message: "Home, About, and Services heroes synced and saved to Media Library.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // Load saved home-page JSON (includes "Our Story") for the /admin/home route.
   useEffect(() => {
@@ -541,6 +623,14 @@ export function AdminHeroManager() {
                             </button>
                         ))}
                     </div>
+                    <button
+                      type="button"
+                      onClick={syncMainHeroes}
+                      disabled={saving}
+                      className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded border border-stone-200 bg-white text-deep-midnight-navy hover:bg-stone-50 disabled:opacity-60"
+                    >
+                      Sync main-site heroes
+                    </button>
 
                     {/* Our Story is now managed in /admin/our-story */}
                 </div>

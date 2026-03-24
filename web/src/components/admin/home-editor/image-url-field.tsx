@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback } from 'react';
-import { Image as ImageIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Image as ImageIcon, Library, RefreshCw, Save, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { MediaAsset } from '@/lib/media-library-types';
 
 type ImageUrlFieldProps = {
   value: string;
@@ -17,17 +18,83 @@ export function ImageUrlField({
   urlInputClassName,
   urlPlaceholder = 'Paste image URL or upload a file below',
 }: ImageUrlFieldProps) {
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [libraryLoading, setLibraryLoading] = useState(false);
+  const [libraryItems, setLibraryItems] = useState<MediaAsset[]>([]);
+  const [libraryMessage, setLibraryMessage] = useState<string | null>(null);
+
+  const fetchLibrary = useCallback(async () => {
+    const token =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('blissmatch_admin_token')
+        : null;
+    if (!token) return;
+    setLibraryLoading(true);
+    try {
+      const res = await fetch('/api/admin/media', {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !Array.isArray(data)) {
+        setLibraryMessage('Could not load media library.');
+        return;
+      }
+      setLibraryItems(data as MediaAsset[]);
+    } finally {
+      setLibraryLoading(false);
+    }
+  }, []);
+
+  const saveToLibrary = useCallback(
+    async (imageUrl: string, preferredName?: string) => {
+      const token =
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('blissmatch_admin_token')
+          : null;
+      if (!token || !imageUrl) return;
+      const payload = {
+        name: preferredName?.trim() || 'Library image',
+        url: imageUrl,
+      };
+      const res = await fetch('/api/admin/media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setLibraryMessage('Saved to media library.');
+        fetchLibrary();
+      } else {
+        setLibraryMessage('Could not save to media library.');
+      }
+    },
+    [fetchLibrary],
+  );
+
+  useEffect(() => {
+    if (!libraryOpen) return;
+    fetchLibrary();
+  }, [libraryOpen, fetchLibrary]);
+
   const onFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file?.type.startsWith('image/')) {
         const reader = new FileReader();
-        reader.onloadend = () => onChange(reader.result as string);
+        reader.onloadend = async () => {
+          const result = reader.result as string;
+          onChange(result);
+          await saveToLibrary(result, file.name);
+        };
         reader.readAsDataURL(file);
       }
       e.target.value = '';
     },
-    [onChange],
+    [onChange, saveToLibrary],
   );
 
   return (
@@ -80,13 +147,77 @@ export function ImageUrlField({
         </div>
       </div>
       {value ? (
-        <button
-          type="button"
-          onClick={() => onChange('')}
-          className="text-[10px] font-black uppercase tracking-wide text-red-500 hover:text-red-600"
-        >
-          Remove image
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => onChange('')}
+            className="text-[10px] font-black uppercase tracking-wide text-red-500 hover:text-red-600"
+          >
+            Remove image
+          </button>
+          <button
+            type="button"
+            onClick={() => saveToLibrary(value)}
+            className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wide text-deep-midnight-navy hover:text-muted-burgundy-rose"
+          >
+            <Save className="h-3.5 w-3.5" />
+            Save to library
+          </button>
+        </div>
+      ) : null}
+      <button
+        type="button"
+        onClick={() => setLibraryOpen((v) => !v)}
+        className="inline-flex items-center gap-2 rounded-md border border-stone-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-wider text-stone-600 hover:text-deep-midnight-navy"
+      >
+        {libraryOpen ? <X className="h-3.5 w-3.5" /> : <Library className="h-3.5 w-3.5" />}
+        {libraryOpen ? 'Close media library' : 'Choose from media library'}
+      </button>
+      {libraryOpen ? (
+        <div className="rounded-xl border border-stone-200 bg-white p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] font-black uppercase tracking-wider text-stone-500">
+              Media library
+            </p>
+            <button
+              type="button"
+              onClick={fetchLibrary}
+              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-stone-500 hover:text-deep-midnight-navy"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Refresh
+            </button>
+          </div>
+          {libraryMessage ? (
+            <p className="text-[10px] font-semibold text-muted-burgundy-rose">{libraryMessage}</p>
+          ) : null}
+          {libraryLoading ? (
+            <p className="text-xs text-stone-500">Loading library...</p>
+          ) : libraryItems.length === 0 ? (
+            <p className="text-xs text-stone-500">No saved images yet.</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-1">
+              {libraryItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onChange(item.url)}
+                  className="rounded-lg border border-stone-200 p-2 text-left hover:border-muted-burgundy-rose transition-colors"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.url}
+                    alt={item.name}
+                    className="h-20 w-full rounded object-cover border border-stone-100"
+                  />
+                  <p className="mt-1 truncate text-[10px] font-semibold text-stone-600">
+                    {item.name}
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       ) : null}
     </div>
   );

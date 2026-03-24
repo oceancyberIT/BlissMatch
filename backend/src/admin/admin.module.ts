@@ -19,6 +19,8 @@ import {
   SiteSettingsPublicController,
 } from './site-settings.controller';
 import { SiteSettingsService } from './site-settings.service';
+import { MediaLibraryController } from './media-library.controller';
+import { MediaLibraryService } from './media-library.service';
 
 @Module({
   imports: [AuthModule],
@@ -33,6 +35,7 @@ import { SiteSettingsService } from './site-settings.service';
     AdminEnquiryController,
     SiteSettingsPublicController,
     SiteSettingsAdminController,
+    MediaLibraryController,
   ],
   providers: [
     HeroSectionService,
@@ -43,6 +46,7 @@ import { SiteSettingsService } from './site-settings.service';
     EnquiryService,
     EmailService,
     SiteSettingsService,
+    MediaLibraryService,
   ],
 })
 export class AdminModule {}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   BookOpen,
@@ -23,6 +24,7 @@ import {
   Blocks,
   PanelBottom,
   PanelTop,
+  Images,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -100,7 +102,10 @@ export const ADMIN_NAV_ITEMS = [
   },
   {
     group: 'GLOBAL',
-    items: [{ name: 'Hero Section', href: '/admin/hero', icon: Command }],
+    items: [
+      { name: 'Hero Section', href: '/admin/hero', icon: Command },
+      { name: 'Media Library', href: '/admin/media-library', icon: Images },
+    ],
   },
   {
     group: 'SITE STRUCTURE',
@@ -135,10 +140,11 @@ export default function AdminLayout({ children, title, description }: any) {
       {/* --- SIDEBAR (Dark Professional) --- */}
       <aside className="w-64 flex flex-col bg-[#0F172A] border-r border-white/5 shrink-0 z-50">
         <div className="h-20 flex items-center px-6 gap-3 border-b border-white/5 bg-[#0F172A]">
-          <div className="h-8 w-8 rounded bg-muted-burgundy-rose flex items-center justify-center font-bold text-white italic">B</div>
+          {/* <div className="h-8 w-8 rounded bg-muted-burgundy-rose flex items-center justify-center font-bold text-white italic">B</div> */}
+          <Image src="/logo1.png" alt="BlissMatch Heart" width={32} height={32} className="object-contain" />
           <div className="flex flex-col">
-            <span className="text-white text-[11px] font-black tracking-widest uppercase">Admin panel</span>
-            <span className="text-[8px] text-muted-burgundy-rose font-bold">Site manager</span>
+            <span className="text-white text-[11px] font-black tracking-widest uppercase">BlissMatch</span>
+            <span className="text-[8px] text-muted-burgundy-rose font-bold">Administrator</span>
           </div>
         </div>
 

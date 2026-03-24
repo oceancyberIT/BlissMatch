@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const backendUrl =
-  process.env.BACKEND_URL ??
-  process.env.NEXT_PUBLIC_API_URL ??
-  "http://backend:4000";
+import { fetchBackend } from "@/lib/backend-proxy";
 
 export async function GET(request: NextRequest) {
   const route = request.nextUrl.searchParams.get("route");
@@ -12,8 +8,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const res = await fetch(
-      `${backendUrl}/admin/hero?route=${encodeURIComponent(route)}`,
+    const res = await fetchBackend(
+      `/admin/hero?route=${encodeURIComponent(route)}`,
     );
     const data = await res.json().catch(() => null);
     return NextResponse.json(data, { status: res.status });
@@ -37,7 +33,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const res = await fetch(`${backendUrl}/admin/hero`, {
+    const res = await fetchBackend(`/admin/hero`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
