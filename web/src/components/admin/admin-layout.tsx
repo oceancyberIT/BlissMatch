@@ -357,7 +357,7 @@ export default function AdminLayout({ children, title, description }: any) {
               <h1 className="text-lg font-black tracking-tighter text-[#0F172A] italic uppercase flex items-center gap-2">
                 {title} <ChevronRight size={14} className="text-stone-300" />
               </h1>
-              <p className="text-[9px] font-bold text-stone-400 uppercase tracking-widest truncate">
+              <p className="hidden lg:block text-[9px] font-bold text-stone-400 uppercase tracking-widest truncate">
                 {description || "Manage your site content"}
               </p>
             </div>
