@@ -17,7 +17,7 @@ const SocialImpact = ({ data }: SocialImpactProps) => {
   const quoteLines = s.overlayQuote.split("\n").filter(Boolean);
 
   return (
-    <section className="relative py-16 lg:py-12 bg-warm-linen overflow-hidden">
+    <section className="relative py-10 lg:py-12 bg-warm-linen overflow-hidden">
       <div className="absolute top-1/2 left-[-2%] -translate-y-1/2 select-none pointer-events-none opacity-[0.03]">
         <h2 className="text-[12vw] font-serif font-bold text-deep-midnight-navy leading-none">
           Purpose

@@ -118,7 +118,7 @@ const AppointmentPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-4 space-y-6">
-            <div className="relative aspect-[4/5] md:aspect-[4.5/5] rounded-t-full overflow-hidden shadow-2xl border-8 border-white">
+            <div className="relative aspect-[3/3] md:aspect-[4.5/5] rounded-t-full overflow-hidden shadow-2xl border-8 border-white">
               <Image
                 src={page.imageUrl || "/image.png"}
                 alt={page.imageAlt}

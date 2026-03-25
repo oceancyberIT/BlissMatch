@@ -97,7 +97,7 @@ const ProcessTimeline = ({ data }: ProcessTimelineProps) => {
       {/* Timeline - Reduced width for tighter spacing */}
       <div
         ref={sectionRef}
-        className="flex relative z-10 w-[350vw] h-[98%] items-center"
+        className="flex relative z-10 w-[350vw] h-[98%] items-start md:items-center pt-28 md:pt-0"
       >
         {(data?.steps ?? processStepsDefault).map((step) => (
           <div

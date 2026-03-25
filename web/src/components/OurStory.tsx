@@ -29,7 +29,7 @@ const OurStory = ({ data }: OurStoryProps) => {
       <div className="max-w-6xl mx-auto px-6 lg:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <div className="relative aspect-4/5 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
+            <div className="relative aspect-[4/3] md:aspect-4/5 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
               <Image
                 src={content.imageUrl}
                 alt={content.imageAlt || "BlissMatch image"}
@@ -46,15 +46,15 @@ const OurStory = ({ data }: OurStoryProps) => {
               {content.eyebrow}
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-6">
               {content.headingMain} <br />
               <span className="italic">{content.headingAccent}</span>
             </h2>
 
             <div className="space-y-6 text-stone-600 leading-relaxed max-w-lg">
-              <p>{content.paragraphOne}</p>
+              <p className="text-sm md:text-base">{content.paragraphOne}</p>
 
-              <blockquote className="border-l-2 border-muted-burgundy-rose pl-6 py-2 italic text-deep-midnight-navy font-serif text-lg">
+              <blockquote className="border-l-2 border-muted-burgundy-rose pl-6 py-2 italic text-deep-midnight-navy font-serif md:text-lg text-base">
                 "{content.quote}"
               </blockquote>
 

@@ -11,7 +11,7 @@ type DiscretionSectionProps = {
 const DiscretionSection = ({ data }: DiscretionSectionProps) => {
   const cards = data?.cards ?? [];
   return (
-    <section className="relative bg-deep-midnight-navy py-24 lg:py-20 overflow-hidden">
+    <section className="relative bg-deep-midnight-navy py-10 lg:py-20 overflow-hidden">
       <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
         <svg
           width="100%"
@@ -33,14 +33,14 @@ const DiscretionSection = ({ data }: DiscretionSectionProps) => {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-serif text-white leading-tight">
+            <h2 className="text-3xl md:text-5xl font-serif text-white leading-tight">
               {data?.headingMain ?? "Discretion is our"} <br />
               <span className="italic text-muted-burgundy-rose">
                 {data?.headingAccent ?? "Foundation."}
               </span>
             </h2>
 
-            <p className="text-stone-300 text-lg md:text-xl leading-relaxed font-light">
+            <p className="text-stone-300 md:text-lg text-base leading-relaxed font-light">
               {data?.paragraph ??
                 "Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only. Our consultants handle each relationship personally—ensuring professionalism, privacy, and care."}
             </p>
@@ -48,22 +48,22 @@ const DiscretionSection = ({ data }: DiscretionSectionProps) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <PrivacyCard
-              icon={<EyeOff size={24} />}
+              icon={<EyeOff size={20} />}
               title={cards[0]?.title ?? "Invisible Digital Footprint"}
               desc={cards[0]?.desc ?? "We do not maintain public profiles of our clients. Your journey remains private."}
             />
             <PrivacyCard
-              icon={<CalendarDays size={24} />}
+              icon={<CalendarDays size={20} />}
               title={cards[1]?.title ?? "By Appointment Only"}
               desc={cards[1]?.desc ?? "We ensure dedicated time and total focus for every single consultation."}
             />
             <PrivacyCard
-              icon={<UserCheck size={24} />}
+              icon={<UserCheck size={20} />}
               title={cards[2]?.title ?? "Personal Handling"}
               desc={cards[2]?.desc ?? "No automated systems. Only high-level human consultancy."}
             />
             <PrivacyCard
-              icon={<ShieldCheck size={24} />}
+              icon={<ShieldCheck size={20} />}
               title={cards[3]?.title ?? "Legal Protection"}
               desc={cards[3]?.desc ?? "Strict non-disclosure agreements protect all parties involved."}
             />

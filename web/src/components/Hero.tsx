@@ -33,7 +33,7 @@ const Hero = () => {
             {heroTagline}
           </span>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif leading-[1.1] mb-6 drop-shadow-sm">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif leading-[1.1] mb-6 drop-shadow-sm">
             {heroTitle}
           </h1>
 
@@ -44,13 +44,13 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/appointment"
-              className="bg-white uppercase text-deep-midnight-navy px-8 py-4 font-semibold text-center hover:bg-muted-burgundy-rose hover:text-white transition-all duration-300 shadow-lg"
+              className="bg-white text-sm uppercase text-deep-midnight-navy px-8 py-4 font-semibold text-center hover:bg-muted-burgundy-rose hover:text-white transition-all duration-300 shadow-lg"
             >
               Book a Private Consultation
             </Link>
             <Link
               href="/services"
-              className="bg-transparent uppercase border border-white/40 backdrop-blur-sm text-white px-8 py-4 font-semibold text-center hover:bg-white/10 transition-all duration-300"
+              className="bg-transparent text-sm uppercase border border-white/40 backdrop-blur-sm text-white px-8 py-4 font-semibold text-center hover:bg-white/10 transition-all duration-300"
             >
               Explore Services
             </Link>

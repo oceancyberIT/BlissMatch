@@ -12,7 +12,7 @@ const ServiceGrid = ({ data }: ServiceGridProps) => {
   const banner = grid.banner;
 
   return (
-    <section className="py-20 md:py-16 bg-white">
+    <section className="py-10 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-12 gap-8">
         {services.map((s, i) => (
           <div
@@ -35,7 +35,7 @@ const ServiceGrid = ({ data }: ServiceGridProps) => {
             <span className="text-muted-burgundy-rose text-[10px] font-bold tracking-widest uppercase">
               {banner.eyebrow}
             </span>
-            <h3 className="text-3xl font-serif mt-2">{banner.title}</h3>
+            <h3 className="text-2xl font-serif mt-2">{banner.title}</h3>
           </div>
           <p className="text-white/60 max-w-sm mt-4 md:mt-0 italic">
             {banner.paragraph}

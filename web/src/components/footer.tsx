@@ -79,13 +79,13 @@ const Footer = () => {
                 {f.brandName}
               </span>
             </div>
-            <p className="text-white text-[11px] leading-relaxed max-w-xs font-bold tracking-wider">
+            <p className="text-white text-[11px] leading-relaxed max-w-xs font-bold tracking-none">
               {f.brandTagline}
             </p>
           </div>
 
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.2em]  text-stone-300">
+            <h4 className="text-[9px] font-black uppercase tracking-none  text-stone-300">
               {f.navColumnTitle}
             </h4>
             <ul className="flex flex-col space-y-1 text-xs text-stone-300 font-bold">
@@ -93,7 +93,7 @@ const Footer = () => {
                 <li key={link.id}>
                   <Link
                     href={link.href}
-                    className="hover:text-white transition-colors tracking-widest"
+                    className="hover:text-white transition-colors tracking-none"
                   >
                     {link.name}
                   </Link>
@@ -103,11 +103,11 @@ const Footer = () => {
           </div>
 
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-[9px] font-black uppercase tracking-widest  text-stone-300">
+            <h4 className="text-[9px] font-black uppercase tracking-none  text-stone-300">
               {f.contactTitle}
             </h4>
-            <div className="text-xs text-stone-300 space-y-1 font-bold tracking-widest">
-              <p className="italic font-serif normal-case tracking-normal">
+            <div className="text-xs text-stone-300 space-y-1 font-bold tracking-none">
+              <p className="italic font-serif normal-case tracking-none">
                 {f.locationsLine}
               </p>
               <a
@@ -126,7 +126,7 @@ const Footer = () => {
           </div>
 
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-[9px] font-black uppercase tracking-widest text-stone-300 lg:text-right">
+            <h4 className="text-[9px] font-black uppercase tracking-none text-stone-300 lg:text-right">
               Couples Gallery
             </h4>
             <div className="grid grid-cols-3 gap-2 lg:justify-items-end">
@@ -144,7 +144,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-white/5 text-[9px] font-black uppercase tracking-[0.2em] text-stone-300">
+        <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-white/5 text-[9px] font-black uppercase text-stone-300">
           <p>
             © {currentYear} {f.copyright}
           </p>

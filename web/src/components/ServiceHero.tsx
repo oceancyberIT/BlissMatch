@@ -46,22 +46,41 @@ const ServicesHero = () => {
             <span className="text-white text-xs border border-muted-burgundy-rose p-2 font-bold uppercase tracking-[0.2em] mb-6 inline-block">
               {subtitle}
             </span>
-            <h1 className="text-5xl md:text-6xl font-serif text-white leading-[0.9] mb-8">
+            <h1 className="text-3xl md:text-4xl font-serif text-white leading-[0.9] mb-8">
               {title}
             </h1>
-            <p className="text-stone-300 text-lg md:text-xl font-light leading-relaxed max-w-md">
+            <p className="text-stone-300 text-base md:text-xl font-light leading-relaxed max-w-md">
               {body}
             </p>
           </div>
 
-          <div className="flex gap-4 h-87.5 md:h-125 items-end">
+          {/* Mobile: compact grid of equal squares */}
+          <div className="md:hidden grid grid-cols-3 gap-3 w-full max-w-[240px]">
             {[2, 3, 4].map((i) => (
               <div
                 key={i}
-                className={`relative w-16 md:w-28 h-full overflow-hidden shadow-2xl transition-all duration-1000 ease-in-out hover:w-56 border-x border-white/10
-                  ${i === 2 ? "rounded-t-full h-[80%]" : ""}
-                  ${i === 3 ? "rounded-full h-full mb-5" : ""}
-                  ${i === 4 ? "rounded-b-full h-[90%] mb-10 lg:mt-16 border" : ""}
+                className="relative aspect-[4/4] w-full overflow-hidden shadow-2xl transition-all duration-1000 ease-in-out border border-white/10 rounded-md"
+              >
+                <Image
+                  src={`/image copy ${i}.png`}
+                  alt="Service detail"
+                  fill
+                  className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                />
+                <div className="absolute inset-0 bg-deep-midnight-navy/20 hover:bg-transparent transition-colors" />
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop/tablet: stacked rounded visuals */}
+          <div className="hidden md:flex gap-4 h-[320px] md:h-[480px] items-end">
+            {[2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className={`relative w-14 md:w-28 h-full overflow-hidden shadow-2xl transition-all duration-1000 ease-in-out md:hover:w-56 border-x border-white/10
+                  ${i === 2 ? "rounded-t-lg md:rounded-t-full h-[55%] md:h-[80%]" : ""}
+                  ${i === 3 ? "rounded-md md:rounded-full h-[70%] md:h-full mb-2 md:mb-5" : ""}
+                  ${i === 4 ? "rounded-b-lg md:rounded-b-full h-[60%] md:h-[90%] mb-4 md:mb-10 lg:mt-16 border" : ""}
                 `}
               >
                 <Image
@@ -70,7 +89,6 @@ const ServicesHero = () => {
                   fill
                   className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
-
                 <div className="absolute inset-0 bg-deep-midnight-navy/20 hover:bg-transparent transition-colors" />
               </div>
             ))}

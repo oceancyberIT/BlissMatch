@@ -58,7 +58,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
             <span className="text-white border border-muted-burgundy-rose px-3 py-2 text-[10px] font-black uppercase tracking-[0.3em] mb-8 inline-block">
               {subtitle}
             </span>
-            <h1 className="text-5xl md:text-7xl font-serif text-white leading-[1.1] mb-6 tracking-tighter">
+            <h1 className="text-3xl md:text-5xl font-serif text-white leading-[1.1] mb-6 tracking-tighter">
               {title}
             </h1>
 
@@ -72,7 +72,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
 
           <div className="relative">
             {/* Arched image container */}
-            <div className="relative aspect-3/4 w-full max-w-sm mx-auto lg:ml-auto overflow-hidden shadow-2xl rounded-t-full border-[12px] border-white/10 backdrop-blur-sm">
+            <div className="relative aspect-4/4 md:aspect-3/4 w-full max-w-sm mx-auto lg:ml-auto overflow-hidden shadow-2xl rounded-t-full border-[12px] border-white/10 backdrop-blur-sm">
               <Image
                 src={imageUrl}
                 alt="BlissMatch Founders"

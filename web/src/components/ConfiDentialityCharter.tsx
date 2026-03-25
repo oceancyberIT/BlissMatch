@@ -20,7 +20,7 @@ const ConfidentialityCharter = ({ data }: ConfidentialityCharterProps) => {
   const botL = img(c.imageBottomLeft);
 
   return (
-    <section className="relative bg-deep-midnight-navy py-18 lg:py-20 overflow-hidden group">
+    <section className="relative bg-deep-midnight-navy py-10 lg:py-20 overflow-hidden group">
       <div
         className="absolute -top-20 -left-12 w-60 h-96 overflow-hidden shadow-2xl border-t-2 border-muted-burgundy-rose
                       transition-transform duration-[2s] ease-out group-hover:-translate-y-8"
@@ -100,10 +100,10 @@ const ConfidentialityCharter = ({ data }: ConfidentialityCharterProps) => {
         </svg>
       </div>
       <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-        <h2 className="text-white font-serif text-4xl md:text-5xl mb-6">
+        <h2 className="text-white font-serif text-3xl md:text-4xl mb-6">
           {c.title}
         </h2>
-        <p className="text-muted-burgundy-rose font-bold tracking-[0.3em] uppercase text-xs mb-20">
+        <p className="text-white font-bold tracking-[0.1em] uppercase text-xs mb-20">
           {c.subtitle}
         </p>
 

@@ -11,7 +11,7 @@ const WhyChooseUs = ({ data }: WhyChooseUsProps) => {
   const content = data ?? INITIAL_CONTENT.whyChooseUs;
 
   return (
-    <section className="bg-white py-20 lg:py-16">
+    <section className="bg-soft-ivory-white py-10 lg:py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-7">
@@ -19,38 +19,38 @@ const WhyChooseUs = ({ data }: WhyChooseUsProps) => {
               {content.eyebrow}
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-5">
+            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-5">
               {content.headingMain} <br />
               <span className="italic">{content.headingAccent}</span>
             </h2>
 
-            <div className="space-y-8 text-stone-600 text-lg md:text-[18px] leading-relaxed max-w-2xl">
+            <div className="space-y-8 text-stone-600 md:text-lg text-base leading-relaxed max-w-2xl">
               <p>{content.paragraphOne}</p>
 
               <div className="py-4 border-y border-stone-100">
-                <p className="text-muted-burgundy-rose font-serif italic text-xl">
+                <p className="text-muted-burgundy-rose font-serif italic md:text-xl text-base">
                   "{content.quote}"
                 </p>
               </div>
 
-              <p className="text-base text-stone-500">
+              <p className="md:text-base text-sm text-stone-500">
                 {content.paragraphTwo}{" "}
               </p>
             </div>
           </div>
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 self-center">
+          <div className="lg:col-span-5 grid grid-cols-2 gap-x-3 gap-y-10 md:gap-y-5 self-center">
             <ValueItem
-              icon={<ShieldCheck size={24} />}
+              icon={<ShieldCheck size={20} />}
               title={content.valueCards[0]?.title ?? "Confidentiality"}
               desc={content.valueCards[0]?.description ?? "Absolute discretion in every interaction."}
             />
             <ValueItem
-              icon={<UserCheck size={24} />}
+              icon={<UserCheck size={20} />}
               title={content.valueCards[1]?.title ?? "Psychology"}
               desc={content.valueCards[1]?.description ?? "Rooted in human behavior studies."}
             />
             <ValueItem
-              icon={<Heart size={24} />}
+              icon={<Heart size={20} />}
               title={content.valueCards[2]?.title ?? "Substance"}
               desc={content.valueCards[2]?.description ?? "Depth over digital algorithms."}
             />

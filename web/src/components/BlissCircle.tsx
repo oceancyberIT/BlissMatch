@@ -25,7 +25,7 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
   const badgeIcons = [ShieldCheck, MapPin, Users];
 
   return (
-    <section className="relative py-24 lg:py-16 bg-warm-linen overflow-hidden">
+    <section className="relative py-10 lg:py-16 bg-warm-linen overflow-hidden">
       <div className="absolute -bottom-10 -right-20 pointer-events-none select-none opacity-[0.02]">
         <h2 className="text-[25vw] font-serif font-bold text-deep-midnight-navy leading-none">
           Circle
@@ -39,15 +39,15 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
               {content.eyebrow}
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-5">
+            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-5">
               {content.headingMain} <span className="italic">{content.headingAccent}</span>
             </h2>
 
             <div className="space-y-6 max-w-lg mb-6">
-              <p className="text-stone-600 text-lg font-light leading-relaxed">
+              <p className="text-stone-600 md:text-lg text-base font-light leading-relaxed">
                 {content.paragraphOne}
               </p>
-              <p className="text-stone-500 text-sm leading-relaxed border-l border-muted-burgundy-rose pl-4">
+              <p className="text-stone-500 md:text-sm text-xs leading-relaxed border-l border-muted-burgundy-rose pl-4">
                 {content.paragraphTwo}
               </p>
             </div>

@@ -176,7 +176,7 @@ const Navbar = () => {
         `}
       >
         {/* Changed bg-background to bg-white for guaranteed opacity */}
-        <div className="flex flex-col gap-8 p-10 bg-white min-h-[60vh]">
+        <div className="flex flex-col gap-8 px-10 py-8 bg-white min-h-[60vh]">
           {navLinks.map((link, index) => {
             const isActive = pathname === link.href;
             return (
@@ -185,7 +185,7 @@ const Navbar = () => {
                 href={link.href}
                 style={{ transitionDelay: `${isOpen ? index * 50 : 0}ms` }}
                 className={`
-                  text-sm uppercase font-bold tracking-[0.2em] transition-all duration-300
+                  text-xs uppercase font-bold tracking-[0.2em] transition-all duration-300
                   ${isActive ? "text-muted-burgundy-rose border-l-4 border-muted-burgundy-rose pl-6" : "text-stone-800 border-l-0 pl-0"}
                   ${isOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}
                 `}
@@ -196,7 +196,7 @@ const Navbar = () => {
             );
           })}
 
-          <div className="mt-4 pt-5 border-t border-stone-100">
+          <div className="mt-3 pt-5 border-t border-stone-100">
             <div className="text-[10px] uppercase font-bold tracking-[0.18em] text-stone-400 mb-3">
               Follow us
             </div>
@@ -248,7 +248,7 @@ const Navbar = () => {
                 onClick={handleLinkClick}
               >
                 <Icon size={21} />
-                <span className="text-[11px] font-bold">{tab.name}</span>
+                <span className="text-[10px] font-bold">{tab.name}</span>
               </Link>
             );
           })}

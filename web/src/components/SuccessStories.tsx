@@ -69,14 +69,14 @@ const SuccessStories = () => {
   }, []);
 
   return (
-    <section className="bg-[#F9F7F5] py-20 lg:py-10 overflow-hidden">
+    <section className="bg-[#F9F7F5] py-10 lg:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Header */}
-        <div className="text-center mb-16 lg:mb-10">
+        <div className="text-center mb-9 lg:mb-10">
           <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.3em] mb-4 block">
             Success Stories
           </span>
-          <h2 className="text-4xl md:text-4xl font-serif text-deep-midnight-navy">
+          <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy">
             Stories of Connection
           </h2>
           {/* <div className="w-16 h-[1px] bg-muted-burgundy-rose mx-auto mt-6"></div> */}
@@ -106,19 +106,19 @@ const SuccessStories = () => {
 
                 <Quote
                   className="text-stone-100 mb-4 group-hover:text-muted-burgundy-rose/10 transition-colors"
-                  size={30}
+                  size={24}
                 />
 
-                <p className="text-deep-midnight-navy text-lg font-serif italic leading-relaxed mb-5">
+                <p className="text-deep-midnight-navy md:text-lg text-base font-serif italic leading-relaxed mb-5">
                   “{story.quote}”
                 </p>
               </div>
 
               <div className="flex flex-col">
-                <span className="text-sm font-bold uppercase tracking-widest text-deep-midnight-navy">
+                <span className="md:text-sm text-xs font-bold uppercase tracking-widest text-deep-midnight-navy">
                   — {story.author}
                 </span>
-                <span className="text-xs text-stone-400 mt-1">
+                <span className="md:text-xs text-xs text-stone-400 mt-1">
                   {story.location}
                 </span>
               </div>

@@ -8,7 +8,7 @@ type PhilosophyProps = {
 
 const Philosophy = ({ data }: PhilosophyProps) => {
   return (
-    <section className="bg-white py-20 lg:py-10 overflow-hidden">
+    <section className="bg-white py-10 lg:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-center mb-8">
           <div className="lg:col-span-6 space-y-8">
@@ -16,7 +16,7 @@ const Philosophy = ({ data }: PhilosophyProps) => {
               <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.4em] mb-6 block">
                 {data?.eyebrow ?? "Our Philosophy"}
               </span>
-              <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight">
+              <h2 className="text-3xl md:text-5xl font-serif text-deep-midnight-navy leading-tight">
                 {data?.headingMain ?? "We believe that"} <br />
                 <span className="italic text-muted-burgundy-rose">
                   {data?.headingAccent ?? "love is deliberate."}
@@ -25,11 +25,11 @@ const Philosophy = ({ data }: PhilosophyProps) => {
             </div>
 
             <div className="border-l-2 border-muted-burgundy-rose/20 pl-8 space-y-5">
-              <p className="text-xl text-stone-600 leading-relaxed font-light italic">
+              <p className="text-lg md:text-xl text-stone-600 leading-relaxed font-light italic">
                 "{data?.quote ??
                   "It starts with self-awareness, deepens through shared values, and endures through emotional intelligence."}"
               </p>
-              <p className="text-stone-500 leading-relaxed max-w-md">
+              <p className="text-stone-500 md:text-base text-sm leading-relaxed max-w-md">
                 {data?.body ??
                   "We combine psychological insight with refined matchmaking practice to help clients connect on every level — intellectual, emotional, and spiritual."}
               </p>
@@ -174,7 +174,7 @@ const Philosophy = ({ data }: PhilosophyProps) => {
           </div>
         </div>
 
-        <div className="mt-20 lg:mt-8 text-center">
+        <div className="mt-10 lg:mt-8 text-center">
           <div className="inline-flex items-center gap-4 text-stone-800 uppercase text-[10px] tracking-[0.5em] font-bold">
             <div className="w-12 h-px bg-stone-200" />
             Private Consultancy

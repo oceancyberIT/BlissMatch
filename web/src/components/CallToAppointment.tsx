@@ -22,15 +22,15 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
   ];
 
   return (
-    <section className="bg-white py-20 lg:py-16 px-6 overflow-hidden">
+    <section className="bg-white py-10 lg:py-16 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
           <div className="space-y-10 max-w-xl">
-            <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.4em] mb-6 block">
+            <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.2em] mb-6 block">
               {data?.eyebrow ?? "Connection Begins with a Conversation"}
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight mb-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-8">
               {data?.headingMain ?? "Are you ready for a"} <br />
               <span className="italic text-muted-burgundy-rose">
                 {data?.headingAccent ?? "meaningful"}
@@ -38,7 +38,7 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
               introduction?
             </h2>
 
-            <div className="space-y-6 text-stone-600 text-lg md:text-xl leading-relaxed font-light">
+            <div className="space-y-6 text-stone-600 text-base md:text-xl leading-relaxed font-light">
               <p>
                 {data?.paragraph ??
                   "The journey to a purposeful relationship is not found in an algorithm. It is curated with intention, discretion, and a deep understanding of who you are."}
@@ -65,7 +65,7 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
               {couples.map((couple, index) => (
                 <div
                   key={index}
-                  className={`relative w-full md:w-48 aspect-2/3 transition-all duration-700 hover:scale-105
+                  className={`relative w-full md:w-48 aspect-[3/2] md:aspect-2/3 transition-all duration-700 hover:scale-105
                     ${index === 1 ? "md:w-64 md:z-20 scale-110 shadow-2xl" : "md:opacity-80 md:z-10"}
                   `}
                   style={{
@@ -103,7 +103,7 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
         </div>
       </div>
 
-      <div className="mt-20 lg:mt-10 w-full flex justify-center">
+      <div className="mt-10 lg:mt-10 w-full flex justify-center">
         <div className="flex items-center gap-8 opacity-70">
           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-800">
             {(data?.locations?.[0] ?? "London").toUpperCase()}
