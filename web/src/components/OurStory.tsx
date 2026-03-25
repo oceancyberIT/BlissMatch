@@ -29,7 +29,7 @@ const OurStory = ({ data }: OurStoryProps) => {
       <div className="max-w-6xl mx-auto px-6 lg:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <div className="relative aspect-[4/3] md:aspect-4/5 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
+            <div className="relative aspect-[4/3] md:aspect-4/4 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
               <Image
                 src={content.imageUrl}
                 alt={content.imageAlt || "BlissMatch image"}
