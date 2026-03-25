@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -57,9 +57,23 @@ export default function AdminLoginPage() {
 
       <div className="relative w-full max-w-sm">
         {/* Top Branding Header */}
-        <div className="text-center mb-10 space-y-2">
-          <h1 className="text-3xl font-serif text-deep-midnight-navy tracking-tight">Admin Login</h1>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold">Enter your email and password.</p>
+        <div className="mb-10 space-y-4 text-center">
+          <div className="flex justify-center">
+            <Image
+              src="/logo1.png"
+              alt="Bliss Match"
+              width={160}
+              height={48}
+              className="h-12 w-auto object-contain"
+              priority
+            />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-serif tracking-tight text-deep-midnight-navy">Admin Login</h1>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
+              Enter your email and password.
+            </p>
+          </div>
         </div>
 
         <div className="bg-white/80 backdrop-blur-md p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-white/50 rounded-2xl">
@@ -126,10 +140,6 @@ export default function AdminLoginPage() {
             </button>
           </form>
         </div>
-
-        <footer className="mt-12 text-center">
-          <p className="text-[9px] text-muted-burgundy-rose uppercase tracking-[0.4em]">Bliss Match Private Terminal</p>
-        </footer>
       </div>
     </div>
   );
