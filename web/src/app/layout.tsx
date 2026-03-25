@@ -28,9 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
       "Bliss Match is a private matchmaking consultancy in London serving global clients, specialising in intentional, values-led relationships.",
     metadataBase,
     icons: {
-      icon: "/logo1.png",
-      shortcut: "/logo1.png",
-      apple: "/logo1.png",
+      icon: [{ url: "/logo1.png", sizes: "32x32", type: "image/png" }],
+      shortcut: [{ url: "/logo1.png", sizes: "32x32", type: "image/png" }],
+      apple: [{ url: "/logo1.png", sizes: "180x180", type: "image/png" }],
     },
     openGraph: {
       title: "Bliss Match — Private Matchmaking Consultancy",
