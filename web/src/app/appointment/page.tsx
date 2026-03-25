@@ -101,24 +101,24 @@ const AppointmentPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-soft-ivory-white pt-38 md:pt-48 pb-10 px-6 lg:px-12">
+    <main className="min-h-screen bg-soft-ivory-white pt-28 md:pt-40 pb-8 px-4 sm:px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 md:mb-10 lg:w-2/3">
+        <div className="mb-5 md:mb-8 lg:w-2/3">
           <span className="text-muted-burgundy-rose text-[10px] font-black uppercase tracking-[0.4em] mb-2 block">
             {page.eyebrow}
           </span>
-          <h1 className="text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight tracking-tighter">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deep-midnight-navy leading-tight tracking-tighter">
             {page.titleLine1}{" "}
             <span className="italic">{page.titleItalic}</span>
           </h1>
-          <p className="mt-3 text-stone-500 text-sm md:text-base font-light leading-relaxed max-w-lg">
+          <p className="mt-2 text-stone-500 text-sm md:text-base font-light leading-relaxed max-w-lg">
             {page.lead}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-4 space-y-6">
-            <div className="relative aspect-[3/3] md:aspect-[4.5/5] rounded-t-full overflow-hidden shadow-2xl border-8 border-white">
+            <div className="relative aspect-[3/3] md:aspect-[4.5/5] rounded-t-full overflow-hidden shadow-2xl border-6 sm:border-8 border-white">
               <Image
                 src={page.imageUrl || "/image.png"}
                 alt={page.imageAlt}
@@ -130,7 +130,7 @@ const AppointmentPage = () => {
           </div>
 
           <div className="lg:col-span-8 flex flex-col">
-            <div className="bg-white p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-stone-100 relative lg:-mt-40 z-20">
+            <div className="bg-white p-5 sm:p-8 md:p-10 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-stone-100 relative lg:-mt-40 z-20">
               <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
                 <svg className="w-full h-full">
                   <rect
@@ -144,7 +144,7 @@ const AppointmentPage = () => {
                 </svg>
               </div>
 
-              <h3 className="text-xl font-serif text-deep-midnight-navy mb-7 italic tracking-tight">
+              <h3 className="text-xl font-serif text-deep-midnight-navy mb-4 sm:mb-6 italic tracking-tight">
                 {page.formTitle}
               </h3>
 
@@ -160,8 +160,8 @@ const AppointmentPage = () => {
                 </p>
               )}
 
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+              <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 sm:gap-x-10 gap-y-4 sm:gap-y-6">
                   <InputGroup
                     label={page.fieldNameLabel}
                     placeholder="Your full name"
@@ -217,7 +217,7 @@ const AppointmentPage = () => {
                   />
                 </div>
 
-                <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="pt-3 sm:pt-4 flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
                   <div className="flex items-center gap-6 opacity-30">
                     <div className="flex flex-col items-center">
                       <Shield size={14} />
@@ -236,7 +236,7 @@ const AppointmentPage = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full md:w-auto px-8 py-4 bg-deep-midnight-navy text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-muted-burgundy-rose transition-all shadow-lg disabled:opacity-60"
+                    className="w-full md:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-deep-midnight-navy text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-muted-burgundy-rose transition-all shadow-lg disabled:opacity-60"
                   >
                     {submitting ? "Sending…" : page.submitLabel}
                   </button>
@@ -244,7 +244,7 @@ const AppointmentPage = () => {
               </form>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3 sm:mt-5">
               {page.contactLinks.map((link) => (
                 <ContactLink
                   key={link.title + link.variant}
