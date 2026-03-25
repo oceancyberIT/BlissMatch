@@ -35,11 +35,15 @@ export function FormField({
 }) {
   return (
     <div className="space-y-1.5 group">
-      <div className="flex items-center justify-between pl-1">
-        <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 group-focus-within:text-muted-burgundy-rose transition-colors">
+      <div className="flex min-w-0 flex-col gap-1 pl-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <label className="min-w-0 text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 transition-colors group-focus-within:text-muted-burgundy-rose">
           {label}
         </label>
-        {hint ? <span className="text-[9px] font-bold text-stone-300 uppercase italic">{hint}</span> : null}
+        {hint ? (
+          <span className="shrink-0 text-[9px] font-bold uppercase italic text-stone-300 sm:max-w-[50%] sm:text-right">
+            {hint}
+          </span>
+        ) : null}
       </div>
       {children}
     </div>

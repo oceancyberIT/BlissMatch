@@ -168,22 +168,27 @@ export default function AdminMediaLibraryPage() {
           {message ? <p className="text-xs text-muted-burgundy-rose font-semibold">{message}</p> : null}
         </div>
 
-        <div className="rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-deep-midnight-navy">
+        <div className="min-w-0 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h3 className="shrink-0 text-sm font-black uppercase tracking-widest text-deep-midnight-navy">
               Saved images
             </h3>
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
               <Button
                 type="button"
                 variant="outline"
-                className="text-[10px] font-black uppercase"
+                className="w-full whitespace-normal text-center text-[10px] font-black uppercase sm:w-auto sm:whitespace-nowrap"
                 onClick={backfillCoreImages}
                 disabled={backfilling}
               >
                 {backfilling ? 'Importing...' : 'Import main-site images'}
               </Button>
-              <Button type="button" variant="outline" className="text-[10px] font-black uppercase" onClick={load}>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full text-[10px] font-black uppercase sm:w-auto"
+                onClick={load}
+              >
                 Refresh
               </Button>
             </div>

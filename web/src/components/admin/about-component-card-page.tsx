@@ -635,13 +635,15 @@ export function AboutComponentCardPage(props: AboutComponentCardPageProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-md border border-stone-200 shadow-sm overflow-hidden">
-          <div className="p-6 flex items-start justify-between gap-4 flex-wrap">
-            <div className="min-w-0">
-              <h3 className="text-sm font-black text-deep-midnight-navy uppercase tracking-widest">{cardTitle}</h3>
-              <p className="text-[10px] font-medium text-stone-400 mt-1">{cardHint}</p>
+        <div className="min-w-0 bg-white rounded-md border border-stone-200 shadow-sm overflow-hidden">
+          <div className="flex min-w-0 flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-sm font-black uppercase tracking-widest text-deep-midnight-navy">
+                {cardTitle}
+              </h3>
+              <p className="mt-1 text-[10px] font-medium text-stone-400">{cardHint}</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
               <button
                 type="button"
                 onClick={() => {

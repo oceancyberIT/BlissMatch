@@ -130,15 +130,15 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-8 bg-white border border-stone-100 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-stone-50 flex justify-between items-center">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy flex items-center gap-3">
-                <MessageSquare size={14} className="text-muted-burgundy-rose" />
-                Latest enquiries & requests
+          <div className="lg:col-span-8 min-w-0 bg-white border border-stone-100 shadow-sm overflow-hidden">
+            <div className="flex min-w-0 flex-col gap-3 border-b border-stone-50 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="flex min-w-0 items-start gap-3 text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+                <MessageSquare size={14} className="mt-0.5 shrink-0 text-muted-burgundy-rose" />
+                <span className="min-w-0">Latest enquiries & requests</span>
               </h3>
               <Link
                 href="/admin/submissions"
-                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+                className="shrink-0 self-start whitespace-nowrap text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose sm:self-auto"
               >
                 Open submissions inbox
               </Link>
@@ -263,14 +263,14 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white border border-stone-100 p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+          <div className="min-w-0 bg-white border border-stone-100 p-6 shadow-sm">
+            <div className="mb-4 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <h3 className="min-w-0 text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
                 Recent appointment requests
               </h3>
               <Link
                 href="/admin/submissions"
-                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+                className="shrink-0 self-start whitespace-nowrap text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose sm:self-auto"
               >
                 View all
               </Link>
@@ -289,14 +289,14 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white border border-stone-100 p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
+          <div className="min-w-0 bg-white border border-stone-100 p-6 shadow-sm">
+            <div className="mb-4 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <h3 className="min-w-0 text-[11px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy">
                 Recent contact requests
               </h3>
               <Link
                 href="/admin/submissions"
-                className="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose"
+                className="shrink-0 self-start whitespace-nowrap text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-muted-burgundy-rose sm:self-auto"
               >
                 View all
               </Link>

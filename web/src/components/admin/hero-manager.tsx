@@ -766,19 +766,19 @@ export function AdminHeroManager() {
                         Loading Our Story...
                       </p>
                     ) : (
-                      <div className="rounded-lg bg-white border border-stone-200 shadow-sm overflow-hidden">
-                        <div className="p-5 bg-stone-50 border-b border-stone-200 flex items-start justify-between gap-4">
-                          <div>
+                      <div className="min-w-0 rounded-lg border border-stone-200 bg-white shadow-sm overflow-hidden">
+                        <div className="flex min-w-0 flex-col gap-4 border-b border-stone-200 bg-stone-50 p-5 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="min-w-0 flex-1">
                             <p className="text-[12px] font-semibold text-stone-700">
                               Our Story
                             </p>
-                            <p className="text-[10px] text-stone-500 mt-1">
+                            <p className="mt-1 text-[10px] text-stone-500">
                               {ourStoryMode === "edit"
                                 ? "Edit the story"
                                 : "View the story"}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
                             <button
                               type="button"
                               onClick={() => setOurStoryMode("view")}
