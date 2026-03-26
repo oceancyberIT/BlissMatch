@@ -333,7 +333,7 @@ export default function AdminHomePage() {
                 <Sparkles size={14} />
                 <span className="text-[10px] font-black uppercase tracking-[0.3em]">Editing</span>
               </div>
-              <h2 className="text-3xl font-black italic uppercase tracking-tight">Homepage</h2>
+              <h2 className="text-3xl font-black italic uppercase tracking-tight">Home content</h2>
               <p className="text-stone-400 text-[11px] font-medium uppercase tracking-widest">
                 Update text and images on your homepage
               </p>

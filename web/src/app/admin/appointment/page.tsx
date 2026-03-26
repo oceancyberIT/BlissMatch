@@ -38,6 +38,13 @@ const APPOINTMENT_TABS: Array<{
 const fieldClass =
   'w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-muted-burgundy-rose';
 
+const TAB_HEADLINE: Record<AppointmentTab, string> = {
+  header: 'Header',
+  visual: 'Visual',
+  form: 'Form',
+  links: 'Links',
+};
+
 export default function AdminAppointmentPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<AppointmentTab>('header');
@@ -158,7 +165,9 @@ export default function AdminAppointmentPage() {
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-burgundy-rose">
             Appointment Editor
           </p>
-          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">Section Manager</h2>
+          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">
+            {TAB_HEADLINE[activeTab]}
+          </h2>
           <p className="mt-2 text-[11px] uppercase tracking-widest text-stone-400">{tabDescription}</p>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">

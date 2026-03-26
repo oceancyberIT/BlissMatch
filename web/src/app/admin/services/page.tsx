@@ -154,9 +154,7 @@ export default function AdminServicesPage() {
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-burgundy-rose">
             Services editor
           </p>
-          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">
-            Page sections
-          </h2>
+          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">Services content</h2>
           <p className="mt-2 text-[11px] uppercase tracking-widest text-stone-400">
             Hero and success stories are managed elsewhere. Use section cards in the sidebar for quick edits.
           </p>

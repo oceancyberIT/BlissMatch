@@ -599,9 +599,7 @@ export default function AdminAboutPage() {
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-burgundy-rose">
             About Editor
           </p>
-          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">
-            All sections
-          </h2>
+          <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">About content</h2>
           <p className="mt-2 text-[11px] uppercase tracking-widest text-stone-400">
             Same content as the About section cards — save here or on each card page.
           </p>
