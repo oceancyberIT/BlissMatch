@@ -12,10 +12,16 @@ const ServiceQuestions = ({ data }: ServiceQuestionsProps) => {
   const cards = data?.cards?.length ? data.cards : services;
 
   return (
-    <section className="bg-soft-ivory-white py-10 lg:py-18">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section className="relative overflow-hidden py-10 lg:py-18">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/image.png')" }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-deep-midnight-navy/60" aria-hidden="true" />
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
         <div className="text-center md:mb-20 mb-10">
-          <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy md:mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif text-white md:mb-4">
             {heading}
           </h2>
           {/* <div className="w-24 h-px bg-muted-burgundy-rose mx-auto opacity-50"></div> */}
@@ -24,20 +30,20 @@ const ServiceQuestions = ({ data }: ServiceQuestionsProps) => {
           {cards.map((service: any) => (
             <div
               key={service.id}
-              className="group flex flex-col rounded-0 border border-stone-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-muted-burgundy-rose/30"
+              className="group flex flex-col rounded-0 border border-white/20 bg-white/10 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-muted-burgundy-rose/40"
             >
-              <span className="text-4xl font-serif text-deep-midnight-navy opacity-10 mb-2 group-hover:opacity-20 transition-opacity">
+              <span className="text-4xl font-serif text-white/20 mb-2 group-hover:text-white/30 transition-colors">
                 {service.id}
               </span>
-              <h3 className="text-lg font-bold text-muted-burgundy-rose uppercase tracking-wider mb-4">
+              <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-4">
                 {service.title}
               </h3>
-              <p className="text-stone-600 leading-relaxed text-sm mb-6 grow">
+              <p className="text-white/90 leading-relaxed text-sm mb-6 grow">
                 {service.description}
               </p>
               <Link
                 href="/appointment"
-                className="flex items-center text-deep-midnight-navy text-xs font-bold uppercase tracking-[0.2em]
+                className="flex items-center text-white text-xs font-bold uppercase tracking-[0.2em]
                 group-hover:text-muted-burgundy-rose group-focus-within:text-muted-burgundy-rose active:text-muted-burgundy-rose
                 transition-colors"
                 aria-label={`Let's talk about ${service.title}`}

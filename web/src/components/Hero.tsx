@@ -5,24 +5,28 @@ import Link from "next/link";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 
 const Hero = () => {
-  const config = useHeroConfig("/admin/home");
+  const { config, loading } = useHeroConfig("/admin/home");
   const heroTagline = config?.subtitle || "Where Love Meets Intention";
   const heroBody =
     config?.body ||
     "Expert relationship consultancy designed to help you navigate the complexities of love, connection, and lasting partnership.";
-  const heroImage = config?.imageUrl || "/background.png";
+  const heroImage = config?.imageUrl || "/image copy 2.png";
   const heroTitle = config?.title || "Building great relationships leads to an amazing life!";
 
   return (
     <section className="relative min-h-[90vh] flex pt-38 pb-20 lg:pb-0 md:pt-60 lg:pt-30 items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <Image
-          src={heroImage}
-          alt="Happy couple sharing a moment"
-          fill
-          className="object-cover object-center"
-          priority
-        />
+        {!loading ? (
+          <Image
+            src={heroImage}
+            alt="Polished couple sharing a joyful moment"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        ) : (
+          <div className="h-full w-full bg-deep-midnight-navy" />
+        )}
 
         <div className="absolute inset-0 bg-linear-to-r from-deep-midnight-navy/80 via-deep-midnight-navy/40 to-transparent" />
       </div>

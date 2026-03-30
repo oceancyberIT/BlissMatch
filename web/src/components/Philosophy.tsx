@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 import { AboutContent } from "@/components/admin/about-editor/types";
 
 type PhilosophyProps = {
@@ -7,179 +7,102 @@ type PhilosophyProps = {
 };
 
 const Philosophy = ({ data }: PhilosophyProps) => {
+  const content = data ?? {};
+
+  const blocks = [
+    {
+      id: "01",
+      title: content.promiseTitle ?? "Our Promise",
+      body:
+        content.body ??
+        "We combine psychological insight with refined matchmaking practice to help clients connect on every level — intellectual, emotional, and spiritual.",
+      image: content.imageLeft ?? "/image.png",
+      imageAlt: "Philosophy image one",
+      imageLeft: true,
+    },
+    {
+      id: "02",
+      title: content.trustTitle ?? "Discretion & Trust",
+      body:
+        content.trustText ??
+        "Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only.",
+      image: content.imageCenter ?? "/image copy 4.png",
+      imageAlt: "Philosophy image two",
+      imageLeft: false,
+    },
+    {
+      id: "03",
+      title: "Our Perspective",
+      body:
+        content.quote ??
+        "It starts with self-awareness, deepens through shared values, and endures through emotional intelligence.",
+      image: content.imageRight ?? "/image copy 3.png",
+      imageAlt: "Philosophy image three",
+      imageLeft: true,
+    },
+  ];
+
   return (
-    <section className="bg-white py-10 lg:py-10 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-center mb-8">
-          <div className="lg:col-span-6 space-y-8">
-            <div>
-              <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.4em] mb-6 block">
-                {data?.eyebrow ?? "Our Philosophy"}
-              </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-deep-midnight-navy leading-tight">
-                {data?.headingMain ?? "We believe that"} <br />
-                <span className="italic text-muted-burgundy-rose">
-                  {data?.headingAccent ?? "love is deliberate."}
-                </span>
-              </h2>
-            </div>
-
-            <div className="border-l-2 border-muted-burgundy-rose/20 pl-8 space-y-5">
-              <p className="text-lg md:text-xl text-stone-600 leading-relaxed font-light italic">
-                "{data?.quote ??
-                  "It starts with self-awareness, deepens through shared values, and endures through emotional intelligence."}"
-              </p>
-              <p className="text-stone-500 md:text-base text-sm leading-relaxed max-w-md">
-                {data?.body ??
-                  "We combine psychological insight with refined matchmaking practice to help clients connect on every level — intellectual, emotional, and spiritual."}
-              </p>
-            </div>
+    <section className="overflow-hidden bg-white py-12 lg:py-16">
+      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+        <div className="mb-10 text-center">
+          <h2 className="font-serif text-3xl text-deep-midnight-navy md:text-4xl">
+            <span className="font-semibold">{content.eyebrow ?? "Our"}</span>{" "}
+            <span className="font-light">{content.headingAccent ?? "Philosophy"}</span>
+          </h2>
+          <div className="mx-auto mt-4 flex max-w-sm items-center justify-center gap-3 text-muted-burgundy-rose">
+            <div className="h-px flex-1 bg-stone-200" />
+            <Heart size={14} />
+            <div className="h-px flex-1 bg-stone-200" />
           </div>
+        </div>
 
-          <div className="lg:col-span-5 flex items-center justify-center gap-4 h-100 md:h-100">
-            <div className="relative w-1/3 h-[60%] rounded-t-full overflow-hidden shadow-2xl self-start">
-              <Image
-                src={data?.imageLeft ?? "/image.png"}
-                alt="Perspective"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div
-              className="relative w-1/2 h-[80%] shadow-2xl z-10"
-              style={{ borderRadius: "120px 0px 120px 120px" }}
-            >
+        <div className="space-y-12 md:space-y-14">
+          {blocks.map((item, idx) => (
+            <div key={item.id} className="space-y-6">
               <div
-                className="relative w-full h-full overflow-hidden"
-                style={{ borderRadius: "inherit" }}
+                className={`grid grid-cols-1 items-center gap-6 md:grid-cols-[220px_1fr] ${
+                  item.imageLeft ? "" : "md:grid-cols-[1fr_220px]"
+                }`}
               >
-                <Image
-                  src={data?.imageCenter ?? "/image copy 4.png"}
-                  alt="Connection"
-                  fill
-                  className="object-cover"
-                />
+                {item.imageLeft ? (
+                  <>
+                    <div className="relative mx-auto h-[170px] w-[170px] overflow-hidden rounded-full border border-stone-200 bg-stone-50">
+                      <Image src={item.image} alt={item.imageAlt} fill className="object-cover" />
+                    </div>
+                    <div className="space-y-3 text-center md:text-left">
+                      <h3 className="text-3xl font-serif text-stone-300">{item.id}</h3>
+                      <h4 className="text-2xl font-semibold text-deep-midnight-navy">{item.title}</h4>
+                      <p className="max-w-2xl text-sm leading-relaxed text-stone-600 md:text-base">
+                        {item.body}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-3 text-center md:text-right">
+                      <h3 className="text-3xl font-serif text-stone-300">{item.id}</h3>
+                      <h4 className="text-2xl font-semibold text-deep-midnight-navy">{item.title}</h4>
+                      <p className="ml-auto max-w-2xl text-sm leading-relaxed text-stone-600 md:text-base">
+                        {item.body}
+                      </p>
+                    </div>
+                    <div className="relative mx-auto h-[170px] w-[170px] overflow-hidden rounded-full border border-stone-200 bg-stone-50">
+                      <Image src={item.image} alt={item.imageAlt} fill className="object-cover" />
+                    </div>
+                  </>
+                )}
               </div>
+
+              {idx < blocks.length - 1 ? (
+                <div className="mx-auto flex max-w-xs items-center justify-center gap-3 text-muted-burgundy-rose">
+                  <div className="h-px flex-1 bg-stone-200" />
+                  <Heart size={12} />
+                  <div className="h-px flex-1 bg-stone-200" />
+                </div>
+              ) : null}
             </div>
-
-            <div className="relative w-1/4 h-[50%] rounded-sm overflow-hidden shadow-xl self-center border-l-4 border-muted-burgundy-rose">
-              <Image
-                src={data?.imageRight ?? "/image copy 3.png"}
-                alt="Detail"
-                fill
-                className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="group p-10 lg:px-12 bg-[#F9F7F5] transition-all duration-500 hover:bg-white hover:shadow-2xl hover:-translate-y-2 border border-black hover:border-stone-100 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 opacity-[0.03] -mr-10 -mt-10">
-              <Sparkles size={100} />
-            </div>
-            <Sparkles
-              className="text-muted-burgundy-rose mb-5 relative z-10"
-              size={30}
-            />
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-deep-midnight-navy mb-5 relative z-10">
-              Our Promise
-            </h3>
-            <p className="text-xl md:text-2xl font-serif text-deep-midnight-navy leading-snug mb-5 relative z-10">
-              We don’t introduce many. <br />
-              <span className="italic">We introduce meaningfully.</span>
-            </p>
-            <div className="w-12 h-px bg-muted-burgundy-rose group-hover:w-full transition-all duration-700 opacity-30 relative z-10" />
-          </div>
-
-          <div className="group p-10 lg:p-16 bg-deep-midnight-navy transition-all duration-500 hover:-translate-y-2 shadow-xl relative overflow-hidden">
-            <div className="absolute inset-4 opacity-10 pointer-events-none">
-              <svg className="w-full h-full">
-                <rect
-                  width="100%"
-                  height="100%"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="1"
-                  strokeDasharray="60 600"
-                />
-              </svg>
-            </div>
-
-            <ShieldCheck
-              className="text-muted-burgundy-rose mb-8 relative z-10"
-              size={32}
-            />
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-white/50 mb-6 relative z-10">
-              Discretion & Trust
-            </h3>
-            <p className="text-stone-300 text-lg leading-relaxed mb-6 relative z-10">
-              Every client engagement is strictly confidential. We operate
-              quietly, respectfully, and by appointment only.
-            </p>
-            <p className="text-white font-serif italic text-lg relative z-10">
-              Ensuring professionalism, privacy, and care at every stage.
-            </p>
-          </div>
-        </div> */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-          {/* Card 1: Our Promise */}
-          <div className="group p-8 lg:p-10 bg-[#F9F7F5] transition-all duration-500 hover:bg-white hover:shadow-xl hover:-translate-y-1 border border-black/10 hover:border-stone-100 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-16 h-16 opacity-[0.03] -mr-8 -mt-8">
-              <Sparkles size={80} />
-            </div>
-            <Sparkles
-              className="text-muted-burgundy-rose mb-3 relative z-10"
-              size={24}
-            />
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-deep-midnight-navy mb-3 relative z-10">
-              {data?.promiseTitle ?? "Our Promise"}
-            </h3>
-            <p className="text-lg md:text-xl font-serif text-deep-midnight-navy leading-tight mb-4 relative z-10">
-              {data?.promiseText ?? "We don’t introduce many. We introduce meaningfully."}
-            </p>
-            <div className="w-10 h-px bg-muted-burgundy-rose group-hover:w-full transition-all duration-700 opacity-30 relative z-10" />
-          </div>
-
-          {/* Card 2: Discretion & Trust */}
-          <div className="group p-8 lg:p-10 bg-deep-midnight-navy transition-all duration-500 hover:-translate-y-1 shadow-lg relative overflow-hidden">
-            <div className="absolute inset-2 opacity-5 pointer-events-none">
-              <svg className="w-full h-full">
-                <rect
-                  width="100%"
-                  height="100%"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="1"
-                  strokeDasharray="40 400"
-                />
-              </svg>
-            </div>
-
-            <ShieldCheck
-              className="text-muted-burgundy-rose mb-4 relative z-10"
-              size={24}
-            />
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-3 relative z-10">
-              {data?.trustTitle ?? "Discretion & Trust"}
-            </h3>
-            <p className="text-stone-300 text-sm md:text-base leading-relaxed mb-4 relative z-10">
-              {data?.trustText ??
-                "Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only."}
-            </p>
-            <p className="text-white font-serif italic text-base relative z-10 opacity-90">
-              {data?.trustSubtext ?? "Ensuring professionalism, privacy, and care."}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-10 lg:mt-8 text-center">
-          <div className="inline-flex items-center gap-4 text-stone-800 uppercase text-[10px] tracking-[0.5em] font-bold">
-            <div className="w-12 h-px bg-stone-200" />
-            Private Consultancy
-            <div className="w-12 h-px bg-stone-200" />
-          </div>
+          ))}
         </div>
       </div>
     </section>

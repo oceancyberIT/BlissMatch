@@ -7,14 +7,18 @@ type BlissCircleProps = {
 };
 
 const BlissCircle = ({ data }: BlissCircleProps) => {
+  const shorten = (text: string, maxWords: number) => {
+    const words = text.trim().split(/\s+/);
+    if (words.length <= maxWords) return text;
+    return `${words.slice(0, maxWords).join(" ")}...`;
+  };
+
   const content = data ?? {
     eyebrow: "Launching 2026",
     headingMain: "The",
     headingAccent: "Bliss Circle",
     paragraphOne:
-      "An invitation-only network for returning clients and selected individuals who value meaningful connections, private retreats, and curated gatherings.",
-    paragraphTwo:
-      "A global community built around sincerity, trust, and emotional growth.",
+      "An invitation-only community for selected individuals and returning clients who value meaningful connections, private gatherings, and personal growth built on trust and sincerity.",
     badges: [{ label: "Trust" }, { label: "Retreats" }, { label: "Network" }],
     imageUrl: "/image copy 7.png",
     imageAlt: "Exclusive Gathering",
@@ -25,66 +29,60 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
   const badgeIcons = [ShieldCheck, MapPin, Users];
 
   return (
-    <section className="relative py-10 lg:py-16 bg-warm-linen overflow-hidden">
-      <div className="absolute -bottom-10 -right-20 pointer-events-none select-none opacity-[0.02]">
-        <h2 className="text-[25vw] font-serif font-bold text-deep-midnight-navy leading-none">
-          Circle
-        </h2>
-      </div>
+    <section className="relative overflow-hidden bg-soft-ivory-white py-12 lg:py-16">
+      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+        <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[1fr_1.25fr]">
+          <div className="flex flex-col gap-6">
+            <div className="rounded-sm bg-white p-7 md:p-8">
+              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.45em] text-muted-burgundy-rose">
+                {content.eyebrow}
+              </span>
 
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch border border-stone-100">
-          <div className="lg:col-span-7 bg-white p-12 lg:p-16 flex flex-col justify-center">
-            <span className="text-muted-burgundy-rose text-[10px] font-bold tracking-[0.5em] uppercase mb-5 block">
-              {content.eyebrow}
-            </span>
+              <h2 className="mb-4 text-3xl font-serif leading-tight text-deep-midnight-navy md:text-4xl">
+                {content.headingMain} <span className="italic">{content.headingAccent}</span>
+              </h2>
 
-            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-5">
-              {content.headingMain} <span className="italic">{content.headingAccent}</span>
-            </h2>
-
-            <div className="space-y-6 max-w-lg mb-6">
-              <p className="text-stone-600 md:text-lg text-base font-light leading-relaxed">
+              <p className="text-sm leading-relaxed text-stone-600 md:text-base">
                 {content.paragraphOne}
               </p>
-              <p className="text-stone-500 md:text-sm text-xs leading-relaxed border-l border-muted-burgundy-rose pl-4">
-                {content.paragraphTwo}
-              </p>
+
+              <div className="mt-6 grid grid-cols-3 gap-4 border-t border-stone-100 pt-5">
+                {content.badges.slice(0, 3).map((badge, index) => {
+                  const Icon = badgeIcons[index] ?? ShieldCheck;
+                  return (
+                    <div key={`${badge.label}-${index}`} className="text-center md:text-left">
+                      <Icon size={16} className="mx-auto mb-2 text-muted-burgundy-rose md:mx-0" />
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-deep-midnight-navy">
+                        {badge.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-8 pt-7 border-t border-stone-100">
-              {content.badges.slice(0, 3).map((badge, index) => {
-                const Icon = badgeIcons[index] ?? ShieldCheck;
-                return (
-                  <div key={`${badge.label}-${index}`} className="text-center md:text-left">
-                    <Icon
-                      size={18}
-                      className="text-muted-burgundy-rose mb-3 mx-auto md:mx-0"
-                    />
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-deep-midnight-navy">
-                      {badge.label}
-                    </span>
-                  </div>
-                );
-              })}
+            <div className="relative min-h-[150px] overflow-hidden rounded-br-[70px] border border-stone-200 bg-white">
+              <Image
+                src="/image copy 6.png"
+                alt="Curated private gatherings"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative min-h-100 lg:min-h-full bg-deep-midnight-navy overflow-hidden group">
+          <div className="relative min-h-[250px] overflow-hidden rounded-tl-[2px] rounded-tr-[95px] rounded-br-[95px] rounded-bl-[95px] border border-stone-200 bg-white group lg:min-h-[300px]">
             <Image
               src={content.imageUrl}
               alt={content.imageAlt || "Bliss circle image"}
               fill
-              className="object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[1.5s]"
+              className="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
             />
 
-            <div className="absolute inset-0 flex items-center justify-center p-12">
-              <div className="w-full border border-white/20 p-10 backdrop-blur-sm bg-deep-midnight-navy/40 flex flex-col items-center text-center">
-                <h4 className="text-white font-serif italic text-2xl mb-6">
-                  {content.overlayTitle}
-                </h4>
-                <div className="h-px w-12 bg-muted-burgundy-rose mb-8" />
-                <button className="px-8 py-4 bg-white text-deep-midnight-navy text-[10px] font-bold uppercase tracking-widest hover:bg-muted-burgundy-rose hover:text-white transition-all duration-500">
+            <div className="absolute inset-0 flex items-end justify-start bg-gradient-to-t from-deep-midnight-navy/45 to-transparent p-8">
+              <div>
+                <h4 className="mb-3 font-serif text-2xl italic text-white">{content.overlayTitle}</h4>
+                <button className="rounded-sm rounded-bl-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-deep-midnight-navy transition-all duration-500 hover:bg-muted-burgundy-rose hover:text-white">
                   {content.overlayCtaLabel}
                 </button>
               </div>

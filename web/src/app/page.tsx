@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 import ServiceQuestions from "../components/ServiceQuestions";
 import OurStory from "../components/OurStory";
+import OurServices from "../components/OurServices";
 import SuccessStories from "../components/SuccessStories";
 import WhyChooseUs from "../components/WhyChooseUs";
 import LoveConnectionSection from "../components/Love";
@@ -40,10 +41,11 @@ const Home = () => {
     <main className="flex flex-col w-full">
       <Hero />
       <OurStory data={homeContent.ourStory} />
+      <OurServices data={homeContent.servicesOverview} />
       <ServiceQuestions data={homeContent.servicesOverview} />
+      <WhyChooseUs data={homeContent.whyChooseUs} />
       <LoveConnectionSection data={homeContent.loveConnection} />
       <BlissCircle data={homeContent.blissCircle} />
-      <WhyChooseUs data={homeContent.whyChooseUs} />
       <SuccessStories />
     </main>
   );

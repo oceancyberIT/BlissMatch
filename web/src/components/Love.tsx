@@ -63,15 +63,6 @@ const LoveConnectionSection = ({ data }: LoveConnectionSectionProps) => {
           <p className="text-stone-500 text-sm md:text-base leading-relaxed font-medium md:text-center">
             {subtext}
           </p>
-
-          {/* Extra emphasis on mobile so the section feels informative */}
-          <div className="mt-6 md:hidden">
-            <ul className="space-y-2 text-stone-700 text-sm font-semibold">
-              <li>Values-led, human introductions</li>
-              <li>Discreet conversations, at your pace</li>
-              <li>Ongoing support beyond the first meeting</li>
-            </ul>
-          </div>
         </div>
 
         <div className="max-w-6xl mx-auto">

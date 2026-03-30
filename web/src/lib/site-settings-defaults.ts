@@ -34,7 +34,7 @@ export const INITIAL_FOOTER: FooterContent = {
     { id: 'f-4', name: 'Appointment', href: '/appointment' },
   ],
   contactTitle: 'Contact',
-  locationsLine: 'London • Accra • Paris',
+  locationsLine: 'London • Accra',
   email: 'hello@blissmatch.com',
   emailHref: 'mailto:hello@blissmatch.com',
   social: [

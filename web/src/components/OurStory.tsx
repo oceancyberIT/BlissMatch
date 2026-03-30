@@ -9,65 +9,91 @@ type OurStoryProps = {
 };
 
 const OurStory = ({ data }: OurStoryProps) => {
+  const shorten = (text: string, maxWords: number) => {
+    const words = text.trim().split(/\s+/);
+    if (words.length <= maxWords) return text;
+    return `${words.slice(0, maxWords).join(" ")}...`;
+  };
+
   const content = data ?? {
     eyebrow: "Our Story",
-    headingMain: "Restoring authenticity to",
-    headingAccent: "modern connection.",
+    headingMain: "Grounded in",
+    headingAccent: "meaningful connection.",
     paragraphOne:
-      "BlissMatch was founded by two lifelong friends, uniting backgrounds in Human Behaviour and Business Law to create a sanctuary for meaningful love in a digital world.",
+      "Founded by two lifelong friends, BlissMatch is grounded in Behavioural Science and Law.",
     quote: "We don’t introduce many. We introduce meaningfully.",
     paragraphTwo:
-      "Our philosophy is simple: Love is deliberate. We combine psychological insight with refined matchmaking to help you connect on every level—intellectual, emotional, and spiritual.",
+      "We blend psychology and refined matchmaking to help people build intentional, lasting relationships.",
     ctaLabel: "Discover Our Full Philosophy",
     ctaHref: "/about",
     imageUrl: "/founders-working.png",
     imageAlt: "BlissMatch Founders",
   };
+  const combinedHeading = `${content.headingMain ?? ""} ${content.headingAccent ?? ""}`
+    .replace(/\btooo\b/gi, "to")
+    .replace(/\s+/g, " ")
+    .trim();
+  const displayHeading = /restoring authenticity/i.test(combinedHeading)
+    ? "Authentic connection."
+    : shorten(combinedHeading, 4);
 
   return (
-    <section className="bg-white py-10 lg:py-12 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 lg:px-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="relative">
-            <div className="relative aspect-[4/3] md:aspect-4/4 w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm shadow-2xl">
+    <section className="overflow-hidden bg-soft-ivory-white py-12 lg:py-16">
+      <div className="mx-auto max-w-6xl px-6 lg:px-0">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
+          <div className="grid grid-cols-[1fr_150px] gap-3 md:grid-cols-[1fr_170px]">
+            <div className="relative min-h-[260px] overflow-hidden rounded bg-stone-100">
               <Image
                 src={content.imageUrl}
-                alt={content.imageAlt || "BlissMatch image"}
+                alt={content.imageAlt || "BlissMatch story image"}
                 fill
                 className="object-cover"
               />
             </div>
-
-            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-warm-linen -z-10 rounded-sm" />
+            <div className="space-y-3">
+              <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
+                <Image
+                  src="/image copy 2.png"
+                  alt="Couple sharing a joyful moment"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
+                <Image
+                  src="/image copy 6.png"
+                  alt="Couple walking together"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col">
-            <span className="text-muted-burgundy-rose text-xs font-bold uppercase tracking-[0.3em] mb-4">
+            <span className="mb-4 text-[12px] md:text-[13px] font-black uppercase tracking-[0.35em] text-muted-burgundy-rose">
               {content.eyebrow}
             </span>
 
-            <h2 className="text-3xl md:text-4xl font-serif text-deep-midnight-navy leading-tight mb-6">
-              {content.headingMain} <br />
-              <span className="italic">{content.headingAccent}</span>
+            <h2 className="mb-4 font-serif text-2xl leading-tight text-deep-midnight-navy md:text-3xl">
+              {displayHeading}
             </h2>
 
-            <div className="space-y-6 text-stone-600 leading-relaxed max-w-lg">
-              <p className="text-sm md:text-base">{content.paragraphOne}</p>
+            <div className="max-w-lg space-y-4 leading-relaxed text-stone-700">
+              <p className="text-sm md:text-base">{shorten(content.paragraphOne, 14)}</p>
 
-              <blockquote className="border-l-2 border-muted-burgundy-rose pl-6 py-2 italic text-deep-midnight-navy font-serif md:text-lg text-base">
-                "{content.quote}"
+              <blockquote className="border-l-2 border-muted-burgundy-rose/40 py-1 pl-4 font-serif text-base italic text-deep-midnight-navy md:text-lg">
+                "{shorten(content.quote, 8)}"
               </blockquote>
-
-              <p className="text-sm">{content.paragraphTwo}</p>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-7">
               <Link
                 href={content.ctaHref || "/about"}
-                className="inline-flex items-center group text-deep-midnight-navy font-bold uppercase text-xs tracking-widest border-b border-stone-200 pb-2 hover:border-muted-burgundy-rose transition-all"
+                className="group inline-flex items-center border-b border-stone-300 pb-2 text-xs font-bold uppercase tracking-widest text-deep-midnight-navy transition-all hover:border-muted-burgundy-rose"
               >
                 {content.ctaLabel}
-                <ArrowRight className="ml-3 w-4 h-4 transition-transform group-hover:translate-x-2 text-muted-burgundy-rose" />
+                <ArrowRight className="ml-3 h-4 w-4 text-muted-burgundy-rose transition-transform group-hover:translate-x-2" />
               </Link>
             </div>
           </div>

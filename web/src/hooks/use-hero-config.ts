@@ -10,14 +10,16 @@ type HeroConfig = {
 };
 
 export function useHeroConfig(route: string) {
-  const [config, setConfig] = useState<HeroConfig | null>(null);
+  const [config, setConfig] = useState<HeroConfig | null>(undefined);
 
   useEffect(() => {
     let active = true;
 
     async function load() {
       try {
-        const res = await fetch(`/api/admin/hero?route=${encodeURIComponent(route)}`);
+        const res = await fetch(`/api/admin/hero?route=${encodeURIComponent(route)}`, {
+          cache: 'no-store',
+        });
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
@@ -43,6 +45,6 @@ export function useHeroConfig(route: string) {
     };
   }, [route]);
 
-  return config;
+  return { config, loading: config === undefined };
 }
 

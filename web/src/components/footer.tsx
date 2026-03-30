@@ -108,7 +108,7 @@ const Footer = () => {
             </h4>
             <div className="text-xs text-stone-300 space-y-1 font-bold tracking-none">
               <p className="italic font-serif normal-case tracking-none">
-                {f.locationsLine}
+                {f.locationsLine.replace(/\s*•\s*Paris\b/i, "")}
               </p>
               <a
                 href={f.emailHref}
