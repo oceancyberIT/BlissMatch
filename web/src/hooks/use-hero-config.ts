@@ -10,7 +10,7 @@ type HeroConfig = {
 };
 
 export function useHeroConfig(route: string) {
-  const [config, setConfig] = useState<HeroConfig | null>(undefined);
+  const [config, setConfig] = useState<HeroConfig | null | undefined>(undefined);
 
   useEffect(() => {
     let active = true;

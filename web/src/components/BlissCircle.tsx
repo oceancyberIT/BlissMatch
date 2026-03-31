@@ -7,6 +7,12 @@ type BlissCircleProps = {
   data?: HomeContent["blissCircle"];
 };
 
+const compactCopy = (text: string, maxWords = 16) => {
+  const words = text.trim().split(/\s+/);
+  if (words.length <= maxWords) return text.trim();
+  return `${words.slice(0, maxWords).join(" ")}...`;
+};
+
 const BlissCircle = ({ data }: BlissCircleProps) => {
   const content = {
     ...INITIAL_CONTENT.blissCircle,
@@ -31,9 +37,9 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
               </h2>
 
               <div className="space-y-4 text-sm leading-relaxed text-stone-600 md:text-base">
-                <p>{content.paragraphOne}</p>
+                <p>{compactCopy(content.paragraphOne, 15)}</p>
                 {content.paragraphTwo?.trim() ? (
-                  <p>{content.paragraphTwo}</p>
+                  <p>{compactCopy(content.paragraphTwo, 13)}</p>
                 ) : null}
               </div>
 

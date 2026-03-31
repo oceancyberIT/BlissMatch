@@ -141,7 +141,8 @@ export function mergeHomeContent(
   loaded: Partial<HomeContent> | null | undefined,
 ): HomeContent {
   if (!loaded || typeof loaded !== 'object') return INITIAL_CONTENT;
-  const so = loaded.servicesOverview ?? {};
+  const so: Partial<HomeContent['servicesOverview']> =
+    loaded.servicesOverview ?? {};
   return {
     ...INITIAL_CONTENT,
     ...loaded,
