@@ -21,7 +21,7 @@ export const INITIAL_CONTENT: HomeContent = {
       'Our philosophy is simple: Love is deliberate. We combine psychological insight with refined matchmaking to help you connect on every level-intellectual, emotional, and spiritual.',
     ctaLabel: 'Discover Our Full Philosophy',
     ctaHref: '/about',
-    imageUrl: '/founders-working.png',
+    imageUrl: '/about.jpg',
     imageAlt: 'BlissMatch Founders',
     sideImage1Url: '/image copy 2.png',
     sideImage1Alt: 'Couple sharing a joyful moment',
