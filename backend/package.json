@@ -21,7 +21,9 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
     "content:sync": "ts-node scripts/sync-content-to-prod.ts",
-    "content:sync:dry": "ts-node scripts/sync-content-to-prod.ts --dry-run"
+    "content:sync:dry": "ts-node scripts/sync-content-to-prod.ts --dry-run",
+    "content:sync:api": "ts-node scripts/sync-content-via-api.ts",
+    "content:sync:api:dry": "ts-node scripts/sync-content-via-api.ts --dry-run"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
