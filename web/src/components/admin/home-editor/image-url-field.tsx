@@ -23,6 +23,44 @@ export function ImageUrlField({
   const [libraryItems, setLibraryItems] = useState<MediaAsset[]>([]);
   const [libraryMessage, setLibraryMessage] = useState<string | null>(null);
 
+  const compressImageFile = useCallback(async (file: File): Promise<string> => {
+    const readAsDataUrl = () =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result ?? ''));
+        reader.onerror = () => reject(new Error('Could not read image file.'));
+        reader.readAsDataURL(file);
+      });
+
+    const sourceDataUrl = await readAsDataUrl();
+
+    // Skip re-encoding very small files.
+    if (file.size <= 220 * 1024) return sourceDataUrl;
+
+    const img = document.createElement('img');
+    img.src = sourceDataUrl;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error('Could not decode image.'));
+    });
+
+    const maxWidth = 1400;
+    const maxHeight = 1400;
+    const ratio = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+    const targetWidth = Math.max(1, Math.round(img.width * ratio));
+    const targetHeight = Math.max(1, Math.round(img.height * ratio));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return sourceDataUrl;
+    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    // JPEG compression greatly reduces payload for admin JSON saves.
+    return canvas.toDataURL('image/jpeg', 0.82);
+  }, []);
+
   const fetchLibrary = useCallback(async () => {
     const token =
       typeof window !== 'undefined'
@@ -81,20 +119,21 @@ export function ImageUrlField({
   }, [libraryOpen, fetchLibrary]);
 
   const onFile = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file?.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const result = reader.result as string;
+        try {
+          const result = await compressImageFile(file);
           onChange(result);
-          await saveToLibrary(result, file.name);
-        };
-        reader.readAsDataURL(file);
+          // Save in background; don't block form interaction.
+          void saveToLibrary(result, file.name);
+        } catch {
+          setLibraryMessage('Could not process image file.');
+        }
       }
       e.target.value = '';
     },
-    [onChange, saveToLibrary],
+    [compressImageFile, onChange, saveToLibrary],
   );
 
   return (
