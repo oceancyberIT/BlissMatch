@@ -7,6 +7,8 @@ import { AboutContent } from "@/components/admin/about-editor/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ... (processStepsDefault stays the same)
+
 const processStepsDefault = [
   {
     id: "01",
@@ -45,86 +47,134 @@ type ProcessTimelineProps = {
 };
 
 const ProcessTimeline = ({ data }: ProcessTimelineProps) => {
-  const sectionRef = useRef(null);
-  const triggerRef = useRef(null);
+  const containerRef = useRef<HTMLElement | null>(null);
+  const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
+  const steps = data?.steps?.length ? data.steps : processStepsDefault;
 
   useEffect(() => {
-    const pin = gsap.fromTo(
-      sectionRef.current,
-      { translateX: 0 },
-      {
-        translateX: "-150vw", // Reduced travel distance for tighter scroll
-        ease: "none",
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: "+=2000px", // Shorter scroll end for better density
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
-      },
+    const cards = cardsRef.current.filter(
+      (card): card is HTMLDivElement => card !== null,
     );
+    if (cards.length === 0 || !containerRef.current) return;
+
+    // Without this, every card paints at full opacity in the same spot until GSAP runs.
+    gsap.set(cards[0], { opacity: 1, y: 0, scale: 1, pointerEvents: "auto" });
+    for (let i = 1; i < cards.length; i++) {
+      gsap.set(cards[i], {
+        opacity: 0,
+        y: "75vh",
+        scale: 0.92,
+        pointerEvents: "none",
+      });
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top top",
+        end: `+=${cards.length * 100}%`,
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+      },
+    });
+
+    cards.forEach((card, index) => {
+      if (index === 0) return;
+
+      tl.fromTo(
+        card,
+        { y: "75vh", opacity: 0, scale: 0.92, pointerEvents: "none" },
+        {
+          y: "0vh",
+          opacity: 1,
+          scale: 1,
+          pointerEvents: "auto",
+          duration: 1,
+          ease: "power2.out",
+        },
+        index === 1 ? 0 : ">",
+      );
+
+      tl.to(
+        cards[index - 1],
+        {
+          opacity: 0,
+          y: "-35vh",
+          scale: 0.9,
+          pointerEvents: "none",
+          duration: 0.75,
+          ease: "power2.in",
+        },
+        "<",
+      );
+    });
+
     return () => {
-      pin.kill();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [steps.length]);
 
   return (
-    <section ref={triggerRef} className="overflow-hidden relative h-[70vh]">
-      {/* Background Layer */}
+    <section ref={containerRef} className="relative h-screen overflow-hidden bg-stone-950">
+      {/* Fixed Background */}
       <div className="absolute inset-0 z-0">
         <Image
           src={data?.backgroundImageUrl ?? "/image.png"}
-          alt="Couple holding hands"
+          alt="Background"
           fill
-          className="object-cover"
+          className="object-cover opacity-40"
           priority
         />
-        <div className="absolute inset-0 bg-stone-950/60 backdrop-blur-[1px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-950 via-transparent to-stone-950" />
       </div>
 
-      {/* Header - Reduced top padding and text size */}
-      <div className="absolute top-10 md:top-12 left-1/2 -translate-x-1/2 z-20 text-center w-full px-6">
+      {/* Header - Stays static while cards swap */}
+      <div className="absolute top-12 left-0 w-full z-30 text-center px-6">
         <span className="text-muted-burgundy-rose text-[10px] font-black uppercase tracking-[0.4em] mb-2 block">
           {data?.eyebrow ?? "The Journey"}
         </span>
-        <h2 className="text-3xl md:text-4xl font-serif text-white tracking-tight">
+        <h2 className="text-3xl md:text-5xl font-serif text-white tracking-tight">
           {data?.heading ?? "Our Five-Step Process"}
         </h2>
       </div>
 
-      {/* Timeline - Reduced width for tighter spacing */}
-      <div
-        ref={sectionRef}
-        className="flex relative z-10 w-[350vw] h-[98%] items-start md:items-center pt-28 md:pt-0"
-      >
-        {(data?.steps ?? processStepsDefault).map((step) => (
+      {/* Cards Container */}
+      <div className="relative h-full w-full flex items-center justify-center z-20">
+        {steps.map((step, index) => (
           <div
             key={step.id}
-            className="w-[65vw] h-full flex flex-col justify-center items-center px-4 md:px-10"
+            ref={(el) => {
+              cardsRef.current[index] = el;
+            }}
+            className="absolute w-[90%] max-w-2xl"
+            style={{
+              zIndex: index + 10,
+              opacity: index === 0 ? 1 : 0,
+            }}
           >
-            {/* Card - Reduced padding and max-width */}
-            <div className="relative p-6 md:p-10 bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl w-full max-w-2xl group transition-all duration-500 hover:bg-white/[0.08]">
-              <div className="absolute top-3 bottom-0 left-0 w-1 bg-muted-burgundy-rose opacity-40 group-hover:opacity-100 transition-opacity" />
-
-              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8">
-                {/* ID - Scaled down */}
-                <span className="text-5xl md:text-6xl font-serif text-white opacity-20 font-black tracking-tighter shrink-0 leading-none">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 md:p-16 shadow-2xl rounded-sm">
+              <div className="flex flex-col items-center text-center">
+                <span className="text-6xl md:text-8xl font-serif text-muted-burgundy-rose/30 font-black mb-6">
                   {step.id}
                 </span>
-
-                <div className="pt-1">
-                  <h3 className="text-sm md:text-base font-black text-white uppercase tracking-[0.2em] mb-3 group-hover:text-muted-burgundy-rose transition-colors">
-                    {step.title}
-                  </h3>
-                  <p className="text-stone-300 leading-relaxed text-[13px] md:text-sm font-medium">
-                    {step.description}
-                  </p>
-                </div>
+                <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-[0.2em] mb-6">
+                  {step.title}
+                </h3>
+                <div className="w-12 h-[1px] bg-muted-burgundy-rose mb-6" />
+                <p className="text-stone-200 leading-relaxed text-sm md:text-base max-w-md font-light">
+                  {step.description}
+                </p>
               </div>
             </div>
           </div>
+        ))}
+      </div>
+      
+      {/* Subtle Progress Indicator */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+        {steps.map((_, i) => (
+            <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/20" />
         ))}
       </div>
     </section>

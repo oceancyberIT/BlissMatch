@@ -267,3 +267,65 @@ export function ServicesConfidentialityForm({
     </div>
   );
 }
+
+const SLOT_LABELS = ['Left card', 'Middle card', 'Right card'];
+
+export function ServicesHeroGalleryForm({
+  value,
+  onChange,
+}: {
+  value: ServicesContent['hero'];
+  onChange: (next: ServicesContent['hero']) => void;
+}) {
+  const h = value;
+  return (
+    <div className="space-y-8">
+      <p className="text-[11px] text-stone-500 leading-relaxed">
+        Title, subtitle, lead text, and the large background image are edited in{' '}
+        <strong className="text-deep-midnight-navy">Global → Hero Section</strong> (route: Services).
+        Here you control the three staggered images and the footer line.
+      </p>
+
+      <FormField label="Footer line" hint="Small text above the bottom-left rule on large screens">
+        <input
+          className={fieldClass}
+          value={h.footerLabel}
+          onChange={(e) => onChange({ ...h, footerLabel: e.target.value })}
+        />
+      </FormField>
+
+      <div className="space-y-6 border-t border-stone-100 pt-6">
+        <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">
+          Staggered gallery (3)
+        </p>
+        {SLOT_LABELS.map((label, i) => (
+          <div key={label} className="rounded-xl border border-stone-100 bg-stone-50/40 p-4 space-y-3">
+            <p className="text-[10px] font-bold text-stone-500">{label}</p>
+            <FormField label="Image URL">
+              <ImageUrlField
+                value={h.gallery[i]?.url ?? ''}
+                onChange={(v) => {
+                  const next = [...h.gallery];
+                  next[i] = { ...next[i], url: v };
+                  onChange({ ...h, gallery: next });
+                }}
+                urlInputClassName={fieldClass}
+              />
+            </FormField>
+            <FormField label="Alt text">
+              <input
+                className={fieldClass}
+                value={h.gallery[i]?.alt ?? ''}
+                onChange={(e) => {
+                  const next = [...h.gallery];
+                  next[i] = { ...next[i], alt: e.target.value };
+                  onChange({ ...h, gallery: next });
+                }}
+              />
+            </FormField>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

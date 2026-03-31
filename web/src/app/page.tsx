@@ -1,6 +1,7 @@
  'use client';
 
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Hero from "../components/Hero";
 import ServiceQuestions from "../components/ServiceQuestions";
 import OurStory from "../components/OurStory";
@@ -10,7 +11,26 @@ import WhyChooseUs from "../components/WhyChooseUs";
 import LoveConnectionSection from "../components/Love";
 import BlissCircle from "../components/BlissCircle";
 import { HomeContent } from "@/components/admin/home-editor/types";
-import { INITIAL_CONTENT } from "@/components/admin/home-editor/constants";
+import {
+  INITIAL_CONTENT,
+  mergeHomeContent,
+} from "@/components/admin/home-editor/constants";
+
+type RevealProps = {
+  children: React.ReactNode;
+  delay?: number;
+};
+
+const Reveal = ({ children, delay = 0 }: RevealProps) => (
+  <motion.div
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.2 }}
+    transition={{ duration: 0.65, ease: "easeOut", delay }}
+  >
+    {children}
+  </motion.div>
+);
 
 const Home = () => {
   const [homeContent, setHomeContent] = useState<HomeContent>(INITIAL_CONTENT);
@@ -24,7 +44,7 @@ const Home = () => {
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
-          setHomeContent(data);
+          setHomeContent(mergeHomeContent(data));
         }
       } catch {
         // Keep fallback content
@@ -39,14 +59,30 @@ const Home = () => {
 
   return (
     <main className="flex flex-col w-full">
-      <Hero />
-      <OurStory data={homeContent.ourStory} />
-      <OurServices data={homeContent.servicesOverview} />
-      <ServiceQuestions data={homeContent.servicesOverview} />
-      <WhyChooseUs data={homeContent.whyChooseUs} />
-      <LoveConnectionSection data={homeContent.loveConnection} />
-      <BlissCircle data={homeContent.blissCircle} />
-      <SuccessStories />
+      <Reveal>
+        <Hero />
+      </Reveal>
+      <Reveal delay={0.05}>
+        <OurStory data={homeContent.ourStory} />
+      </Reveal>
+      <Reveal delay={0.08}>
+        <OurServices data={homeContent.servicesOverview} />
+      </Reveal>
+      <Reveal delay={0.11}>
+        <ServiceQuestions data={homeContent.servicesOverview} />
+      </Reveal>
+      <Reveal delay={0.14}>
+        <WhyChooseUs data={homeContent.whyChooseUs} />
+      </Reveal>
+      <Reveal delay={0.17}>
+        <LoveConnectionSection data={homeContent.loveConnection} />
+      </Reveal>
+      <Reveal delay={0.2}>
+        <BlissCircle data={homeContent.blissCircle} />
+      </Reveal>
+      <Reveal delay={0.23}>
+        <SuccessStories />
+      </Reveal>
     </main>
   );
 };

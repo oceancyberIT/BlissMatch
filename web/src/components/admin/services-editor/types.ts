@@ -5,6 +5,11 @@ export type ServicesGridCard = {
 };
 
 export type ServicesContent = {
+  /** Right-column gallery + footer — copy/background still come from Hero registry (/admin/hero → /admin/services) */
+  hero: {
+    gallery: Array<{ url: string; alt: string }>;
+    footerLabel: string;
+  };
   grid: {
     cards: ServicesGridCard[];
     banner: {
@@ -36,4 +41,4 @@ export type ServicesContent = {
   };
 };
 
-export type ServicesSectionKey = 'grid' | 'socialImpact' | 'confidentiality';
+export type ServicesSectionKey = 'hero' | 'grid' | 'socialImpact' | 'confidentiality';

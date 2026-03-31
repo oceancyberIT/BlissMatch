@@ -1,6 +1,14 @@
 import { ServicesContent } from './types';
 
 export const INITIAL_SERVICES_CONTENT: ServicesContent = {
+  hero: {
+    gallery: [
+      { url: '/image copy 2.png', alt: 'Service detail' },
+      { url: '/image copy 3.png', alt: 'Service detail' },
+      { url: '/image copy 4.png', alt: 'Service detail' },
+    ],
+    footerLabel: 'Scroll to Discover',
+  },
   grid: {
     cards: [
       {
@@ -60,3 +68,53 @@ export const INITIAL_SERVICES_CONTENT: ServicesContent = {
     ],
   },
 };
+
+/** Three staggered cards on the services hero (left → right). */
+export function mergeHeroGallery(
+  initial: ServicesContent['hero']['gallery'],
+  loaded?: Partial<{ url: string; alt: string }>[] | null,
+): ServicesContent['hero']['gallery'] {
+  return initial.map((slot, i) => ({
+    ...slot,
+    ...(loaded?.[i] ?? {}),
+  }));
+}
+
+export function mergeServicesContent(raw: unknown): ServicesContent {
+  if (!raw || typeof raw !== 'object') return INITIAL_SERVICES_CONTENT;
+  const d = raw as Partial<ServicesContent>;
+  return {
+    ...INITIAL_SERVICES_CONTENT,
+    ...d,
+    hero: {
+      ...INITIAL_SERVICES_CONTENT.hero,
+      ...d.hero,
+      gallery: mergeHeroGallery(INITIAL_SERVICES_CONTENT.hero.gallery, d.hero?.gallery),
+    },
+    grid: {
+      ...INITIAL_SERVICES_CONTENT.grid,
+      ...d.grid,
+      cards:
+        Array.isArray(d.grid?.cards) && d.grid!.cards!.length > 0
+          ? d.grid!.cards!
+          : INITIAL_SERVICES_CONTENT.grid.cards,
+      banner: {
+        ...INITIAL_SERVICES_CONTENT.grid.banner,
+        ...d.grid?.banner,
+      },
+    },
+    socialImpact: {
+      ...INITIAL_SERVICES_CONTENT.socialImpact,
+      ...d.socialImpact,
+    },
+    confidentiality: {
+      ...INITIAL_SERVICES_CONTENT.confidentiality,
+      ...d.confidentiality,
+      bullets:
+        Array.isArray(d.confidentiality?.bullets) &&
+        d.confidentiality!.bullets!.length > 0
+          ? d.confidentiality!.bullets!
+          : INITIAL_SERVICES_CONTENT.confidentiality.bullets,
+    },
+  };
+}

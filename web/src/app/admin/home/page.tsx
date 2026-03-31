@@ -11,6 +11,8 @@ import {
   BlissCircleSection,
   INITIAL_CONTENT,
   LoveConnectionSection,
+  mergeHomeContent,
+  mergeCollageImages,
   OurStorySection,
   SECTION_TABS,
   ServicesOverviewSection,
@@ -86,9 +88,10 @@ export default function AdminHomePage() {
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
-          latestContentRef.current = data;
-          setContent(data);
-          lastSavedContentRef.current = JSON.stringify(data);
+          const merged = mergeHomeContent(data);
+          latestContentRef.current = merged;
+          setContent(merged);
+          lastSavedContentRef.current = JSON.stringify(merged);
           setMessage('Loaded.');
           setTimeout(() => setMessage(null), 2000);
         }
@@ -219,6 +222,16 @@ export default function AdminHomePage() {
         selectedIndex: indices.service,
         setSelectedIndex: (i: number) => setIndices(p => ({ ...p, service: i })),
         onHeadingChange: (v: string) => updateSection('servicesOverview', { heading: v }),
+        onIntroFieldChange: (field: string, value: string) =>
+          updateSection('servicesOverview', { [field]: value }),
+        onUpdateCollageSlot: (index: number, patch: Record<string, unknown>) => {
+          const merged = mergeCollageImages(
+            INITIAL_CONTENT.servicesOverview.collageImages,
+            content.servicesOverview.collageImages,
+          );
+          merged[index] = { ...merged[index], ...patch };
+          updateSection('servicesOverview', { collageImages: merged });
+        },
         onAdd: handlers.services.add,
         onDelete: handlers.services.delete,
         onUpdateCard: (index: number, patch: any) => {

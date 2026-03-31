@@ -5,6 +5,8 @@
 
 generator client {
   provider = "prisma-client-js"
+  // Default location; do not compile these sources with Nest (see tsconfig.build.json).
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {

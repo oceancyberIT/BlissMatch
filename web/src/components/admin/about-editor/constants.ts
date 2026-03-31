@@ -25,7 +25,7 @@ export const INITIAL_ABOUT_CONTENT: AboutContent = {
     promiseText: "We don't introduce many. We introduce meaningfully.",
     trustTitle: 'Discretion & Trust',
     trustText:
-      'Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only.',
+      'Every engagement is private and by appointment only.',
     trustSubtext: 'Ensuring professionalism, privacy, and care.',
   },
   discretion: {
@@ -33,7 +33,7 @@ export const INITIAL_ABOUT_CONTENT: AboutContent = {
     headingMain: 'Discretion is our',
     headingAccent: 'Foundation.',
     paragraph:
-      'Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only. Our consultants handle each relationship personally—ensuring professionalism, privacy, and care.',
+      'Every engagement is private and by appointment only. We handle each relationship with discretion, professionalism, and care.',
     cards: [
       {
         title: 'Invisible Digital Footprint',
@@ -95,7 +95,7 @@ export const INITIAL_ABOUT_CONTENT: AboutContent = {
     headingMain: 'Are you ready for a',
     headingAccent: 'meaningful',
     paragraph:
-      'The journey to a purposeful relationship is not found in an algorithm. It is curated with intention, discretion, and a deep understanding of who you are.',
+      'Meaningful relationships are not found in algorithms. They are curated with intention and discretion.',
     buttonLabel: 'Book a Private Consultation',
     buttonHref: '/appointment',
     images: [

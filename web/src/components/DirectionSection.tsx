@@ -8,8 +8,18 @@ type DiscretionSectionProps = {
   data?: AboutContent["discretion"];
 };
 
+const compactCopy = (text: string, maxWords = 18) => {
+  const words = text.trim().split(/\s+/);
+  if (words.length <= maxWords) return text.trim();
+  return `${words.slice(0, maxWords).join(" ")}.`;
+};
+
 const DiscretionSection = ({ data }: DiscretionSectionProps) => {
   const cards = data?.cards ?? [];
+  const paragraphSource =
+    data?.paragraph ??
+    "Every engagement is private and by appointment only. We handle each relationship with discretion, professionalism, and care.";
+  const paragraph = compactCopy(paragraphSource, 18);
   return (
     <section className="relative bg-deep-midnight-navy py-10 lg:py-20 overflow-hidden">
       <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
@@ -41,8 +51,7 @@ const DiscretionSection = ({ data }: DiscretionSectionProps) => {
             </h2>
 
             <p className="text-stone-300 md:text-lg text-base leading-relaxed font-light">
-              {data?.paragraph ??
-                "Every client engagement is strictly confidential. We operate quietly, respectfully, and by appointment only. Our consultants handle each relationship personally—ensuring professionalism, privacy, and care."}
+              {paragraph}
             </p>
           </div>
 

@@ -1,14 +1,157 @@
 
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, LayoutGrid, Type } from "lucide-react";
 import { FormField } from "./form-field";
+import { ImageUrlField } from "./image-url-field";
 import { cn } from "@/lib/utils";
 
-export function ServicesOverviewSection({ data, selectedIndex, setSelectedIndex, onHeadingChange, onAdd, onDelete, onUpdateCard }: any) {
-  const inputStyle = "w-full bg-stone-50/50 rounded-xl px-4 py-3 text-sm outline-none border border-transparent focus:border-muted-burgundy-rose/30 focus:bg-white transition-all";
+const COLLAGE_SLOT_LABELS = [
+  "Large tile (left)",
+  "Top right",
+  "Middle right",
+  "Bottom left",
+  "Bottom centre",
+  "Bottom right",
+];
+
+const inputStyle =
+  "w-full bg-stone-50/50 rounded-xl px-4 py-3 text-sm outline-none border border-transparent focus:border-muted-burgundy-rose/30 focus:bg-white transition-all";
+
+type CollagePatch = {
+  url?: string;
+  alt?: string;
+  objectPosition?: string;
+};
+
+export function ServicesOverviewSection({
+  data,
+  selectedIndex,
+  setSelectedIndex,
+  onHeadingChange,
+  onAdd,
+  onDelete,
+  onUpdateCard,
+  onIntroFieldChange,
+  onUpdateCollageSlot,
+}: {
+  data: any;
+  selectedIndex: number;
+  setSelectedIndex: (i: number) => void;
+  onHeadingChange: (v: string) => void;
+  onAdd: () => void;
+  onDelete: (index: number) => void;
+  onUpdateCard: (index: number, patch: Record<string, unknown>) => void;
+  onIntroFieldChange: (field: string, value: string) => void;
+  onUpdateCollageSlot: (index: number, patch: CollagePatch) => void;
+}) {
+  const collage = data.collageImages ?? [];
 
   return (
     <div className="space-y-8">
-      <FormField label="Heading">
+      <section className="space-y-6 pb-8 border-b border-stone-100">
+        <div className="flex items-center gap-2">
+          <LayoutGrid size={14} className="text-muted-burgundy-rose" />
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+            Homepage — Our Service block
+          </h3>
+        </div>
+        <p className="text-[11px] text-stone-500 leading-relaxed">
+          Left column text and image collage beside it on the home page. The section below controls the
+          large &ldquo;Elevated Relational Support&rdquo; grid.
+        </p>
+
+        <FormField label="Eyebrow" hint="Small label above the paragraph (e.g. Our Service)">
+          <input
+            value={data.introEyebrow ?? ""}
+            onChange={(e) => onIntroFieldChange("introEyebrow", e.target.value)}
+            className={inputStyle}
+          />
+        </FormField>
+
+        <FormField label="Intro paragraph">
+          <textarea
+            rows={4}
+            value={data.introLead ?? ""}
+            onChange={(e) => onIntroFieldChange("introLead", e.target.value)}
+            className={cn(inputStyle, "resize-none leading-relaxed")}
+          />
+        </FormField>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <FormField label="Link text">
+            <input
+              value={data.introCtaLabel ?? ""}
+              onChange={(e) => onIntroFieldChange("introCtaLabel", e.target.value)}
+              className={inputStyle}
+            />
+          </FormField>
+          <FormField label="Link URL" hint="Usually /services">
+            <input
+              value={data.introCtaHref ?? ""}
+              onChange={(e) => onIntroFieldChange("introCtaHref", e.target.value)}
+              className={cn(inputStyle, "font-mono text-[12px]")}
+            />
+          </FormField>
+        </div>
+
+        <div className="space-y-4 pt-2">
+          <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">
+            Collage — six images (order matches homepage bento)
+          </p>
+          <div className="grid gap-6 md:grid-cols-2">
+            {COLLAGE_SLOT_LABELS.map((label, i) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-stone-100 bg-stone-50/30 p-4 space-y-3"
+              >
+                <p className="text-[10px] font-bold text-stone-500">
+                  {i + 1}. {label}
+                </p>
+                <FormField label="Image">
+                  <ImageUrlField
+                    value={collage[i]?.url ?? ""}
+                    onChange={(v) => onUpdateCollageSlot(i, { url: v })}
+                    urlInputClassName={cn(inputStyle, "font-mono text-[12px]")}
+                  />
+                </FormField>
+                <FormField label="Alt text">
+                  <input
+                    value={collage[i]?.alt ?? ""}
+                    onChange={(e) => onUpdateCollageSlot(i, { alt: e.target.value })}
+                    className={inputStyle}
+                  />
+                </FormField>
+                <FormField
+                  label="Object position (optional)"
+                  hint="CSS value, e.g. center 35% — helps crop focus"
+                >
+                  <input
+                    value={collage[i]?.objectPosition ?? ""}
+                    onChange={(e) =>
+                      onUpdateCollageSlot(i, {
+                        objectPosition: e.target.value.trim() || undefined,
+                      })
+                    }
+                    className={cn(inputStyle, "font-mono text-[12px]")}
+                    placeholder="center"
+                  />
+                </FormField>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="flex items-center gap-2">
+        <Type size={14} className="text-muted-burgundy-rose" />
+        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+          Service grid section
+        </h3>
+      </div>
+      <p className="text-[11px] text-stone-500 -mt-4 mb-2">
+        Heading and cards for the dark band below (four service pillars).
+      </p>
+
+      <FormField label="Section heading">
         <input value={data.heading} onChange={(e) => onHeadingChange(e.target.value)} className={inputStyle} />
       </FormField>
 

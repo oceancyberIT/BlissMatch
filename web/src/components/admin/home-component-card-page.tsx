@@ -9,6 +9,8 @@ import {
   BlissCircleSection,
   INITIAL_CONTENT,
   LoveConnectionSection,
+  mergeCollageImages,
+  mergeHomeContent,
   ServicesOverviewSection,
   WhyChooseUsSection,
 } from '@/components/admin/home-editor/sections';
@@ -95,7 +97,28 @@ function ViewSectionReadOnly({
     return (
       <div className="space-y-6">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">Heading</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">Our Service block</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-burgundy-rose mt-2">{s.introEyebrow}</p>
+          <p className="text-sm text-stone-600 mt-2 leading-relaxed">{s.introLead}</p>
+          <p className="text-xs text-stone-500 mt-2">
+            {s.introCtaLabel} → {s.introCtaHref}
+          </p>
+        </div>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-2">Collage</p>
+          <div className="grid grid-cols-3 gap-2">
+            {(s.collageImages ?? []).map((im, i) => (
+              <div key={i} className="aspect-square rounded-lg border border-stone-200 overflow-hidden bg-stone-100">
+                {im?.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={im.url} alt={im.alt || ''} className="h-full w-full object-cover" />
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">Service grid heading</p>
           <p className="text-lg font-semibold text-deep-midnight-navy mt-1">{s.heading}</p>
         </div>
         <div className="space-y-3">
@@ -146,12 +169,24 @@ function ViewSectionReadOnly({
     const s = content.blissCircle;
     return (
       <div className="space-y-6">
-        {s.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={s.imageUrl} alt={s.imageAlt || ''} className="h-56 w-full object-cover rounded-xl border border-stone-200" />
-        ) : (
-          <div className="h-56 w-full rounded-xl border border-stone-200 bg-stone-50" />
-        )}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {s.secondaryImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={s.secondaryImageUrl}
+              alt={s.secondaryImageAlt || ''}
+              className="h-40 w-full object-cover rounded-xl border border-stone-200"
+            />
+          ) : (
+            <div className="h-40 rounded-xl border border-stone-200 bg-stone-50" />
+          )}
+          {s.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={s.imageUrl} alt={s.imageAlt || ''} className="h-40 w-full object-cover rounded-xl border border-stone-200" />
+          ) : (
+            <div className="h-40 rounded-xl border border-stone-200 bg-stone-50" />
+          )}
+        </div>
         <div className="space-y-2">
           <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">{s.eyebrow}</p>
           <h4 className="text-2xl font-serif italic text-deep-midnight-navy">{s.headingMain}</h4>
@@ -240,7 +275,7 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
         const res = await fetch('/api/admin/home');
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setHomeContent(data);
+        if (res.ok && data) setHomeContent(mergeHomeContent(data));
         else setHomeContent(INITIAL_CONTENT);
       } catch {
         if (!active) return;
@@ -346,6 +381,17 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
           selectedIndex={indices.service}
           setSelectedIndex={(i: number) => setIndices((p) => ({ ...p, service: i }))}
           onHeadingChange={(v: string) => updateSection('servicesOverview', { heading: v })}
+          onIntroFieldChange={(field: string, value: string) =>
+            updateSection('servicesOverview', { [field]: value })
+          }
+          onUpdateCollageSlot={(index: number, patch: Record<string, unknown>) => {
+            const merged = mergeCollageImages(
+              INITIAL_CONTENT.servicesOverview.collageImages,
+              c.servicesOverview.collageImages,
+            );
+            merged[index] = { ...merged[index], ...patch };
+            updateSection('servicesOverview', { collageImages: merged });
+          }}
           onAdd={() => {
             const nextCards = [
               ...c.servicesOverview.cards,

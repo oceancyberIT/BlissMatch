@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import AdminLayout from '@/components/admin/admin-layout';
-import { Eye, Pencil, Trash2, Save, Blocks, Heart, Shield } from 'lucide-react';
+import { Eye, Pencil, Trash2, Save, Blocks, Heart, Shield, Images } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ServicesContent, ServicesSectionKey } from '@/components/admin/services-editor/types';
-import { INITIAL_SERVICES_CONTENT } from '@/components/admin/services-editor/constants';
+import {
+  INITIAL_SERVICES_CONTENT,
+  mergeServicesContent,
+} from '@/components/admin/services-editor/constants';
 import {
   ServicesGridForm,
   ServicesSocialForm,
   ServicesConfidentialityForm,
+  ServicesHeroGalleryForm,
 } from '@/components/admin/services-admin-forms';
 
 export type ServicesComponentCardPageProps = {
@@ -26,45 +30,22 @@ export type ServicesComponentCardPageProps = {
   deleteMessage: string;
 };
 
-function mergeLoaded(raw: unknown): ServicesContent {
-  if (!raw || typeof raw !== 'object') return INITIAL_SERVICES_CONTENT;
-  const d = raw as Partial<ServicesContent>;
-  return {
-    ...INITIAL_SERVICES_CONTENT,
-    ...d,
-    grid: {
-      ...INITIAL_SERVICES_CONTENT.grid,
-      ...d.grid,
-      cards:
-        Array.isArray(d.grid?.cards) && d.grid!.cards!.length > 0
-          ? d.grid!.cards!
-          : INITIAL_SERVICES_CONTENT.grid.cards,
-      banner: {
-        ...INITIAL_SERVICES_CONTENT.grid.banner,
-        ...d.grid?.banner,
-      },
-    },
-    socialImpact: {
-      ...INITIAL_SERVICES_CONTENT.socialImpact,
-      ...d.socialImpact,
-    },
-    confidentiality: {
-      ...INITIAL_SERVICES_CONTENT.confidentiality,
-      ...d.confidentiality,
-      bullets:
-        Array.isArray(d.confidentiality?.bullets) &&
-        d.confidentiality!.bullets!.length > 0
-          ? d.confidentiality!.bullets!
-          : INITIAL_SERVICES_CONTENT.confidentiality.bullets,
-    },
-  };
-}
-
 function previewForSection(
   key: ServicesSectionKey,
   content: ServicesContent,
 ): { eyebrow: string; title: string; subtitle: string; imageUrl: string | null } {
   switch (key) {
+    case 'hero':
+      return {
+        eyebrow: 'Services hero',
+        title: content.hero.footerLabel || 'Footer line',
+        subtitle:
+          content.hero.gallery
+            .map((g) => g.alt)
+            .filter(Boolean)
+            .join(' · ') || 'Three gallery images',
+        imageUrl: content.hero.gallery[0]?.url || null,
+      };
     case 'grid':
       return {
         eyebrow: 'Service grid',
@@ -98,6 +79,30 @@ function ViewSectionReadOnly({
   sectionKey: ServicesSectionKey;
   content: ServicesContent;
 }) {
+  if (sectionKey === 'hero') {
+    const h = content.hero;
+    return (
+      <div className="space-y-6">
+        <p className="text-sm text-stone-600">
+          <span className="text-[10px] font-black uppercase text-stone-500">Footer line</span>
+          <br />
+          {h.footerLabel}
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          {h.gallery.map((g, i) => (
+            <div key={i} className="rounded-lg border border-stone-200 overflow-hidden">
+              {g.url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={g.url} alt={g.alt || ''} className="h-28 w-full object-cover" />
+              ) : (
+                <div className="h-28 bg-stone-100" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   if (sectionKey === 'grid') {
     const g = content.grid;
     return (
@@ -203,7 +208,7 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
         const res = await fetch('/api/admin/services');
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setServicesContent(mergeLoaded(data));
+        if (res.ok && data) setServicesContent(mergeServicesContent(data));
         else setServicesContent(INITIAL_SERVICES_CONTENT);
       } catch {
         if (!active) return;
@@ -293,6 +298,14 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
   const c = servicesContent;
 
   const renderEditor = () => {
+    if (sectionKey === 'hero') {
+      return (
+        <ServicesHeroGalleryForm
+          value={c.hero}
+          onChange={(hero) => updateSection('hero', hero as Record<string, unknown>)}
+        />
+      );
+    }
     if (sectionKey === 'grid') {
       return (
         <ServicesGridForm
@@ -322,7 +335,13 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
   };
 
   const PlaceholderIcon =
-    sectionKey === 'grid' ? Blocks : sectionKey === 'socialImpact' ? Heart : Shield;
+    sectionKey === 'grid'
+      ? Blocks
+      : sectionKey === 'socialImpact'
+        ? Heart
+        : sectionKey === 'hero'
+          ? Images
+          : Shield;
 
   return (
     <AdminLayout title={layoutTitle} description={layoutDescription}>

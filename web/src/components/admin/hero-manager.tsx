@@ -16,7 +16,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { HomeContent } from "@/components/admin/home-editor/types";
-import { INITIAL_CONTENT, OurStorySection } from "@/components/admin/home-editor/sections";
+import {
+  INITIAL_CONTENT,
+  mergeHomeContent,
+  OurStorySection,
+} from "@/components/admin/home-editor/sections";
 
 type HeroConfig = {
   route: string;
@@ -61,7 +65,8 @@ export function AdminHeroManager() {
       title: "Our Story",
       subtitle: "Established in Connection",
       body: "BlissMatch was founded by two best friends—one from a background in Human Behaviour Studies, the other in Business and Law—united by a vision to restore authenticity to modern relationships.",
-      imageUrl: "/image.png",
+      /** Full-bleed background on /about (portrait is edited in About page admin) */
+      imageUrl: "/image copy 2.png",
     },
     "/admin/services": {
       route: "/admin/services",
@@ -100,8 +105,8 @@ export function AdminHeroManager() {
         bodyLabel: "Intro Paragraph",
         bodyPlaceholder:
           "BlissMatch was founded by two best friends—one in Human Behaviour Studies, the other in Business and Law.",
-        imageLabel: "Hero Image URL",
-        imagePlaceholder: "/image.png",
+        imageLabel: "Background image URL",
+        imagePlaceholder: "/image copy 2.png",
         examples: {
           title: "Our Story",
           subtitle: "Established in Connection",
@@ -266,7 +271,7 @@ export function AdminHeroManager() {
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
-          setHomeContent(data);
+          setHomeContent(mergeHomeContent(data));
         } else {
           setHomeContent(INITIAL_CONTENT);
         }
@@ -298,7 +303,7 @@ export function AdminHeroManager() {
         const res = await fetch("/api/admin/home");
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setHomeContent(data);
+        if (res.ok && data) setHomeContent(mergeHomeContent(data));
         else setHomeContent(INITIAL_CONTENT);
       } catch {
         if (!active) return;
@@ -324,7 +329,7 @@ export function AdminHeroManager() {
       try {
         const res = await fetch("/api/admin/home");
         const data = await res.json().catch(() => null);
-        if (res.ok && data) setHomeContent(data);
+        if (res.ok && data) setHomeContent(mergeHomeContent(data));
         else setHomeContent(INITIAL_CONTENT);
       } catch {
         setHomeContent(INITIAL_CONTENT);

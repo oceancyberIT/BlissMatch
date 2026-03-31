@@ -8,6 +8,12 @@ type CallToAppointmentProps = {
   data?: AboutContent["cta"];
 };
 
+const compactCopy = (text: string, maxWords = 16) => {
+  const words = text.trim().split(/\s+/);
+  if (words.length <= maxWords) return text.trim();
+  return `${words.slice(0, maxWords).join(" ")}.`;
+};
+
 const CallToAppointment = ({ data }: CallToAppointmentProps) => {
   const couples = data?.images ?? [
     { src: "/image copy 2.png", alt: "Authentic couple sharing a laugh" },
@@ -20,6 +26,10 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
       alt: "Couple walking hand-in-hand in a garden",
     },
   ];
+  const paragraphSource =
+    data?.paragraph ??
+    "Meaningful relationships are not found in algorithms. They are curated with intention and discretion.";
+  const paragraph = compactCopy(paragraphSource, 16);
 
   return (
     <section className="bg-white py-10 lg:py-16 px-6 overflow-hidden">
@@ -39,10 +49,7 @@ const CallToAppointment = ({ data }: CallToAppointmentProps) => {
             </h2>
 
             <div className="space-y-6 text-stone-600 text-base md:text-xl leading-relaxed font-light">
-              <p>
-                {data?.paragraph ??
-                  "The journey to a purposeful relationship is not found in an algorithm. It is curated with intention, discretion, and a deep understanding of who you are."}
-              </p>
+              <p>{paragraph}</p>
             </div>
 
             <div className="pt-5">

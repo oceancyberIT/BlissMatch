@@ -4,59 +4,30 @@ import { useEffect, useMemo, useState } from 'react';
 import AdminLayout from '@/components/admin/admin-layout';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Save, Blocks, Heart, Shield } from 'lucide-react';
+import { Save, Blocks, Heart, Shield, Images } from 'lucide-react';
 import { ServicesContent } from '@/components/admin/services-editor/types';
-import { INITIAL_SERVICES_CONTENT } from '@/components/admin/services-editor/constants';
+import {
+  INITIAL_SERVICES_CONTENT,
+  mergeServicesContent,
+} from '@/components/admin/services-editor/constants';
 import {
   ServicesGridForm,
   ServicesSocialForm,
   ServicesConfidentialityForm,
+  ServicesHeroGalleryForm,
 } from '@/components/admin/services-admin-forms';
 
-type ServicesTab = 'grid' | 'socialImpact' | 'confidentiality';
+type ServicesTab = 'hero' | 'grid' | 'socialImpact' | 'confidentiality';
 
 const SERVICES_TABS: Array<{ key: ServicesTab; label: string; icon: typeof Blocks }> = [
+  { key: 'hero', label: 'Hero gallery', icon: Images },
   { key: 'grid', label: 'Service grid', icon: Blocks },
   { key: 'socialImpact', label: 'Social impact', icon: Heart },
   { key: 'confidentiality', label: 'Confidentiality', icon: Shield },
 ];
 
-function mergeLoaded(raw: unknown): ServicesContent {
-  if (!raw || typeof raw !== 'object') return INITIAL_SERVICES_CONTENT;
-  const d = raw as Partial<ServicesContent>;
-  return {
-    ...INITIAL_SERVICES_CONTENT,
-    ...d,
-    grid: {
-      ...INITIAL_SERVICES_CONTENT.grid,
-      ...d.grid,
-      cards:
-        Array.isArray(d.grid?.cards) && d.grid!.cards!.length > 0
-          ? d.grid!.cards!
-          : INITIAL_SERVICES_CONTENT.grid.cards,
-      banner: {
-        ...INITIAL_SERVICES_CONTENT.grid.banner,
-        ...d.grid?.banner,
-      },
-    },
-    socialImpact: {
-      ...INITIAL_SERVICES_CONTENT.socialImpact,
-      ...d.socialImpact,
-    },
-    confidentiality: {
-      ...INITIAL_SERVICES_CONTENT.confidentiality,
-      ...d.confidentiality,
-      bullets:
-        Array.isArray(d.confidentiality?.bullets) &&
-        d.confidentiality!.bullets!.length > 0
-          ? d.confidentiality!.bullets!
-          : INITIAL_SERVICES_CONTENT.confidentiality.bullets,
-    },
-  };
-}
-
 export default function AdminServicesPage() {
-  const [activeTab, setActiveTab] = useState<ServicesTab>('grid');
+  const [activeTab, setActiveTab] = useState<ServicesTab>('hero');
   const [content, setContent] = useState<ServicesContent>(INITIAL_SERVICES_CONTENT);
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -68,7 +39,7 @@ export default function AdminServicesPage() {
         const res = await fetch('/api/admin/services');
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setContent(mergeLoaded(data));
+        if (res.ok && data) setContent(mergeServicesContent(data));
       } catch {
         // fallback
       }
@@ -120,6 +91,14 @@ export default function AdminServicesPage() {
   );
 
   const renderEditor = () => {
+    if (activeTab === 'hero') {
+      return (
+        <ServicesHeroGalleryForm
+          value={content.hero}
+          onChange={(hero) => setContent((p) => ({ ...p, hero }))}
+        />
+      );
+    }
     if (activeTab === 'grid') {
       return (
         <ServicesGridForm
@@ -156,7 +135,7 @@ export default function AdminServicesPage() {
           </p>
           <h2 className="mt-2 text-3xl font-black italic uppercase tracking-tight">Services content</h2>
           <p className="mt-2 text-[11px] uppercase tracking-widest text-stone-400">
-            Hero and success stories are managed elsewhere. Use section cards in the sidebar for quick edits.
+            Hero copy + background: Hero Registry. Use tabs below or sidebar sections for quick edits.
           </p>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">

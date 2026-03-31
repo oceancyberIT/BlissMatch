@@ -1,29 +1,16 @@
 import Image from "next/image";
 import { ShieldCheck, MapPin, Users } from "lucide-react";
 import { HomeContent } from "@/components/admin/home-editor/types";
+import { INITIAL_CONTENT } from "@/components/admin/home-editor/constants";
 
 type BlissCircleProps = {
   data?: HomeContent["blissCircle"];
 };
 
 const BlissCircle = ({ data }: BlissCircleProps) => {
-  const shorten = (text: string, maxWords: number) => {
-    const words = text.trim().split(/\s+/);
-    if (words.length <= maxWords) return text;
-    return `${words.slice(0, maxWords).join(" ")}...`;
-  };
-
-  const content = data ?? {
-    eyebrow: "Launching 2026",
-    headingMain: "The",
-    headingAccent: "Bliss Circle",
-    paragraphOne:
-      "An invitation-only community for selected individuals and returning clients who value meaningful connections, private gatherings, and personal growth built on trust and sincerity.",
-    badges: [{ label: "Trust" }, { label: "Retreats" }, { label: "Network" }],
-    imageUrl: "/image copy 7.png",
-    imageAlt: "Exclusive Gathering",
-    overlayTitle: "Coming Soon",
-    overlayCtaLabel: "Register Interest",
+  const content = {
+    ...INITIAL_CONTENT.blissCircle,
+    ...(data ?? {}),
   };
 
   const badgeIcons = [ShieldCheck, MapPin, Users];
@@ -39,19 +26,29 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
               </span>
 
               <h2 className="mb-4 text-3xl font-serif leading-tight text-deep-midnight-navy md:text-4xl">
-                {content.headingMain} <span className="italic">{content.headingAccent}</span>
+                {content.headingMain}{" "}
+                <span className="italic">{content.headingAccent}</span>
               </h2>
 
-              <p className="text-sm leading-relaxed text-stone-600 md:text-base">
-                {content.paragraphOne}
-              </p>
+              <div className="space-y-4 text-sm leading-relaxed text-stone-600 md:text-base">
+                <p>{content.paragraphOne}</p>
+                {content.paragraphTwo?.trim() ? (
+                  <p>{content.paragraphTwo}</p>
+                ) : null}
+              </div>
 
               <div className="mt-6 grid grid-cols-3 gap-4 border-t border-stone-100 pt-5">
                 {content.badges.slice(0, 3).map((badge, index) => {
                   const Icon = badgeIcons[index] ?? ShieldCheck;
                   return (
-                    <div key={`${badge.label}-${index}`} className="text-center md:text-left">
-                      <Icon size={16} className="mx-auto mb-2 text-muted-burgundy-rose md:mx-0" />
+                    <div
+                      key={`${badge.label}-${index}`}
+                      className="text-center md:text-left"
+                    >
+                      <Icon
+                        size={16}
+                        className="mx-auto mb-2 text-muted-burgundy-rose md:mx-0"
+                      />
                       <span className="text-[9px] font-bold uppercase tracking-widest text-deep-midnight-navy">
                         {badge.label}
                       </span>
@@ -63,9 +60,10 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
 
             <div className="relative min-h-[150px] overflow-hidden rounded-br-[70px] border border-stone-200 bg-white">
               <Image
-                src="/image copy 6.png"
-                alt="Curated private gatherings"
+                src={content.secondaryImageUrl}
+                alt={content.secondaryImageAlt || "Bliss Circle"}
                 fill
+                sizes="(max-width: 1024px) 100vw, 45vw"
                 className="object-cover"
               />
             </div>
@@ -76,13 +74,19 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
               src={content.imageUrl}
               alt={content.imageAlt || "Bliss circle image"}
               fill
-              className="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover transition-all duration-700"
             />
 
             <div className="absolute inset-0 flex items-end justify-start bg-gradient-to-t from-deep-midnight-navy/45 to-transparent p-8">
               <div>
-                <h4 className="mb-3 font-serif text-2xl italic text-white">{content.overlayTitle}</h4>
-                <button className="rounded-sm rounded-bl-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-deep-midnight-navy transition-all duration-500 hover:bg-muted-burgundy-rose hover:text-white">
+                <h4 className="mb-3 font-serif text-2xl italic text-white">
+                  {content.overlayTitle}
+                </h4>
+                <button
+                  type="button"
+                  className="rounded-sm rounded-bl-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-deep-midnight-navy transition-all duration-500 hover:bg-muted-burgundy-rose hover:text-white"
+                >
                   {content.overlayCtaLabel}
                 </button>
               </div>

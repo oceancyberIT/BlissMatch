@@ -106,18 +106,51 @@ export function OurStorySection({ data, onFieldChange }: any) {
           <div className="space-y-5">
             <div className="flex items-center gap-2">
               <ImageIcon size={14} className="text-muted-burgundy-rose" />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Photo</h4>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Main photo</h4>
             </div>
-            <FormField label="Photo" hint="Paste a link or upload a file">
+            <FormField label="Large image (left)" hint="Paste a link or upload a file">
               <ImageUrlField
                 value={data.imageUrl}
                 onChange={(v) => onFieldChange('imageUrl', v)}
                 urlInputClassName={cn(inputStyle, 'font-mono text-[12px]')}
               />
             </FormField>
-            <FormField label="Describe the photo" hint="Helps visitors who use screen readers">
+            <FormField label="Describe the main photo" hint="Helps visitors who use screen readers">
               <input value={data.imageAlt} onChange={(e) => onFieldChange('imageAlt', e.target.value)} className={inputStyle} />
             </FormField>
+          </div>
+
+          <div className="space-y-5 md:col-span-2">
+            <div className="flex items-center gap-2 pt-2 border-t border-stone-100 md:border-0 md:pt-0">
+              <ImageIcon size={14} className="text-muted-burgundy-rose" />
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Stacked photos (right column)</h4>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-4">
+                <FormField label="Top small image" hint="Matches homepage right column, top">
+                  <ImageUrlField
+                    value={data.sideImage1Url}
+                    onChange={(v) => onFieldChange('sideImage1Url', v)}
+                    urlInputClassName={cn(inputStyle, 'font-mono text-[12px]')}
+                  />
+                </FormField>
+                <FormField label="Top image description">
+                  <input value={data.sideImage1Alt} onChange={(e) => onFieldChange('sideImage1Alt', e.target.value)} className={inputStyle} />
+                </FormField>
+              </div>
+              <div className="space-y-4">
+                <FormField label="Bottom small image" hint="Matches homepage right column, bottom">
+                  <ImageUrlField
+                    value={data.sideImage2Url}
+                    onChange={(v) => onFieldChange('sideImage2Url', v)}
+                    urlInputClassName={cn(inputStyle, 'font-mono text-[12px]')}
+                  />
+                </FormField>
+                <FormField label="Bottom image description">
+                  <input value={data.sideImage2Alt} onChange={(e) => onFieldChange('sideImage2Alt', e.target.value)} className={inputStyle} />
+                </FormField>
+              </div>
+            </div>
           </div>
 
         </div>

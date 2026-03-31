@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { HomeContent } from "@/components/admin/home-editor/types";
+import { INITIAL_CONTENT } from "@/components/admin/home-editor/constants";
 
 type OurStoryProps = {
   data?: HomeContent["ourStory"];
@@ -12,22 +13,12 @@ const OurStory = ({ data }: OurStoryProps) => {
   const shorten = (text: string, maxWords: number) => {
     const words = text.trim().split(/\s+/);
     if (words.length <= maxWords) return text;
-    return `${words.slice(0, maxWords).join(" ")}...`;
+    return words.slice(0, maxWords).join(" ");
   };
 
-  const content = data ?? {
-    eyebrow: "Our Story",
-    headingMain: "Grounded in",
-    headingAccent: "meaningful connection.",
-    paragraphOne:
-      "Founded by two lifelong friends, BlissMatch is grounded in Behavioural Science and Law.",
-    quote: "We don’t introduce many. We introduce meaningfully.",
-    paragraphTwo:
-      "We blend psychology and refined matchmaking to help people build intentional, lasting relationships.",
-    ctaLabel: "Discover Our Full Philosophy",
-    ctaHref: "/about",
-    imageUrl: "/founders-working.png",
-    imageAlt: "BlissMatch Founders",
+  const content = {
+    ...INITIAL_CONTENT.ourStory,
+    ...(data ?? {}),
   };
   const combinedHeading = `${content.headingMain ?? ""} ${content.headingAccent ?? ""}`
     .replace(/\btooo\b/gi, "to")
@@ -53,16 +44,16 @@ const OurStory = ({ data }: OurStoryProps) => {
             <div className="space-y-3">
               <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
                 <Image
-                  src="/image copy 2.png"
-                  alt="Couple sharing a joyful moment"
+                  src={content.sideImage1Url}
+                  alt={content.sideImage1Alt || "Our story image"}
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
                 <Image
-                  src="/image copy 6.png"
-                  alt="Couple walking together"
+                  src={content.sideImage2Url}
+                  alt={content.sideImage2Alt || "Our story image"}
                   fill
                   className="object-cover"
                 />
@@ -83,8 +74,10 @@ const OurStory = ({ data }: OurStoryProps) => {
               <p className="text-sm md:text-base">{shorten(content.paragraphOne, 14)}</p>
 
               <blockquote className="border-l-2 border-muted-burgundy-rose/40 py-1 pl-4 font-serif text-base italic text-deep-midnight-navy md:text-lg">
-                "{shorten(content.quote, 8)}"
+                &ldquo;{shorten(content.quote, 8)}&rdquo;
               </blockquote>
+
+              <p className="text-sm md:text-base">{shorten(content.paragraphTwo, 22)}</p>
             </div>
 
             <div className="mt-7">

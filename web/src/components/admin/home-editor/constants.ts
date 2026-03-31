@@ -23,9 +23,33 @@ export const INITIAL_CONTENT: HomeContent = {
     ctaHref: '/about',
     imageUrl: '/founders-working.png',
     imageAlt: 'BlissMatch Founders',
+    sideImage1Url: '/image copy 2.png',
+    sideImage1Alt: 'Couple sharing a joyful moment',
+    sideImage2Url: '/image copy 6.png',
+    sideImage2Alt: 'Couple walking together',
   },
   servicesOverview: {
     heading: 'Elevated Relational Support',
+    introEyebrow: 'Our Service',
+    introLead:
+      'We offer a bespoke, confidential matchmaking experience for discerning professionals and global citizens seeking lasting love.',
+    introCtaLabel: 'Our Services',
+    introCtaHref: '/services',
+    collageImages: [
+      {
+        url: '/image copy 2.png',
+        alt: 'Couple sharing a warm, genuine moment together',
+        objectPosition: 'center 35%',
+      },
+      { url: '/image copy 6.png', alt: 'Couple walking together outdoors' },
+      { url: '/image copy 3.png', alt: 'Couple in a quiet, intimate moment' },
+      { url: '/image copy.png', alt: 'Couple in a natural, open setting' },
+      { url: '/image copy 4.png', alt: 'Couple enjoying time together' },
+      {
+        url: '/image copy 7.png',
+        alt: 'Thoughtful connection and conversation',
+      },
+    ],
     cards: [
       {
         id: '01.',
@@ -78,6 +102,8 @@ export const INITIAL_CONTENT: HomeContent = {
     badges: [{ label: 'Trust' }, { label: 'Retreats' }, { label: 'Network' }],
     imageUrl: '/image copy 7.png',
     imageAlt: 'Exclusive Gathering',
+    secondaryImageUrl: '/image copy 6.png',
+    secondaryImageAlt: 'Curated private gatherings',
     overlayTitle: 'Coming Soon',
     overlayCtaLabel: 'Register Interest',
   },
@@ -99,3 +125,44 @@ export const INITIAL_CONTENT: HomeContent = {
   },
 };
 
+/** Ensures six collage slots with defaults when saved JSON is older or partial. */
+export function mergeCollageImages(
+  initial: HomeContent['servicesOverview']['collageImages'],
+  loaded?: HomeContent['servicesOverview']['collageImages'] | null,
+): HomeContent['servicesOverview']['collageImages'] {
+  return initial.map((slot, i) => ({
+    ...slot,
+    ...(loaded?.[i] ?? {}),
+  }));
+}
+
+/** Merges saved JSON with defaults so new fields (e.g. ourStory side images) never come through as undefined. */
+export function mergeHomeContent(
+  loaded: Partial<HomeContent> | null | undefined,
+): HomeContent {
+  if (!loaded || typeof loaded !== 'object') return INITIAL_CONTENT;
+  const so = loaded.servicesOverview ?? {};
+  return {
+    ...INITIAL_CONTENT,
+    ...loaded,
+    ourStory: {
+      ...INITIAL_CONTENT.ourStory,
+      ...(loaded.ourStory ?? {}),
+    },
+    servicesOverview: {
+      ...INITIAL_CONTENT.servicesOverview,
+      ...so,
+      cards: so.cards?.length
+        ? so.cards
+        : INITIAL_CONTENT.servicesOverview.cards,
+      collageImages: mergeCollageImages(
+        INITIAL_CONTENT.servicesOverview.collageImages,
+        so.collageImages,
+      ),
+    },
+    blissCircle: {
+      ...INITIAL_CONTENT.blissCircle,
+      ...(loaded.blissCircle ?? {}),
+    },
+  };
+}

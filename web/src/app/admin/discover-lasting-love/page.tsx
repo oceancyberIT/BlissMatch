@@ -7,9 +7,9 @@ export default function DiscoverLastingLoveAdminPage() {
     <HomeComponentCardPage
       sectionKey="servicesOverview"
       layoutTitle="Admin"
-      layoutDescription="Manage the Discover Lasting Love section."
+      layoutDescription="Homepage: Our Service intro, image collage, and the service grid heading & cards."
       heroTitle="Discover Lasting Love"
-      heroSubtitle="View, edit, or reset this homepage component card."
+      heroSubtitle="Same content as Homepage → Discover Lasting Love tab. Saves to the live home page."
       cardTitle="Discover Lasting Love card"
       cardHint="Open this card to view or edit details in a popup form."
       saveLabel="Save Discover Lasting Love"

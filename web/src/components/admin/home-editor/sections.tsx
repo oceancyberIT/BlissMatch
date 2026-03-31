@@ -1,4 +1,9 @@
-export { SECTION_TABS, INITIAL_CONTENT } from './constants';
+export {
+  SECTION_TABS,
+  INITIAL_CONTENT,
+  mergeHomeContent,
+  mergeCollageImages,
+} from './constants';
 export { OurStorySection } from './our-story-section';
 export { ServicesOverviewSection } from './services-overview-section';
 export { LoveConnectionSection } from './love-connection-section';

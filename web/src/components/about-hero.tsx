@@ -7,32 +7,45 @@ type AboutHeroProps = {
   data?: AboutContent["hero"];
 };
 
+const firstSentence = (text: string) => {
+  const [sentence] = text.split(/(?<=[.!?])\s+/);
+  return sentence?.trim() || text;
+};
+
 const AboutHero = ({ data }: AboutHeroProps) => {
-  const config = useHeroConfig("/admin/about");
-  const title = data?.title || config?.title || "Our Story";
-  const subtitle = data?.subtitle || config?.subtitle || "Established in Connection";
+  const { config: heroConfig } = useHeroConfig("/admin/about");
+  const title = data?.title || heroConfig?.title || "Our Story";
+  const subtitle = data?.subtitle || heroConfig?.subtitle || "Established in Connection";
   const body =
     data?.body ||
-    config?.body ||
+    heroConfig?.body ||
     "BlissMatch was founded by two best friends—one from a background in Human Behaviour Studies, the other in Business and Law—united by a vision to restore authenticity to modern relationships.";
-  const imageUrl = data?.sideImageUrl || config?.imageUrl || "/image.png";
-  const backgroundImage = data?.backgroundImageUrl || "/image copy 2.png";
+  /** Portrait — from About editor only; hero admin `imageUrl` is the full-bleed background */
+  const imageUrl = data?.sideImageUrl || "/image.png";
+  /** Full-bleed background: Hero Sections admin wins when set; otherwise About JSON */
+  const backgroundImage =
+    (heroConfig?.imageUrl?.trim() ? heroConfig.imageUrl.trim() : "") ||
+    "/about.jpg";
   const sideNote =
     data?.sideNote ||
     "In a fast, digital world, real connection had become rare. We built BlissMatch as a sanctuary for meaningful love—a private consultancy rooted in discretion and human understanding.";
   const quote = data?.quote || "Restoring the art of human connection.";
+  const bodyShort = firstSentence(body);
+  const sideNoteShort = firstSentence(sideNote);
 
   return (
-    <section className="relative min-h-[95vh] flex items-center pt-38 pb-20 lg:pt-42 lg:pb-24 overflow-hidden">
+    // <section className="relative min-h-[95vh] flex items-center pt-38 pb-20 lg:pt-42 lg:pb-24 overflow-hidden">
+    <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] flex items-center overflow-hidden pt-18 pb-20 lg:pt-10 lg:pb-24">
       <div className="absolute inset-0 z-0">
         <Image
           src={backgroundImage}
           alt="BlissMatch Sanctuary"
           fill
+          sizes="100vw"
           className="object-cover brightness-[0.4] scale-105"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-r from-deep-midnight-navy/80 via-deep-midnight-navy/40 to-transparent" />
+        {/* <div className="absolute inset-0 bg-gradient-to-r from-deep-midnight-navy/80 via-deep-midnight-navy/40 to-transparent" /> */}
       </div>
 
       <div className="absolute inset-8 pointer-events-none z-10 opacity-20">
@@ -62,10 +75,10 @@ const AboutHero = ({ data }: AboutHeroProps) => {
               {title}
             </h1>
 
-            <div className="space-y-6 text-stone-200 text-lg md:text-xl leading-relaxed">
-              <p>{body}</p>
-              <p className="text-base text-stone-300 font-light max-w-lg italic border-l border-muted-burgundy-rose/30 pl-6">
-                {sideNote}
+            <div className="space-y-4 text-stone-200 text-base md:text-lg leading-relaxed">
+              <p className="max-w-xl">{bodyShort}</p>
+              <p className="text-sm text-stone-300 font-light max-w-lg italic border-l border-muted-burgundy-rose/30 pl-5">
+                {sideNoteShort}
               </p>
             </div>
           </div>
@@ -77,6 +90,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
                 src={imageUrl}
                 alt="BlissMatch Founders"
                 fill
+                sizes="(max-width: 1024px) 90vw, 400px"
                 className="object-cover transition-transform duration-1000 hover:scale-105"
               />
             </div>
@@ -84,7 +98,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
             {/* Desktop Quote Box */}
             <div className="absolute -bottom-6 -left-6 bg-white p-8 shadow-2xl max-w-[240px] hidden md:block border-t-4 border-muted-burgundy-rose">
               <p className="font-serif italic text-deep-midnight-navy text-lg leading-snug">
-                "{quote}"
+                &ldquo;{quote}&rdquo;
               </p>
             </div>
           </div>

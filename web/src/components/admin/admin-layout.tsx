@@ -64,12 +64,14 @@ export const ADMIN_NAV_ITEMS = [
   {
     group: 'SERVICES SECTIONS',
     items: [
+      { name: 'Hero gallery', href: '/admin/services-hero', icon: Images },
       { name: 'Service Grid', href: '/admin/services-grid', icon: Blocks },
       { name: 'Social Impact', href: '/admin/services-social', icon: Heart },
       { name: 'Confidentiality', href: '/admin/services-confidentiality', icon: Shield },
     ],
   },
   {
+    // Each item maps to a block on `/`; Our Story shares the same JSON as Homepage › Our Story.
     group: 'HOMEPAGE SECTIONS',
     items: [
       { name: 'Our Story', href: '/admin/our-story', icon: BookOpen },

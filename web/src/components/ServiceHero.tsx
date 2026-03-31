@@ -1,114 +1,115 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 import { useHeroConfig } from "@/hooks/use-hero-config";
+import { motion } from "framer-motion";
+import { ServicesContent } from "@/components/admin/services-editor/types";
+import {
+  INITIAL_SERVICES_CONTENT,
+  mergeHeroGallery,
+} from "@/components/admin/services-editor/constants";
 
-const ServicesHero = () => {
-  const config = useHeroConfig("/admin/services");
-  const title = config?.title || "Our Services";
-  const subtitle = config?.subtitle || "The BlissMatch Suite";
+type ServiceHeroProps = {
+  hero?: ServicesContent["hero"];
+};
+
+const ServicesHero = ({ hero }: ServiceHeroProps) => {
+  const { config: heroConfig } = useHeroConfig("/admin/services");
+
+  const title = heroConfig?.title || "Our Services";
+  const subtitle = heroConfig?.subtitle || "The BlissMatch Suite";
   const body =
-    config?.body ||
+    heroConfig?.body ||
     "A bespoke collection of consultancy services designed for the discerning individual seeking depth, discretion, and a crafted path to love.";
-  const imageUrl = config?.imageUrl || "/image.png";
+  const imageUrl = heroConfig?.imageUrl || "/service.jpg";
+
+  const gallery = mergeHeroGallery(
+    INITIAL_SERVICES_CONTENT.hero.gallery,
+    hero?.gallery,
+  );
+  const footerLabel =
+    hero?.footerLabel ?? INITIAL_SERVICES_CONTENT.hero.footerLabel;
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-start overflow-hidden pt-32 md:pt-48">
+    <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] items-start overflow-hidden pt-28 pb-24 md:min-h-[90vh] md:items-center md:pt-0 md:pb-0">
       <div className="absolute inset-0 z-0">
         <Image
           src={imageUrl}
-          alt="BlissMatch Service Sanctuary"
+          alt=""
           fill
-          className="object-cover brightness-[0.4] scale-105"
+          sizes="100vw"
+          className="object-cover scale-105"
           priority
         />
-
-        <div className="absolute inset-0 bg-linear-to-r from-deep-midnight-navy/90 via-deep-midnight-navy/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-900/40 to-stone-900/20 md:from-stone-950/90 md:via-stone-900/30" />
       </div>
 
-      <div className="absolute inset-10 pointer-events-none z-10 opacity-20">
-        <svg className="w-full h-full">
-          <rect
-            width="100%"
-            height="100%"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            strokeDasharray="100 1200"
-            className="animate-border-trace"
-          />
-        </svg>
-      </div>
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-8 px-5 sm:px-6 md:gap-10 lg:grid-cols-12 lg:items-center lg:gap-12 lg:px-12">
+        <div className="lg:col-span-6">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative mt-6 max-w-xl border border-white/20 bg-transparent p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-sm sm:p-7 md:mt-0 md:p-10"
+          >
+            <div className="absolute top-0 left-0 h-24 w-1 bg-muted-burgundy-rose" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-20 w-full">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
-          <div className="max-w-2xl bg-white/5 backdrop-blur-md p-8 mt-8 md:mt-0 mb-4 md:mb-0 md:p-12 border border-white/10 rounded-sm">
-            <span className="text-white text-xs border border-muted-burgundy-rose p-2 font-bold uppercase tracking-[0.2em] mb-6 inline-block">
+            <span className="mb-4 block text-[9px] font-black uppercase tracking-[0.32em] text-white sm:text-[10px] sm:tracking-[0.38em]">
               {subtitle}
             </span>
-            <h1 className="text-3xl md:text-4xl font-serif text-white leading-[0.9] mb-8">
-              {title}
+
+            <h1 className="mb-5 text-3xl font-serif leading-[1.06] text-white sm:text-4xl md:mb-8 md:text-5xl">
+              {title.split(" ").map((word, i) => (
+                <span
+                  key={`w-${i}`}
+                  className={i === 1 ? "block font-light text-white italic" : ""}
+                >
+                  {word}{" "}
+                </span>
+              ))}
             </h1>
-            <p className="text-stone-300 text-base md:text-xl font-light leading-relaxed max-w-md">
+
+            <p className="mb-2 max-w-md text-[15px] font-light leading-relaxed text-stone-200 sm:text-base md:mb-4 md:text-[16px]">
               {body}
             </p>
-          </div>
+          </motion.div>
+        </div>
 
-          {/* Mobile: compact grid of equal squares */}
-          <div className="md:hidden grid grid-cols-3 gap-3 w-full max-w-[240px]">
-            {[2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="relative aspect-[4/4] w-full overflow-hidden shadow-2xl transition-all duration-1000 ease-in-out border border-white/10 rounded-md"
+        <div className="relative flex h-[235px] items-start justify-center sm:h-[280px] md:h-[420px] lg:col-span-6 lg:h-[600px] lg:items-center lg:justify-end">
+          <div className="flex items-end gap-3 sm:gap-4 md:gap-6">
+            {gallery.slice(0, 3).map((item, index) => (
+              <motion.div
+                key={`${item.url}-${index}`}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 * index }}
+                className="group relative h-[170px] w-[29vw] max-w-[110px] overflow-hidden border-4 border-white/20 shadow-2xl backdrop-blur-sm sm:h-[205px] sm:max-w-[125px] md:h-[320px] md:w-40 md:max-w-none md:border-[6px] lg:h-80 lg:w-44"
+                style={{
+                  marginBottom:
+                    index === 1 ? "clamp(18px, 4vw, 40px)" : "0px",
+                }}
               >
                 <Image
-                  src={`/image copy ${i}.png`}
-                  alt="Service detail"
+                  src={item.url}
+                  alt={item.alt || "Service detail"}
                   fill
-                  className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                  sizes="(max-width: 768px) 30vw, 200px"
+                  className="object-cover transition-transform duration-1000"
                 />
-                <div className="absolute inset-0 bg-deep-midnight-navy/20 hover:bg-transparent transition-colors" />
-              </div>
-            ))}
-          </div>
-
-          {/* Desktop/tablet: stacked rounded visuals */}
-          <div className="hidden md:flex gap-4 h-[320px] md:h-[480px] items-end">
-            {[2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className={`relative w-14 md:w-28 h-full overflow-hidden shadow-2xl transition-all duration-1000 ease-in-out md:hover:w-56 border-x border-white/10
-                  ${i === 2 ? "rounded-t-lg md:rounded-t-full h-[55%] md:h-[80%]" : ""}
-                  ${i === 3 ? "rounded-md md:rounded-full h-[70%] md:h-full mb-2 md:mb-5" : ""}
-                  ${i === 4 ? "rounded-b-lg md:rounded-b-full h-[60%] md:h-[90%] mb-4 md:mb-10 lg:mt-16 border" : ""}
-                `}
-              >
-                <Image
-                  src={`/image copy ${i}.png`}
-                  alt="Service detail"
-                  fill
-                  className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-deep-midnight-navy/20 hover:bg-transparent transition-colors" />
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent opacity-60" />
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes border-trace {
-          from {
-            stroke-dashoffset: 1350;
-          }
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-        .animate-border-trace {
-          animation: border-trace 10s linear infinite;
-        }
-      `}</style>
+      <div className="absolute bottom-12 left-12 z-20 hidden items-center gap-4 lg:flex">
+        <div className="h-px w-12 bg-white/30" />
+        <span className="text-[9px] font-bold tracking-[0.5em] text-white/40 uppercase">
+          {footerLabel}
+        </span>
+      </div>
     </section>
   );
 };

@@ -2,6 +2,8 @@
 :root {
   --background: rgba(244, 240, 236, 0.69);
   --foreground: #171717;
+  /* Fixed header (marquee + nav) — content must start below this or it sits underneath */
+  --site-header-offset: 7.75rem;
 }
 
 @theme inline {

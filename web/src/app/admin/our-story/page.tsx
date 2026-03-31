@@ -6,7 +6,10 @@ import { Eye, Pencil, Trash2, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { OurStorySection } from '@/components/admin/home-editor/sections';
-import { INITIAL_CONTENT } from '@/components/admin/home-editor/constants';
+import {
+  INITIAL_CONTENT,
+  mergeHomeContent,
+} from '@/components/admin/home-editor/constants';
 import { HomeContent } from '@/components/admin/home-editor/types';
 
 type OurStoryMode = 'view' | 'edit';
@@ -32,7 +35,7 @@ export default function OurStoryAdminPage() {
         const res = await fetch('/api/admin/home');
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setHomeContent(data);
+        if (res.ok && data) setHomeContent(mergeHomeContent(data));
         else setHomeContent(INITIAL_CONTENT);
       } catch {
         if (!active) return;
@@ -159,8 +162,8 @@ export default function OurStoryAdminPage() {
 
   return (
     <AdminLayout
-      title="Admin"
-      description="Manage the Our Story section."
+      title="Our Story"
+      description="Homepage section — changes here and on Homepage › Our Story use the same saved content and appear on the main site."
     >
       {toast && (
         <div
@@ -183,7 +186,7 @@ export default function OurStoryAdminPage() {
                 Our Story
               </h2>
               <p className="text-stone-400 text-[11px] font-medium uppercase tracking-widest mt-2">
-                View, edit, or delete the Our Story card.
+                Same data as the Homepage editor (Our Story tab). Save to update the live homepage.
               </p>
             </div>
           </div>
@@ -306,6 +309,29 @@ export default function OurStoryAdminPage() {
                     ) : (
                       <div className="h-56 w-full rounded-xl border border-stone-200 bg-stone-50" />
                     )}
+
+                    <div className="grid grid-cols-2 gap-2 max-w-md">
+                      {homeContent.ourStory.sideImage1Url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={homeContent.ourStory.sideImage1Url}
+                          alt={homeContent.ourStory.sideImage1Alt || ''}
+                          className="h-24 w-full object-cover rounded-lg border border-stone-200"
+                        />
+                      ) : (
+                        <div className="h-24 rounded-lg border border-stone-200 bg-stone-100" />
+                      )}
+                      {homeContent.ourStory.sideImage2Url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={homeContent.ourStory.sideImage2Url}
+                          alt={homeContent.ourStory.sideImage2Alt || ''}
+                          className="h-24 w-full object-cover rounded-lg border border-stone-200"
+                        />
+                      ) : (
+                        <div className="h-24 rounded-lg border border-stone-200 bg-stone-100" />
+                      )}
+                    </div>
 
                     <div className="space-y-2">
                       <p className="text-[10px] font-black uppercase tracking-widest text-stone-500">

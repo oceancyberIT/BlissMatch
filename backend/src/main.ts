@@ -5,8 +5,9 @@ import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(json({ limit: '5mb' }));
-  app.use(urlencoded({ extended: true, limit: '5mb' }));
+  // Admin CMS sends base64 images in JSON; base64 expands payload (~4/3). 50mb allows multi-image saves.
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.enableCors({
     // Fully open CORS for now so web ↔ API works behind Coolify
     origin: '*',
