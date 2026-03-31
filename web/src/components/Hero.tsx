@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useHeroConfig } from "@/hooks/use-hero-config";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 const Hero = () => {
   const { config } = useHeroConfig("/admin/home");
@@ -17,7 +18,7 @@ const Hero = () => {
     <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] flex items-center overflow-hidden py-12 md:py-16 lg:py-20">
       <div className="absolute inset-0 z-0">
         <Image
-          src={heroImage}
+          src={withCmsImageVersion(heroImage)}
           alt="Polished couple sharing a joyful moment"
           fill
           className="object-cover object-[68%_center] md:object-center"

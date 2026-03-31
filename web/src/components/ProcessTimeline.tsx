@@ -4,6 +4,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AboutContent } from "@/components/admin/about-editor/types";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,7 +121,7 @@ const ProcessTimeline = ({ data }: ProcessTimelineProps) => {
       {/* Fixed Background */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={data?.backgroundImageUrl ?? "/image.png"}
+          src={withCmsImageVersion(data?.backgroundImageUrl ?? "/image.png")}
           alt="Background"
           fill
           className="object-cover opacity-40"

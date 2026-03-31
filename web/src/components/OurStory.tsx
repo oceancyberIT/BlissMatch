@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { HomeContent } from "@/components/admin/home-editor/types";
 import { INITIAL_CONTENT } from "@/components/admin/home-editor/constants";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 type OurStoryProps = {
   data?: HomeContent["ourStory"];
@@ -35,7 +36,7 @@ const OurStory = ({ data }: OurStoryProps) => {
           <div className="grid grid-cols-[1fr_150px] gap-3 md:grid-cols-[1fr_170px]">
             <div className="relative min-h-[260px] overflow-hidden rounded bg-stone-100">
               <Image
-                src={content.imageUrl}
+                src={withCmsImageVersion(content.imageUrl)}
                 alt={content.imageAlt || "BlissMatch story image"}
                 fill
                 className="object-cover"
@@ -44,7 +45,7 @@ const OurStory = ({ data }: OurStoryProps) => {
             <div className="space-y-3">
               <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
                 <Image
-                  src={content.sideImage1Url}
+                  src={withCmsImageVersion(content.sideImage1Url)}
                   alt={content.sideImage1Alt || "Our story image"}
                   fill
                   className="object-cover"
@@ -52,7 +53,7 @@ const OurStory = ({ data }: OurStoryProps) => {
               </div>
               <div className="relative h-[124px] overflow-hidden rounded border border-stone-200">
                 <Image
-                  src={content.sideImage2Url}
+                  src={withCmsImageVersion(content.sideImage2Url)}
                   alt={content.sideImage2Alt || "Our story image"}
                   fill
                   className="object-cover"

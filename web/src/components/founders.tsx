@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { AboutContent } from "@/components/admin/about-editor/types";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 type FoundersSectionProps = {
   data?: AboutContent["hero"];
@@ -29,7 +30,9 @@ const FoundersSection = ({ data }: FoundersSectionProps) => {
   const secondParagraph =
     data?.sideNote?.trim() ||
     "Their approach is professional yet personal, discreet yet warm, and timeless yet modern.";
-  const founderImage = data?.sideImageUrl?.trim() || "/image copy.png";
+  const founderImage = withCmsImageVersion(
+    data?.sideImageUrl?.trim() || "/image copy.png",
+  );
   const shortFirstParagraph = compactCopy(firstParagraph, 18);
   const shortSecondParagraph = compactCopy(secondParagraph, 18);
 

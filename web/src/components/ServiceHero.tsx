@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { motion } from "framer-motion";
 import { ServicesContent } from "@/components/admin/services-editor/types";
+import { withCmsImageVersion } from "@/lib/cms-image";
 import {
   INITIAL_SERVICES_CONTENT,
   mergeHeroGallery,
@@ -35,7 +36,7 @@ const ServicesHero = ({ hero }: ServiceHeroProps) => {
     <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] items-start overflow-hidden pt-28 pb-24 md:min-h-[90vh] md:items-center md:pt-0 md:pb-0">
       <div className="absolute inset-0 z-0">
         <Image
-          src={imageUrl}
+          src={withCmsImageVersion(imageUrl)}
           alt=""
           fill
           sizes="100vw"
@@ -91,7 +92,7 @@ const ServicesHero = ({ hero }: ServiceHeroProps) => {
                 }}
               >
                 <Image
-                  src={item.url}
+                  src={withCmsImageVersion(item.url)}
                   alt={item.alt || "Service detail"}
                   fill
                   sizes="(max-width: 768px) 30vw, 200px"

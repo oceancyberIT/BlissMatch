@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useHeroConfig } from "@/hooks/use-hero-config";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 const BlissCircleHero = () => {
   const { config, loading } = useHeroConfig("/admin/services");
@@ -11,7 +12,7 @@ const BlissCircleHero = () => {
   const subtitle = "Coming Soon";
   const body = "Our upcoming Bliss Circle will offer an invitation-only network for returning clients and selected individuals who value meaningful connections, private retreats, and curated gatherings.";
   const subtext = "A global community built around sincerity, trust, and emotional growth. Launching in 2026.";
-  const imageUrl = config?.imageUrl || "/image.png";
+  const imageUrl = withCmsImageVersion(config?.imageUrl || "/image.png");
 
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-white pt-24 pb-10 md:min-h-[90vh] md:items-center md:pt-0 md:pb-0">

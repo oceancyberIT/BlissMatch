@@ -151,6 +151,7 @@ import {
   INITIAL_CONTENT,
   mergeCollageImages,
 } from "@/components/admin/home-editor/constants";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 type OurServicesProps = {
   data?: HomeContent["servicesOverview"];
@@ -167,7 +168,7 @@ const OurServices = ({ data }: OurServicesProps) => {
   };
 
   const collage = s.collageImages.slice(0, 4).map((img) => ({
-    src: img.url,
+    src: withCmsImageVersion(img.url),
     alt: img.alt,
     objectPosition: img.objectPosition,
   }));

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ShieldCheck, MapPin, Users } from "lucide-react";
 import { HomeContent } from "@/components/admin/home-editor/types";
 import { INITIAL_CONTENT } from "@/components/admin/home-editor/constants";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 type BlissCircleProps = {
   data?: HomeContent["blissCircle"];
@@ -66,7 +67,7 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
 
             <div className="relative min-h-[150px] overflow-hidden rounded-br-[70px] border border-stone-200 bg-white">
               <Image
-                src={content.secondaryImageUrl}
+                src={withCmsImageVersion(content.secondaryImageUrl)}
                 alt={content.secondaryImageAlt || "Bliss Circle"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 45vw"
@@ -77,7 +78,7 @@ const BlissCircle = ({ data }: BlissCircleProps) => {
 
           <div className="relative min-h-[250px] overflow-hidden rounded-tl-[2px] rounded-tr-[95px] rounded-br-[95px] rounded-bl-[95px] border border-stone-200 bg-white group lg:min-h-[300px]">
             <Image
-              src={content.imageUrl}
+              src={withCmsImageVersion(content.imageUrl)}
               alt={content.imageAlt || "Bliss circle image"}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

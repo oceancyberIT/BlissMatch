@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { AboutContent } from "@/components/admin/about-editor/types";
+import { withCmsImageVersion } from "@/lib/cms-image";
 
 type AboutHeroProps = {
   data?: AboutContent["hero"];
@@ -38,7 +39,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
     <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] flex items-center overflow-hidden pt-18 pb-20 lg:pt-10 lg:pb-24">
       <div className="absolute inset-0 z-0">
         <Image
-          src={backgroundImage}
+          src={withCmsImageVersion(backgroundImage)}
           alt="BlissMatch Sanctuary"
           fill
           sizes="100vw"
@@ -87,7 +88,7 @@ const AboutHero = ({ data }: AboutHeroProps) => {
             {/* Arched image container */}
             <div className="relative aspect-4/4 md:aspect-3/4 w-full max-w-sm mx-auto lg:ml-auto overflow-hidden shadow-2xl rounded-t-full border-[12px] border-white/10 backdrop-blur-sm">
               <Image
-                src={imageUrl}
+                src={withCmsImageVersion(imageUrl)}
                 alt="BlissMatch Founders"
                 fill
                 sizes="(max-width: 1024px) 90vw, 400px"
