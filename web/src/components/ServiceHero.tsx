@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { motion } from "framer-motion";
@@ -23,7 +23,27 @@ const ServicesHero = ({ hero }: ServiceHeroProps) => {
   const body =
     heroConfig?.body ||
     "A bespoke collection of consultancy services designed for the discerning individual seeking depth, discretion, and a crafted path to love.";
-  const imageUrl = heroConfig?.imageUrl || "/service.jpg";
+  const heroImage = heroConfig?.imageUrl?.trim() ?? "";
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const slides = useMemo(() => {
+    const candidates = [heroImage, ...(heroConfig?.imageUrls ?? [])]
+      .map((url) => url?.trim())
+      .filter(Boolean) as string[];
+    return Array.from(new Set(candidates));
+  }, [heroConfig?.imageUrls, heroImage]);
+
+  useEffect(() => {
+    setActiveSlide(0);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
 
   const gallery = mergeHeroGallery(
     INITIAL_SERVICES_CONTENT.hero.gallery,
@@ -35,14 +55,19 @@ const ServicesHero = ({ hero }: ServiceHeroProps) => {
   return (
     <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] items-start overflow-hidden pt-28 pb-24 md:min-h-[90vh] md:items-center md:pt-0 md:pb-0">
       <div className="absolute inset-0 z-0">
-        <Image
-          src={withCmsImageVersion(imageUrl)}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover scale-105"
-          priority
-        />
+        {slides.map((slide, index) => (
+          <Image
+            key={`${slide}-${index}`}
+            src={withCmsImageVersion(slide)}
+            alt=""
+            fill
+            sizes="100vw"
+            className={`object-cover scale-105 transition-opacity duration-1000 ${
+              index === activeSlide ? "opacity-100" : "opacity-0"
+            }`}
+            priority={index === 0}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-stone-900/40 to-stone-900/20 md:from-stone-950/90 md:via-stone-900/30" />
       </div>
 

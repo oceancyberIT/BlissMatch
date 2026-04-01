@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { AboutContent } from "@/components/admin/about-editor/types";
 import { withCmsImageVersion } from "@/lib/cms-image";
@@ -24,9 +25,14 @@ const AboutHero = ({ data }: AboutHeroProps) => {
   /** Portrait — from About editor only; hero admin `imageUrl` is the full-bleed background */
   const imageUrl = data?.sideImageUrl || "/image.png";
   /** Full-bleed background: Hero Sections admin wins when set; otherwise About JSON */
-  const backgroundImage =
-    (heroConfig?.imageUrl?.trim() ? heroConfig.imageUrl.trim() : "") ||
-    "/about.jpg";
+  const heroImage = heroConfig?.imageUrl?.trim() ?? "";
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slides = useMemo(() => {
+    const candidates = [heroImage, ...(heroConfig?.imageUrls ?? [])]
+      .map((url) => url?.trim())
+      .filter(Boolean) as string[];
+    return Array.from(new Set(candidates));
+  }, [heroConfig?.imageUrls, heroImage]);
   const sideNote =
     data?.sideNote ||
     "In a fast, digital world, real connection had become rare. We built BlissMatch as a sanctuary for meaningful love—a private consultancy rooted in discretion and human understanding.";
@@ -34,18 +40,35 @@ const AboutHero = ({ data }: AboutHeroProps) => {
   const bodyShort = firstSentence(body);
   const sideNoteShort = firstSentence(sideNote);
 
+  useEffect(() => {
+    setActiveSlide(0);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
+
   return (
     // <section className="relative min-h-[95vh] flex items-center pt-38 pb-20 lg:pt-42 lg:pb-24 overflow-hidden">
     <section className="relative mt-[var(--site-header-offset)] min-h-[calc(100svh-var(--site-header-offset))] flex items-center overflow-hidden pt-18 pb-20 lg:pt-10 lg:pb-24">
       <div className="absolute inset-0 z-0">
-        <Image
-          src={withCmsImageVersion(backgroundImage)}
-          alt="BlissMatch Sanctuary"
-          fill
-          sizes="100vw"
-          className="object-cover brightness-[0.4] scale-105"
-          priority
-        />
+        {slides.map((slide, index) => (
+          <Image
+            key={`${slide}-${index}`}
+            src={withCmsImageVersion(slide)}
+            alt="BlissMatch Sanctuary"
+            fill
+            sizes="100vw"
+            className={`object-cover brightness-[0.4] scale-105 transition-opacity duration-1000 ${
+              index === activeSlide ? "opacity-100" : "opacity-0"
+            }`}
+            priority={index === 0}
+          />
+        ))}
         {/* <div className="absolute inset-0 bg-gradient-to-r from-deep-midnight-navy/80 via-deep-midnight-navy/40 to-transparent" /> */}
       </div>
 
