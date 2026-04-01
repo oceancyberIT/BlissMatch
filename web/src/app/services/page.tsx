@@ -50,8 +50,8 @@ const ServicesPage = () => {
     async function load() {
       try {
         const [servicesRes, homeRes, ssRes] = await Promise.all([
-          fetch("/api/admin/services"),
-          fetch("/api/admin/home"),
+          fetch("/api/admin/services", { cache: "no-store" }),
+          fetch("/api/admin/home", { cache: "no-store" }),
           fetch("/api/admin/success-stories", { cache: "no-store" }),
         ]);
         const [servicesData, homeData, ssData] = await Promise.all([

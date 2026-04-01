@@ -78,7 +78,7 @@ const OurStory = ({ data }: OurStoryProps) => {
                 &ldquo;{shorten(content.quote, 8)}&rdquo;
               </blockquote>
 
-              <p className="text-sm md:text-base">{shorten(content.paragraphTwo, 22)}</p>
+              <p className="text-sm md:text-base">{shorten(content.paragraphTwo, 10)}</p>
             </div>
 
             <div className="mt-7">

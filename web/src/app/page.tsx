@@ -40,7 +40,7 @@ const Home = () => {
 
     async function loadHomeContent() {
       try {
-        const res = await fetch('/api/admin/home');
+        const res = await fetch('/api/admin/home', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {

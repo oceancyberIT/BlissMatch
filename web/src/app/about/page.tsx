@@ -33,7 +33,7 @@ const About = () => {
     let active = true;
     async function loadAbout() {
       try {
-        const res = await fetch('/api/admin/about');
+        const res = await fetch('/api/admin/about', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {

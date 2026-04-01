@@ -182,7 +182,7 @@ const OurServices = ({ data }: OurServicesProps) => {
             <span className="mb-3 block text-[11px] font-black uppercase tracking-[0.4em] text-muted-burgundy-rose">
               {s.introEyebrow}
             </span>
-            <p className="text-lg md:text-xl font-serif leading-relaxed text-deep-midnight-navy italic">
+            <p className="text-lg md:text-xl font-serif leading-relaxed text-deep-midnight-navy">
               {s.introLead}
             </p>
           </div>
