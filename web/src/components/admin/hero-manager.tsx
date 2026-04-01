@@ -28,6 +28,7 @@ type HeroConfig = {
   subtitle?: string;
   body?: string;
   imageUrl?: string;
+  imageUrls?: string[];
 };
 
 export function AdminHeroManager() {
@@ -59,6 +60,7 @@ export function AdminHeroManager() {
       subtitle: "Where Love Meets Intention",
       body: "Expert relationship consultancy designed to help you navigate the complexities of love, connection, and lasting partnership.",
       imageUrl: "/background.png",
+      imageUrls: [],
     },
     "/admin/about": {
       route: "/admin/about",
@@ -67,6 +69,7 @@ export function AdminHeroManager() {
       body: "BlissMatch was founded by two best friends—one from a background in Human Behaviour Studies, the other in Business and Law—united by a vision to restore authenticity to modern relationships.",
       /** Full-bleed background on /about (portrait is edited in About page admin) */
       imageUrl: "/image copy 2.png",
+      imageUrls: [],
     },
     "/admin/services": {
       route: "/admin/services",
@@ -74,6 +77,7 @@ export function AdminHeroManager() {
       subtitle: "The BlissMatch Suite",
       body: "A bespoke collection of consultancy services designed for the discerning individual seeking depth, discretion, and a crafted path to love.",
       imageUrl: "/image.png",
+      imageUrls: [],
     },
   };
 
@@ -177,6 +181,9 @@ export function AdminHeroManager() {
             subtitle: data.subtitle ?? "",
             body: data.body ?? "",
             imageUrl: data.imageUrl ?? "",
+            imageUrls: Array.isArray(data.imageUrls)
+              ? data.imageUrls.filter((url: unknown): url is string => typeof url === "string")
+              : [],
           });
         } else {
           setConfig(
@@ -186,6 +193,7 @@ export function AdminHeroManager() {
               subtitle: "",
               body: "",
               imageUrl: "",
+              imageUrls: [],
             },
           );
         }
@@ -347,6 +355,7 @@ export function AdminHeroManager() {
         subtitle: "",
         body: "",
         imageUrl: "",
+        imageUrls: [],
       },
     [config, route],
   );
@@ -359,10 +368,59 @@ export function AdminHeroManager() {
         subtitle: "",
         body: "",
         imageUrl: "",
+        imageUrls: [],
       }),
       route,
       [field]: value,
     }));
+  };
+
+  const updateSliderImage = (index: number, value: string) => {
+    setConfig((prev) => {
+      const base = prev ?? {
+        route,
+        title: "",
+        subtitle: "",
+        body: "",
+        imageUrl: "",
+        imageUrls: [],
+      };
+      const nextImages = [...(base.imageUrls ?? [])];
+      nextImages[index] = value;
+      return { ...base, route, imageUrls: nextImages };
+    });
+  };
+
+  const addSliderImage = () => {
+    setConfig((prev) => {
+      const base = prev ?? {
+        route,
+        title: "",
+        subtitle: "",
+        body: "",
+        imageUrl: "",
+        imageUrls: [],
+      };
+      return { ...base, route, imageUrls: [...(base.imageUrls ?? []), ""] };
+    });
+  };
+
+  const removeSliderImage = (index: number) => {
+    setConfig((prev) => {
+      const base = prev ?? {
+        route,
+        title: "",
+        subtitle: "",
+        body: "",
+        imageUrl: "",
+        imageUrls: [],
+      };
+      return {
+        ...base,
+        route,
+        imageUrls: (base.imageUrls ?? []).filter((_, i) => i !== index),
+      };
+    });
   };
 
   const updateOurStoryField = (field: string, value: string) => {
@@ -762,6 +820,58 @@ export function AdminHeroManager() {
                                 </>
                             )}
                         </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[12px] font-medium text-stone-600">
+                            Slider image URLs
+                          </label>
+                          <button
+                            type="button"
+                            onClick={addSliderImage}
+                            className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded border border-stone-200 bg-white text-deep-midnight-navy hover:bg-stone-50"
+                          >
+                            Add image
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-stone-400">
+                          Add multiple images here. Home hero rotates through them.
+                        </p>
+                        {(currentConfig.imageUrls ?? []).map((url, index) => (
+                          <div key={`slider-${index}`} className="space-y-2 rounded-lg border border-stone-200 bg-stone-50 p-3">
+                            <input
+                              className="w-full bg-white border border-stone-200 rounded-lg px-3 py-2 text-xs font-medium outline-none"
+                              placeholder={`Slide ${index + 1} image URL or upload below`}
+                              value={url}
+                              onChange={(e) => updateSliderImage(index, e.target.value)}
+                            />
+                            <div className="flex items-center gap-2">
+                              <label className="text-[10px] font-semibold px-3 py-1 rounded border border-stone-200 bg-white cursor-pointer hover:bg-stone-50">
+                                Upload
+                                <input
+                                  type="file"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    const reader = new FileReader();
+                                    reader.onloadend = () =>
+                                      updateSliderImage(index, String(reader.result ?? ""));
+                                    reader.readAsDataURL(file);
+                                  }}
+                                />
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => removeSliderImage(index)}
+                                className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded border border-red-200 bg-white text-red-500 hover:bg-red-50"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
                     </div>
                   </>
                 ) : (

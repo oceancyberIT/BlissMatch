@@ -33,6 +33,7 @@ export class HeroSectionController {
       subtitle?: string;
       body?: string;
       imageUrl?: string;
+      imageUrls?: string[];
     },
   ) {
     if (!body.route) {
@@ -45,6 +46,9 @@ export class HeroSectionController {
       subtitle: body.subtitle,
       body: body.body,
       imageUrl: body.imageUrl,
+      imageUrls: Array.isArray(body.imageUrls)
+        ? body.imageUrls.filter((url) => typeof url === 'string')
+        : [],
     });
   }
 }

@@ -8,6 +8,7 @@ type UpsertHeroSectionInput = {
   subtitle?: string;
   body?: string;
   imageUrl?: string;
+  imageUrls?: string[];
 };
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL ?? '' });

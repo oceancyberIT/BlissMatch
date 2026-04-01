@@ -7,6 +7,7 @@ type HeroConfig = {
   subtitle?: string;
   body?: string;
   imageUrl?: string;
+  imageUrls?: string[];
 };
 
 export function useHeroConfig(route: string) {
@@ -28,6 +29,9 @@ export function useHeroConfig(route: string) {
             subtitle: data.subtitle ?? undefined,
             body: data.body ?? undefined,
             imageUrl: data.imageUrl ?? undefined,
+            imageUrls: Array.isArray(data.imageUrls)
+              ? data.imageUrls.filter((url: unknown): url is string => typeof url === 'string')
+              : [],
           });
         } else {
           setConfig(null);
