@@ -32,12 +32,22 @@ export const SUCCESS_STORIES_FALLBACK: SuccessStory[] = [
   },
 ];
 
+function storyRecord(story: unknown): Record<string, unknown> {
+  if (story !== null && typeof story === "object") {
+    return story as Record<string, unknown>;
+  }
+  return {};
+}
+
 export function mapSuccessStoriesFromApi(data: unknown[]): SuccessStory[] {
-  return data.map((story: Record<string, unknown>) => ({
-    id: typeof story.id === "string" ? story.id : undefined,
-    quote: typeof story.quote === "string" ? story.quote : "",
-    author: typeof story.author === "string" ? story.author : "",
-    location: typeof story.location === "string" ? story.location : "",
-    stars: Number(story.stars ?? 5),
-  }));
+  return data.map((story): SuccessStory => {
+    const s = storyRecord(story);
+    return {
+      id: typeof s.id === "string" ? s.id : undefined,
+      quote: typeof s.quote === "string" ? s.quote : "",
+      author: typeof s.author === "string" ? s.author : "",
+      location: typeof s.location === "string" ? s.location : "",
+      stars: Number(s.stars ?? 5),
+    };
+  });
 }
