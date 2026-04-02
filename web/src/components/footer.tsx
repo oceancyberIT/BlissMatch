@@ -9,9 +9,13 @@ import type { FooterContent } from "@/lib/site-settings-types";
 
 const COUPLES_GALLERY = ["/image.png", "/image copy 6.png", "/image copy 7.png"];
 
-const Footer = () => {
+type FooterProps = {
+  initialFooter?: FooterContent;
+};
+
+const Footer = ({ initialFooter }: FooterProps) => {
   const currentYear = new Date().getFullYear();
-  const [f, setF] = useState<FooterContent>(() => INITIAL_FOOTER);
+  const [f, setF] = useState<FooterContent>(() => initialFooter ?? INITIAL_FOOTER);
   const [nav, setNav] = useState(() => INITIAL_NAVIGATION);
 
   useEffect(() => {

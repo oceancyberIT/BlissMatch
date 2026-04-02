@@ -2,8 +2,17 @@
 
 import { usePathname } from 'next/navigation';
 import Navbar from './navbar';
+import type { FooterContent, NavigationContent } from '@/lib/site-settings-types';
 
-const Header = () => {
+type HeaderProps = {
+  initialNavigation?: NavigationContent;
+  initialFooterSocial?: FooterContent['social'];
+};
+
+const Header = ({
+  initialNavigation,
+  initialFooterSocial,
+}: HeaderProps) => {
   const pathname = usePathname();
 
   if (pathname.startsWith('/admin')) {
@@ -42,7 +51,10 @@ const Header = () => {
         </div>
       </div>
 
-      <Navbar />
+      <Navbar
+        initialNavigation={initialNavigation}
+        initialSocial={initialFooterSocial}
+      />
 
       <style jsx global>{`
         @keyframes marquee {

@@ -4,9 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { AboutContent } from "@/components/admin/about-editor/types";
 import { withCmsImageVersion } from "@/lib/cms-image";
+import type { HeroConfig } from "@/lib/hero-config";
 
 type AboutHeroProps = {
   data?: AboutContent["hero"];
+  /** From Server Component — avoids flash of wrong hero background/text before client fetch */
+  initialHeroConfig?: HeroConfig | null;
 };
 
 const firstSentence = (text: string) => {
@@ -14,8 +17,8 @@ const firstSentence = (text: string) => {
   return sentence?.trim() || text;
 };
 
-const AboutHero = ({ data }: AboutHeroProps) => {
-  const { config: heroConfig } = useHeroConfig("/admin/about");
+const AboutHero = ({ data, initialHeroConfig }: AboutHeroProps) => {
+  const { config: heroConfig } = useHeroConfig("/admin/about", initialHeroConfig);
   const title = data?.title || heroConfig?.title || "Our Story";
   const subtitle = data?.subtitle || heroConfig?.subtitle || "Established in Connection";
   const body =

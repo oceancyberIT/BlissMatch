@@ -4,6 +4,13 @@ import "./globals.css";
 import { PT_Serif } from "next/font/google";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import { fetchBackend } from "@/lib/backend-proxy";
+import { mergeFooter, mergeNavigation } from "@/lib/site-settings-merge";
+import {
+  INITIAL_FOOTER,
+  INITIAL_NAVIGATION,
+} from "@/lib/site-settings-defaults";
+import type { FooterContent, NavigationContent } from "@/lib/site-settings-types";
 
 const ptSerif = PT_Serif({
   subsets: ["latin"],
@@ -57,18 +64,45 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+async function loadSiteShell() {
+  let navigation: NavigationContent = INITIAL_NAVIGATION;
+  let footer: FooterContent = INITIAL_FOOTER;
+  try {
+    const [navRes, footerRes] = await Promise.all([
+      fetchBackend("/site-settings/navigation", { cache: "no-store" }),
+      fetchBackend("/site-settings/footer", { cache: "no-store" }),
+    ]);
+    if (navRes.ok) {
+      const raw = await navRes.json().catch(() => null);
+      navigation = mergeNavigation(raw);
+    }
+    if (footerRes.ok) {
+      const raw = await footerRes.json().catch(() => null);
+      footer = mergeFooter(raw);
+    }
+  } catch {
+    // Keep defaults
+  }
+  return { navigation, footer };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { navigation, footer } = await loadSiteShell();
+
   return (
     <html lang="en" className={ptSerif.className}>
       {/* <body className="antialiased bg-sand-50 text-charcoal-950">{children}</body> */}
       <body>
-        <Header />
+        <Header
+          initialNavigation={navigation}
+          initialFooterSocial={footer.social}
+        />
         <main>{children}</main>
-        <Footer />
+        <Footer initialFooter={footer} />
       </body>
     </html>
   );

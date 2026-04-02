@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { mergeFooter, mergeNavigation } from "@/lib/site-settings-merge";
 import { INITIAL_FOOTER, INITIAL_NAVIGATION } from "@/lib/site-settings-defaults";
+import type { FooterContent, NavigationContent } from "@/lib/site-settings-types";
 
 const MOBILE_TABS = [
   { name: "Home", href: "/", icon: Home },
@@ -24,11 +25,21 @@ const MOBILE_TABS = [
   { name: "Contact", href: "/contact", icon: MessageSquareText },
 ];
 
-const Navbar = () => {
+type NavbarProps = {
+  initialNavigation?: NavigationContent;
+  initialSocial?: FooterContent["social"];
+};
+
+const Navbar = ({
+  initialNavigation,
+  initialSocial,
+}: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const [nav, setNav] = useState(() => INITIAL_NAVIGATION);
-  const [socialLinks, setSocialLinks] = useState(() => INITIAL_FOOTER.social);
+  const [nav, setNav] = useState(() => initialNavigation ?? INITIAL_NAVIGATION);
+  const [socialLinks, setSocialLinks] = useState(
+    () => initialSocial ?? INITIAL_FOOTER.social,
+  );
 
   useEffect(() => {
     let cancelled = false;

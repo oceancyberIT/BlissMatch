@@ -159,56 +159,27 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import {
+  type SuccessStory,
+  SUCCESS_STORIES_FALLBACK,
+  mapSuccessStoriesFromApi,
+} from "@/lib/success-stories-data";
 
-export type SuccessStory = {
-  id?: string;
-  quote: string;
-  author: string;
-  location: string;
-  stars: number;
-};
-
-const fallbackStories: SuccessStory[] = [
-  {
-    quote: "I had forgotten what it felt like to be seen. BlissMatch reminded me that love can be elegant and kind.",
-    author: "Ella",
-    location: "London",
-    stars: 5,
-  },
-  {
-    quote: "They understood me in a way no app ever could. Every introduction was thoughtful and sincere.",
-    author: "Kwame",
-    location: "Accra",
-    stars: 5,
-  },
-  {
-    quote: "Professionalism with heart. Confidential, intuitive, and refined — exactly what I hoped for.",
-    author: "Marie",
-    location: "Paris",
-    stars: 5,
-  },
-];
-
-export const SUCCESS_STORIES_FALLBACK = fallbackStories;
-
-export function mapSuccessStoriesFromApi(data: unknown[]): SuccessStory[] {
-  return data.map((story: any) => ({
-    id: story.id,
-    quote: story.quote ?? "",
-    author: story.author ?? "",
-    location: story.location ?? "",
-    stars: Number(story.stars ?? 5),
-  }));
-}
+export type { SuccessStory };
+export { SUCCESS_STORIES_FALLBACK, mapSuccessStoriesFromApi };
 
 
 const SuccessStories = ({ stories: controlledStories }: { stories?: SuccessStory[] }) => {
-  const [stories, setStories] = useState<SuccessStory[]>(controlledStories ?? fallbackStories);
+  const [stories, setStories] = useState<SuccessStory[]>(
+    controlledStories ?? SUCCESS_STORIES_FALLBACK,
+  );
 
 
       useEffect(() => {
         if (controlledStories !== undefined) {
-          setStories(controlledStories.length ? controlledStories : fallbackStories);
+          setStories(
+            controlledStories.length ? controlledStories : SUCCESS_STORIES_FALLBACK,
+          );
           return;
         }
     

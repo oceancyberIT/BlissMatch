@@ -1,106 +1,79 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import ServicesHero from "../../components/ServiceHero";
-import ServiceGrid from "../../components/ServiceGrid";
-import ConfidentialityCharter from "../../components/ConfiDentialityCharter";
-import SocialImpact from "../../components/SocialImpact";
-import { ServicesContent } from "@/components/admin/services-editor/types";
-import {
-  INITIAL_SERVICES_CONTENT,
-  mergeServicesContent,
-} from "@/components/admin/services-editor/constants";
-import SuccessStories, {
-  SUCCESS_STORIES_FALLBACK,
-  mapSuccessStoriesFromApi,
-  type SuccessStory,
-} from "@/components/SuccessStories";
-import BlissCircle from "@/components/BlissCircle";
-import { HomeContent } from "@/components/admin/home-editor/types";
+import { fetchBackend } from "@/lib/backend-proxy";
 import {
   INITIAL_CONTENT,
   mergeHomeContent,
 } from "@/components/admin/home-editor/constants";
+import {
+  INITIAL_SERVICES_CONTENT,
+  mergeServicesContent,
+} from "@/components/admin/services-editor/constants";
+import type { HomeContent } from "@/components/admin/home-editor/types";
+import type { ServicesContent } from "@/components/admin/services-editor/types";
+import { parseHeroSectionResponse, type HeroConfig } from "@/lib/hero-config";
+import {
+  mapSuccessStoriesFromApi,
+  SUCCESS_STORIES_FALLBACK,
+  type SuccessStory,
+} from "@/lib/success-stories-data";
+import ServicesPageClient from "./services-page-client";
 
-type RevealProps = {
-  children: React.ReactNode;
-  delay?: number;
-};
-
-const Reveal = ({ children, delay = 0 }: RevealProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.65, ease: "easeOut", delay }}
-  >
-    {children}
-  </motion.div>
-);
-
-const ServicesPage = () => {
-  const [content, setContent] = useState<ServicesContent>(INITIAL_SERVICES_CONTENT);
-  const [homeContent, setHomeContent] = useState<HomeContent>(INITIAL_CONTENT);
-  const [successStories, setSuccessStories] = useState<SuccessStory[]>(
-    SUCCESS_STORIES_FALLBACK,
+export default async function ServicesPage() {
+  let servicesContent: ServicesContent = mergeServicesContent(
+    INITIAL_SERVICES_CONTENT,
   );
+  let homeContent: HomeContent = mergeHomeContent(INITIAL_CONTENT);
+  let initialSuccessStories: SuccessStory[] = SUCCESS_STORIES_FALLBACK;
+  let initialHeroConfig: HeroConfig | undefined = undefined;
 
-  useEffect(() => {
-    let active = true;
-    async function load() {
-      try {
-        const [servicesRes, homeRes, ssRes] = await Promise.all([
-          fetch("/api/admin/services", { cache: "no-store" }),
-          fetch("/api/admin/home", { cache: "no-store" }),
-          fetch("/api/admin/success-stories", { cache: "no-store" }),
-        ]);
-        const [servicesData, homeData, ssData] = await Promise.all([
-          servicesRes.json().catch(() => null),
-          homeRes.json().catch(() => null),
-          ssRes.json().catch(() => []),
-        ]);
-        if (!active) return;
-        if (servicesRes.ok && servicesData) {
-          setContent(mergeServicesContent(servicesData));
-        }
-        if (homeRes.ok && homeData) {
-          setHomeContent(mergeHomeContent(homeData));
-        }
-        if (ssRes.ok && Array.isArray(ssData)) {
-          setSuccessStories(
-            ssData.length ? mapSuccessStoriesFromApi(ssData) : SUCCESS_STORIES_FALLBACK,
-          );
-        }
-      } catch {
-        // fallback
+  try {
+    const [servicesRes, homeRes, ssRes, heroRes] = await Promise.all([
+      fetchBackend("/admin/services-page", { cache: "no-store" }),
+      fetchBackend("/admin/home", { cache: "no-store" }),
+      fetchBackend("/admin/success-stories", { cache: "no-store" }),
+      fetchBackend(
+        `/admin/hero?route=${encodeURIComponent("/admin/services")}`,
+        { cache: "no-store" },
+      ),
+    ]);
+
+    if (servicesRes.ok) {
+      const raw = await servicesRes.json().catch(() => null);
+      if (raw && typeof raw === "object") {
+        servicesContent = mergeServicesContent(raw);
       }
     }
-    load();
-    return () => {
-      active = false;
-    };
-  }, []);
+
+    if (homeRes.ok) {
+      const raw = await homeRes.json().catch(() => null);
+      if (raw && typeof raw === "object") {
+        homeContent = mergeHomeContent(raw);
+      }
+    }
+
+    if (ssRes.ok) {
+      const raw = await ssRes.json().catch(() => []);
+      if (Array.isArray(raw) && raw.length) {
+        initialSuccessStories = mapSuccessStoriesFromApi(raw);
+      }
+    }
+
+    if (heroRes.ok) {
+      const raw = await heroRes.json().catch(() => null);
+      const parsed = parseHeroSectionResponse(raw);
+      if (parsed !== null) {
+        initialHeroConfig = parsed;
+      }
+    }
+  } catch {
+    // Client may refetch
+  }
 
   return (
-    <div>
-      <ServicesHero hero={content.hero} />
-      <Reveal delay={0.06}>
-        <ServiceGrid data={content.grid} />
-      </Reveal>
-      <Reveal delay={0.1}>
-        <SocialImpact data={content.socialImpact} />
-      </Reveal>
-      <Reveal delay={0.14}>
-        <ConfidentialityCharter data={content.confidentiality} />
-      </Reveal>
-      <Reveal delay={0.18}>
-        <BlissCircle data={homeContent.blissCircle} />
-      </Reveal>
-      <Reveal delay={0.22}>
-        <SuccessStories stories={successStories} />
-      </Reveal>
-    </div>
+    <ServicesPageClient
+      initialServices={servicesContent}
+      initialHomeContent={homeContent}
+      initialSuccessStories={initialSuccessStories}
+      initialHeroConfig={initialHeroConfig}
+    />
   );
-};
-
-export default ServicesPage;
+}

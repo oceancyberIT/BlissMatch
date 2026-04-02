@@ -5,9 +5,14 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useHeroConfig } from "@/hooks/use-hero-config";
 import { withCmsImageVersion } from "@/lib/cms-image";
+import type { HeroConfig } from "@/lib/hero-config";
 
-const Hero = () => {
-  const { config } = useHeroConfig("/admin/home");
+type HeroProps = {
+  initialHeroConfig?: HeroConfig | null;
+};
+
+const Hero = ({ initialHeroConfig }: HeroProps) => {
+  const { config } = useHeroConfig("/admin/home", initialHeroConfig);
   const heroTagline = config?.subtitle || "Where Love Meets Intention";
   const heroBody =
     config?.body ||

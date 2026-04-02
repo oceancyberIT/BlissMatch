@@ -10,13 +10,18 @@ import {
   INITIAL_SERVICES_CONTENT,
   mergeHeroGallery,
 } from "@/components/admin/services-editor/constants";
+import type { HeroConfig } from "@/lib/hero-config";
 
 type ServiceHeroProps = {
   hero?: ServicesContent["hero"];
+  initialHeroConfig?: HeroConfig | null;
 };
 
-const ServicesHero = ({ hero }: ServiceHeroProps) => {
-  const { config: heroConfig } = useHeroConfig("/admin/services");
+const ServicesHero = ({ hero, initialHeroConfig }: ServiceHeroProps) => {
+  const { config: heroConfig } = useHeroConfig(
+    "/admin/services",
+    initialHeroConfig,
+  );
 
   const title = heroConfig?.title || "Our Services";
   const subtitle = heroConfig?.subtitle || "The BlissMatch Suite";

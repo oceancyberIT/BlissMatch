@@ -1,76 +1,44 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import AboutHero from "../../components/about-hero";
-import Philosophy from "../../components/Philosophy";
-import DiscretionSection from "../../components/DirectionSection";
-import CallToAppointment from "../../components/CallToAppointment";
-import ProcessTimeline from "../../components/ProcessTimeline";
-import { AboutContent } from "@/components/admin/about-editor/types";
+import { fetchBackend } from "@/lib/backend-proxy";
 import { INITIAL_ABOUT_CONTENT } from "@/components/admin/about-editor/constants";
-import FoundersSection from "@/components/founders";
+import type { AboutContent } from "@/components/admin/about-editor/types";
+import { parseHeroSectionResponse, type HeroConfig } from "@/lib/hero-config";
+import AboutPageClient from "./about-page-client";
 
-type RevealProps = {
-  children: React.ReactNode;
-  delay?: number;
-};
+export default async function AboutPage() {
+  let initialContent: AboutContent = INITIAL_ABOUT_CONTENT;
+  let initialHeroConfig: HeroConfig | undefined = undefined;
 
-const Reveal = ({ children, delay = 0 }: RevealProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.65, ease: "easeOut", delay }}
-  >
-    {children}
-  </motion.div>
-);
+  try {
+    const [aboutRes, heroRes] = await Promise.all([
+      fetchBackend("/admin/about-page", { cache: "no-store" }),
+      fetchBackend(
+        `/admin/hero?route=${encodeURIComponent("/admin/about")}`,
+        { cache: "no-store" },
+      ),
+    ]);
 
-const About = () => {
-  const [aboutContent, setAboutContent] = useState<AboutContent>(INITIAL_ABOUT_CONTENT);
-
-  useEffect(() => {
-    let active = true;
-    async function loadAbout() {
-      try {
-        const res = await fetch('/api/admin/about', { cache: 'no-store' });
-        const data = await res.json().catch(() => null);
-        if (!active) return;
-        if (res.ok && data) {
-          setAboutContent(data);
-        }
-      } catch {
-        // Keep fallback content
+    if (aboutRes.ok) {
+      const data = await aboutRes.json().catch(() => null);
+      if (data && typeof data === "object") {
+        initialContent = data as AboutContent;
       }
     }
-    loadAbout();
-    return () => {
-      active = false;
-    };
-  }, []);
+
+    if (heroRes.ok) {
+      const raw = await heroRes.json().catch(() => null);
+      const parsed = parseHeroSectionResponse(raw);
+      if (parsed !== null) {
+        initialHeroConfig = parsed;
+      }
+    }
+  } catch {
+    // Use bundled fallbacks; client may still refetch.
+  }
 
   return (
-    <div className="">
-      <Reveal>
-        <AboutHero data={aboutContent.hero} />
-      </Reveal>
-      <Reveal delay={0.06}>
-        <Philosophy data={aboutContent.philosophy} />
-      </Reveal>
-      <Reveal delay={0.1}>
-        <FoundersSection data={aboutContent.hero} />
-      </Reveal>
-      {/* <Reveal delay={0.14}> */}
-        <ProcessTimeline data={aboutContent.process} />
-      {/* </Reveal> */}
-      <Reveal delay={0.18}>
-        <DiscretionSection data={aboutContent.discretion} />
-      </Reveal>
-      <Reveal delay={0.22}>
-        <CallToAppointment data={aboutContent.cta} />
-      </Reveal>
-    </div>
+    <AboutPageClient
+      initialContent={initialContent}
+      initialHeroConfig={initialHeroConfig}
+    />
   );
-};
-
-export default About;
+}

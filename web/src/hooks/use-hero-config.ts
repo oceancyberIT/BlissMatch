@@ -1,17 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { type HeroConfig, parseHeroSectionResponse } from '@/lib/hero-config';
 
-type HeroConfig = {
-  title?: string;
-  subtitle?: string;
-  body?: string;
-  imageUrl?: string;
-  imageUrls?: string[];
-};
+export type { HeroConfig };
 
-export function useHeroConfig(route: string) {
-  const [config, setConfig] = useState<HeroConfig | null | undefined>(undefined);
+/**
+ * @param initialFromServer — When set from a Server Component fetch, first paint matches CMS (no flash of bundled defaults).
+ * Pass `undefined` to let the client fetch only (legacy behavior).
+ */
+export function useHeroConfig(route: string, initialFromServer?: HeroConfig | null) {
+  const [config, setConfig] = useState<HeroConfig | null | undefined>(() =>
+    initialFromServer !== undefined ? initialFromServer : undefined,
+  );
 
   useEffect(() => {
     let active = true;
@@ -24,15 +25,7 @@ export function useHeroConfig(route: string) {
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
-          setConfig({
-            title: data.title ?? undefined,
-            subtitle: data.subtitle ?? undefined,
-            body: data.body ?? undefined,
-            imageUrl: data.imageUrl ?? undefined,
-            imageUrls: Array.isArray(data.imageUrls)
-              ? data.imageUrls.filter((url: unknown): url is string => typeof url === 'string')
-              : [],
-          });
+          setConfig(parseHeroSectionResponse(data));
         } else {
           setConfig(null);
         }
