@@ -20,5 +20,6 @@ export async function putAdminSiteSettings(key: string, body: unknown): Promise<
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(body),
+    cache: 'no-store',
   });
 }

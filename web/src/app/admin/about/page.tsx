@@ -6,7 +6,10 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Save, Plus, BookOpen, Shield, ListOrdered, MessageSquare } from 'lucide-react';
 import { AboutContent } from '@/components/admin/about-editor/types';
-import { INITIAL_ABOUT_CONTENT } from '@/components/admin/about-editor/constants';
+import {
+  INITIAL_ABOUT_CONTENT,
+  mergeAboutContent,
+} from '@/components/admin/about-editor/constants';
 import { ImageUrlField } from '@/components/admin/home-editor/image-url-field';
 import { FormField } from '@/components/admin/home-editor/form-field';
 
@@ -29,6 +32,7 @@ const fieldClass =
 export default function AdminAboutPage() {
   const [activeTab, setActiveTab] = useState<AboutTab>('philosophy');
   const [content, setContent] = useState<AboutContent>(INITIAL_ABOUT_CONTENT);
+  const [loadReady, setLoadReady] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -36,30 +40,18 @@ export default function AdminAboutPage() {
     let active = true;
     async function load() {
       try {
-        const res = await fetch('/api/admin/about');
+        const res = await fetch('/api/admin/about', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data && typeof data === 'object') {
-          const d = data as Partial<AboutContent>;
-          setContent({
-            ...INITIAL_ABOUT_CONTENT,
-            ...d,
-            cta: {
-              ...INITIAL_ABOUT_CONTENT.cta,
-              ...(d.cta ?? {}),
-              images:
-                Array.isArray(d.cta?.images) && d.cta!.images!.length
-                  ? d.cta!.images!
-                  : INITIAL_ABOUT_CONTENT.cta.images,
-              locations:
-                Array.isArray(d.cta?.locations) && d.cta!.locations!.length
-                  ? d.cta!.locations!
-                  : INITIAL_ABOUT_CONTENT.cta.locations,
-            },
-          });
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setContent(mergeAboutContent(data as Partial<AboutContent>));
+        } else {
+          setContent(INITIAL_ABOUT_CONTENT);
         }
       } catch {
-        // use fallback
+        if (active) setContent(INITIAL_ABOUT_CONTENT);
+      } finally {
+        if (active) setLoadReady(true);
       }
     }
     load();
@@ -89,12 +81,16 @@ export default function AdminAboutPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(content),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setMessage(data?.message ?? 'Could not save about content.');
         setTimeout(() => setMessage(null), 3000);
         return;
+      }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeAboutContent(data as Partial<AboutContent>));
       }
       setMessage('About page saved.');
       setTimeout(() => setMessage(null), 2500);
@@ -655,7 +651,7 @@ export default function AdminAboutPage() {
             <Button
               type="button"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !loadReady}
               className="rounded-md bg-deep-midnight-navy px-5 py-2 text-xs font-black uppercase tracking-widest text-white hover:bg-muted-burgundy-rose"
             >
               <Save size={14} className="mr-2" />
@@ -669,7 +665,11 @@ export default function AdminAboutPage() {
             </p>
           )}
 
-          {renderEditor()}
+          {!loadReady ? (
+            <p className="text-sm text-stone-500">Loading saved content…</p>
+          ) : (
+            renderEditor()
+          )}
         </div>
       </div>
     </AdminLayout>

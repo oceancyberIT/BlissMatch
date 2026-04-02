@@ -272,11 +272,12 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
     let active = true;
     async function load() {
       try {
-        const res = await fetch('/api/admin/home');
+        const res = await fetch('/api/admin/home', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setHomeContent(mergeHomeContent(data));
-        else setHomeContent(INITIAL_CONTENT);
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setHomeContent(mergeHomeContent(data));
+        } else setHomeContent(INITIAL_CONTENT);
       } catch {
         if (!active) return;
         setHomeContent(INITIAL_CONTENT);
@@ -315,6 +316,7 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(homeContent),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
@@ -323,6 +325,9 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
           message: data?.message || 'Could not save.',
         });
         return;
+      }
+      if (data && typeof data === 'object' && data !== null) {
+        setHomeContent(mergeHomeContent(data));
       }
       setModalMode('view');
       setIsModalOpen(false);
@@ -351,6 +356,7 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(next),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
@@ -360,7 +366,11 @@ export function HomeComponentCardPage(props: HomeComponentCardPageProps) {
         });
         return;
       }
-      setHomeContent(next);
+      if (data && typeof data === 'object' && data !== null) {
+        setHomeContent(mergeHomeContent(data));
+      } else {
+        setHomeContent(next);
+      }
       setIndices({ service: 0, love: 0, badge: 0, value: 0 });
       setModalMode('view');
       setIsModalOpen(false);

@@ -29,6 +29,7 @@ const SERVICES_TABS: Array<{ key: ServicesTab; label: string; icon: typeof Block
 export default function AdminServicesPage() {
   const [activeTab, setActiveTab] = useState<ServicesTab>('hero');
   const [content, setContent] = useState<ServicesContent>(INITIAL_SERVICES_CONTENT);
+  const [loadReady, setLoadReady] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -36,12 +37,16 @@ export default function AdminServicesPage() {
     let active = true;
     async function load() {
       try {
-        const res = await fetch('/api/admin/services');
+        const res = await fetch('/api/admin/services', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setContent(mergeServicesContent(data));
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setContent(mergeServicesContent(data));
+        }
       } catch {
         // fallback
+      } finally {
+        if (active) setLoadReady(true);
       }
     }
     load();
@@ -71,12 +76,16 @@ export default function AdminServicesPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(content),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setMessage(data?.message ?? 'Could not save services content.');
         setTimeout(() => setMessage(null), 3000);
         return;
+      }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeServicesContent(data));
       }
       setMessage('Services page saved.');
       setTimeout(() => setMessage(null), 2500);
@@ -189,7 +198,7 @@ export default function AdminServicesPage() {
             <Button
               type="button"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !loadReady}
               className="rounded-md bg-deep-midnight-navy px-5 py-2 text-xs font-black uppercase tracking-widest text-white hover:bg-muted-burgundy-rose"
             >
               <Save size={14} className="mr-2" />
@@ -203,7 +212,11 @@ export default function AdminServicesPage() {
             </p>
           )}
 
-          {renderEditor()}
+          {!loadReady ? (
+            <p className="text-sm text-stone-500">Loading saved content…</p>
+          ) : (
+            renderEditor()
+          )}
         </div>
       </div>
     </AdminLayout>

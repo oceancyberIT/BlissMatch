@@ -5,6 +5,10 @@ import AdminLayout from '@/components/admin/admin-layout';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, Star, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  mapSuccessStoriesFromApi,
+  SUCCESS_STORIES_FALLBACK,
+} from '@/lib/success-stories-data';
 
 type Story = {
   id: string;
@@ -14,35 +18,21 @@ type Story = {
   stars: number;
 };
 
-export default function AdminSuccessStoriesPage() {
-  const [stories, setStories] = useState<Story[]>([
-    {
-      id: 'story-1',
-      quote:
-        'I had forgotten what it felt like to be seen. BlissMatch reminded me that love can be elegant and kind.',
-      author: 'Ella',
-      location: 'London',
-      stars: 5,
-    },
-    {
-      id: 'story-2',
-      quote:
-        'They understood me in a way no app ever could. Every introduction was thoughtful and sincere.',
-      author: 'Kwame',
-      location: 'Accra',
-      stars: 5,
-    },
-    {
-      id: 'story-3',
-      quote:
-        'Professionalism with heart. Confidential, intuitive, and refined - exactly what I hoped for.',
-      author: 'Marie',
-      location: 'Paris',
-      stars: 5,
-    },
-  ]);
+function toUiStories(raw: ReturnType<typeof mapSuccessStoriesFromApi>): Story[] {
+  return raw.map((item, index) => ({
+    id: item.id ?? `story-${index + 1}`,
+    quote: item.quote,
+    author: item.author,
+    location: item.location,
+    stars: item.stars,
+  }));
+}
 
-  const [selectedId, setSelectedId] = useState<string>('story-1');
+export default function AdminSuccessStoriesPage() {
+  const [stories, setStories] = useState<Story[]>([]);
+  const [loadReady, setLoadReady] = useState(false);
+
+  const [selectedId, setSelectedId] = useState<string>('');
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [newStory, setNewStory] = useState<Omit<Story, 'id'>>({
@@ -60,22 +50,24 @@ export default function AdminSuccessStoriesPage() {
 
     async function loadStories() {
       try {
-        const res = await fetch('/api/admin/success-stories');
+        const res = await fetch('/api/admin/success-stories', { cache: 'no-store' });
         const data = await res.json().catch(() => []);
         if (!active) return;
         if (res.ok && Array.isArray(data) && data.length) {
-          const normalized: Story[] = data.map((item: any, index: number) => ({
-            id: item.id ?? `story-${index + 1}`,
-            quote: item.quote ?? '',
-            author: item.author ?? '',
-            location: item.location ?? '',
-            stars: Number(item.stars ?? 5),
-          }));
+          const normalized = toUiStories(mapSuccessStoriesFromApi(data));
           setStories(normalized);
-          setSelectedId(normalized[0].id);
+          setSelectedId(normalized[0]?.id ?? '');
+        } else {
+          const fallback = toUiStories(SUCCESS_STORIES_FALLBACK);
+          setStories(fallback);
+          setSelectedId(fallback[0]?.id ?? '');
         }
       } catch {
-        // Keep fallback list
+        const fallback = toUiStories(SUCCESS_STORIES_FALLBACK);
+        setStories(fallback);
+        setSelectedId(fallback[0]?.id ?? '');
+      } finally {
+        if (active) setLoadReady(true);
       }
     }
 
@@ -152,6 +144,7 @@ export default function AdminSuccessStoriesPage() {
             stars: story.stars,
           })),
         }),
+        cache: 'no-store',
       });
 
       const data = await res.json().catch(() => null);
@@ -161,14 +154,8 @@ export default function AdminSuccessStoriesPage() {
         return;
       }
 
-      if (Array.isArray(data)) {
-        const normalized: Story[] = data.map((item: any, index: number) => ({
-          id: item.id ?? `story-${index + 1}`,
-          quote: item.quote ?? '',
-          author: item.author ?? '',
-          location: item.location ?? '',
-          stars: Number(item.stars ?? 5),
-        }));
+      if (Array.isArray(data) && data.length) {
+        const normalized = toUiStories(mapSuccessStoriesFromApi(data));
         setStories(normalized);
         if (normalized.length) setSelectedId(normalized[0].id);
       }
@@ -186,6 +173,10 @@ export default function AdminSuccessStoriesPage() {
       description="Manage stories shown on the main site."
     >
       <div className="space-y-8">
+        {!loadReady ? (
+          <p className="text-sm text-stone-500 py-4">Loading saved stories…</p>
+        ) : (
+        <>
         <div className="rounded-2xl bg-[#0F172A] p-8 text-white shadow-xl">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-burgundy-rose">
             Story Manager
@@ -200,7 +191,7 @@ export default function AdminSuccessStoriesPage() {
             <Button
               type="button"
               onClick={handleSaveAll}
-              disabled={saving}
+              disabled={saving || !loadReady}
               className="rounded-md bg-white text-deep-midnight-navy px-5 py-2 text-xs font-black uppercase tracking-widest hover:bg-stone-100"
             >
               <Save size={14} className="mr-2" />
@@ -413,6 +404,8 @@ export default function AdminSuccessStoriesPage() {
             </Button>
           </div>
         </section>
+        </>
+        )}
       </div>
     </AdminLayout>
   );

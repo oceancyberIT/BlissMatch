@@ -1,5 +1,8 @@
 import { fetchBackend } from "@/lib/backend-proxy";
-import { INITIAL_ABOUT_CONTENT } from "@/components/admin/about-editor/constants";
+import {
+  INITIAL_ABOUT_CONTENT,
+  mergeAboutContent,
+} from "@/components/admin/about-editor/constants";
 import type { AboutContent } from "@/components/admin/about-editor/types";
 import { parseHeroSectionResponse, type HeroConfig } from "@/lib/hero-config";
 import AboutPageClient from "./about-page-client";
@@ -19,8 +22,8 @@ export default async function AboutPage() {
 
     if (aboutRes.ok) {
       const data = await aboutRes.json().catch(() => null);
-      if (data && typeof data === "object") {
-        initialContent = data as AboutContent;
+      if (data && typeof data === "object" && data !== null) {
+        initialContent = mergeAboutContent(data as Partial<AboutContent>);
       }
     }
 

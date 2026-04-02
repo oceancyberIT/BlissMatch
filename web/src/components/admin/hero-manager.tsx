@@ -15,6 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { parseHeroSectionResponse } from "@/lib/hero-config";
 import { HomeContent } from "@/components/admin/home-editor/types";
 import {
   INITIAL_CONTENT,
@@ -275,7 +276,7 @@ export function AdminHeroManager() {
     async function loadHome() {
       setHomeLoading(true);
       try {
-        const res = await fetch("/api/admin/home");
+        const res = await fetch("/api/admin/home", { cache: "no-store" });
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) {
@@ -308,7 +309,7 @@ export function AdminHeroManager() {
     async function refreshHome() {
       setHomeLoading(true);
       try {
-        const res = await fetch("/api/admin/home");
+        const res = await fetch("/api/admin/home", { cache: "no-store" });
         const data = await res.json().catch(() => null);
         if (!active) return;
         if (res.ok && data) setHomeContent(mergeHomeContent(data));
@@ -335,7 +336,7 @@ export function AdminHeroManager() {
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch("/api/admin/home");
+        const res = await fetch("/api/admin/home", { cache: "no-store" });
         const data = await res.json().catch(() => null);
         if (res.ok && data) setHomeContent(mergeHomeContent(data));
         else setHomeContent(INITIAL_CONTENT);
@@ -460,6 +461,7 @@ export function AdminHeroManager() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(homeContent),
+        cache: "no-store",
       });
 
       const data = await res.json().catch(() => null);
@@ -480,6 +482,10 @@ export function AdminHeroManager() {
           message: data?.message || "Could not save Our Story.",
         });
         return;
+      }
+
+      if (data && typeof data === "object" && data !== null) {
+        setHomeContent(mergeHomeContent(data));
       }
 
       setOurStoryDirty(false);
@@ -521,6 +527,7 @@ export function AdminHeroManager() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(next),
+        cache: "no-store",
       });
 
       const data = await res.json().catch(() => null);
@@ -543,7 +550,11 @@ export function AdminHeroManager() {
         return;
       }
 
-      setHomeContent(next);
+      if (data && typeof data === "object" && data !== null) {
+        setHomeContent(mergeHomeContent(data));
+      } else {
+        setHomeContent(next);
+      }
       setOurStoryDirty(false);
       setOurStoryMode("view");
       setToast({
@@ -578,6 +589,7 @@ export function AdminHeroManager() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(currentConfig),
+        cache: "no-store",
       });
 
       const data = await res.json().catch(() => null);
@@ -599,6 +611,18 @@ export function AdminHeroManager() {
           message: data?.message || "Could not save changes.",
         });
         return;
+      }
+
+      const parsed = parseHeroSectionResponse(data);
+      if (parsed) {
+        setConfig({
+          route,
+          title: parsed.title ?? "",
+          subtitle: parsed.subtitle ?? "",
+          body: parsed.body ?? "",
+          imageUrl: parsed.imageUrl ?? "",
+          imageUrls: parsed.imageUrls ?? [],
+        });
       }
 
       setToast({

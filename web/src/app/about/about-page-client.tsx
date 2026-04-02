@@ -7,7 +7,9 @@ import DiscretionSection from "../../components/DirectionSection";
 import CallToAppointment from "../../components/CallToAppointment";
 import ProcessTimeline from "../../components/ProcessTimeline";
 import { AboutContent } from "@/components/admin/about-editor/types";
-import { INITIAL_ABOUT_CONTENT } from "@/components/admin/about-editor/constants";
+import {
+  mergeAboutContent,
+} from "@/components/admin/about-editor/constants";
 import FoundersSection from "@/components/founders";
 import type { HeroConfig } from "@/lib/hero-config";
 
@@ -45,8 +47,8 @@ const AboutPageClient = ({
         const res = await fetch("/api/admin/about", { cache: "no-store" });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) {
-          setAboutContent(data);
+        if (res.ok && data && typeof data === "object" && data !== null) {
+          setAboutContent(mergeAboutContent(data as Partial<AboutContent>));
         }
       } catch {
         // Keep server-hydrated or fallback content

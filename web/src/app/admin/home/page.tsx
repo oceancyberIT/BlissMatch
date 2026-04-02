@@ -84,10 +84,10 @@ export default function AdminHomePage() {
 
     async function load() {
       try {
-        const res = await fetch('/api/admin/home');
+        const res = await fetch('/api/admin/home', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) {
+        if (res.ok && data && typeof data === 'object' && data !== null) {
           const merged = mergeHomeContent(data);
           latestContentRef.current = merged;
           setContent(merged);
@@ -137,6 +137,7 @@ export default function AdminHomePage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(latestContentRef.current),
+        cache: 'no-store',
       });
 
       const data = await res.json().catch(() => null);
@@ -158,8 +159,15 @@ export default function AdminHomePage() {
         return;
       }
 
-      // Keep track of the last saved content snapshot to power auto-save.
-      lastSavedContentRef.current = JSON.stringify(latestContentRef.current);
+      if (data && typeof data === 'object' && data !== null) {
+        const merged = mergeHomeContent(data);
+        latestContentRef.current = merged;
+        setContent(merged);
+        lastSavedContentRef.current = JSON.stringify(merged);
+      } else {
+        lastSavedContentRef.current = JSON.stringify(latestContentRef.current);
+      }
+
       setMessage(toastMessage);
       setToast({ type: 'success', message: toastMessage });
       setTimeout(() => setMessage(null), 3000);

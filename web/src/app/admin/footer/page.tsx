@@ -59,6 +59,9 @@ export default function AdminFooterPage() {
         setMessage(data?.message ?? 'Could not save footer.');
         return;
       }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeFooter(data));
+      }
       setMessage('Footer saved.');
       setMode('view');
     } finally {

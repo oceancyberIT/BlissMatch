@@ -59,6 +59,9 @@ export default function AdminNavigationPage() {
         setMessage(data?.message ?? 'Could not save.');
         return;
       }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeNavigation(data));
+      }
       setMessage('Navigation saved.');
       setMode('view');
     } finally {

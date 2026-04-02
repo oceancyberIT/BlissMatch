@@ -107,3 +107,48 @@ export const INITIAL_ABOUT_CONTENT: AboutContent = {
   },
 };
 
+/** Deep-merge API JSON with defaults so admin always shows DB truth, not bundled placeholders. */
+export function mergeAboutContent(
+  loaded: Partial<AboutContent> | null | undefined,
+): AboutContent {
+  if (!loaded || typeof loaded !== 'object') {
+    return INITIAL_ABOUT_CONTENT;
+  }
+  const d = loaded as Partial<AboutContent>;
+  return {
+    hero: { ...INITIAL_ABOUT_CONTENT.hero, ...(d.hero ?? {}) },
+    philosophy: {
+      ...INITIAL_ABOUT_CONTENT.philosophy,
+      ...(d.philosophy ?? {}),
+    },
+    discretion: {
+      ...INITIAL_ABOUT_CONTENT.discretion,
+      ...(d.discretion ?? {}),
+      cards:
+        Array.isArray(d.discretion?.cards) && d.discretion.cards.length
+          ? d.discretion.cards
+          : INITIAL_ABOUT_CONTENT.discretion.cards,
+    },
+    process: {
+      ...INITIAL_ABOUT_CONTENT.process,
+      ...(d.process ?? {}),
+      steps:
+        Array.isArray(d.process?.steps) && d.process.steps.length
+          ? d.process.steps
+          : INITIAL_ABOUT_CONTENT.process.steps,
+    },
+    cta: {
+      ...INITIAL_ABOUT_CONTENT.cta,
+      ...(d.cta ?? {}),
+      images:
+        Array.isArray(d.cta?.images) && d.cta!.images!.length
+          ? d.cta!.images!
+          : INITIAL_ABOUT_CONTENT.cta.images,
+      locations:
+        Array.isArray(d.cta?.locations) && d.cta!.locations!.length
+          ? d.cta!.locations!
+          : INITIAL_ABOUT_CONTENT.cta.locations,
+    },
+  };
+}
+

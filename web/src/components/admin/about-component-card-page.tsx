@@ -6,7 +6,10 @@ import { Eye, Pencil, Trash2, Save, BookOpen, Shield, ListOrdered, MessageSquare
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { AboutContent } from '@/components/admin/about-editor/types';
-import { INITIAL_ABOUT_CONTENT } from '@/components/admin/about-editor/constants';
+import {
+  INITIAL_ABOUT_CONTENT,
+  mergeAboutContent,
+} from '@/components/admin/about-editor/constants';
 import { ImageUrlField } from '@/components/admin/home-editor/image-url-field';
 import { FormField } from '@/components/admin/home-editor/form-field';
 
@@ -230,28 +233,11 @@ export function AboutComponentCardPage(props: AboutComponentCardPageProps) {
     let active = true;
     async function load() {
       try {
-        const res = await fetch('/api/admin/about');
+        const res = await fetch('/api/admin/about', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data && typeof data === 'object') {
-          const d = data as Partial<AboutContent>;
-          const merged: AboutContent = {
-            ...INITIAL_ABOUT_CONTENT,
-            ...d,
-            cta: {
-              ...INITIAL_ABOUT_CONTENT.cta,
-              ...(d.cta ?? {}),
-              images:
-                Array.isArray(d.cta?.images) && d.cta!.images!.length
-                  ? d.cta!.images!
-                  : INITIAL_ABOUT_CONTENT.cta.images,
-              locations:
-                Array.isArray(d.cta?.locations) && d.cta!.locations!.length
-                  ? d.cta!.locations!
-                  : INITIAL_ABOUT_CONTENT.cta.locations,
-            },
-          };
-          setAboutContent(merged);
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setAboutContent(mergeAboutContent(data as Partial<AboutContent>));
         } else setAboutContent(INITIAL_ABOUT_CONTENT);
       } catch {
         if (!active) return;
@@ -289,11 +275,15 @@ export function AboutComponentCardPage(props: AboutComponentCardPageProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(aboutContent),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setToast({ type: 'error', message: data?.message || 'Could not save.' });
         return;
+      }
+      if (data && typeof data === 'object' && data !== null) {
+        setAboutContent(mergeAboutContent(data as Partial<AboutContent>));
       }
       setModalMode('view');
       setIsModalOpen(false);
@@ -322,13 +312,18 @@ export function AboutComponentCardPage(props: AboutComponentCardPageProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(next),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setToast({ type: 'error', message: data?.message || 'Could not reset section.' });
         return;
       }
-      setAboutContent(next);
+      if (data && typeof data === 'object' && data !== null) {
+        setAboutContent(mergeAboutContent(data as Partial<AboutContent>));
+      } else {
+        setAboutContent(next);
+      }
       setModalMode('view');
       setIsModalOpen(false);
       setToast({ type: 'success', message: deleteMessage });

@@ -85,6 +85,9 @@ export default function AdminContactPage() {
         setMessage(data?.message ?? 'Could not save.');
         return;
       }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeContact(data));
+      }
       setMessage('Contact page saved.');
       setMode('view');
     } finally {

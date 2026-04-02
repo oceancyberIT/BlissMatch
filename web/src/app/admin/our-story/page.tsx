@@ -32,11 +32,12 @@ export default function OurStoryAdminPage() {
 
     async function load() {
       try {
-        const res = await fetch('/api/admin/home');
+        const res = await fetch('/api/admin/home', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setHomeContent(mergeHomeContent(data));
-        else setHomeContent(INITIAL_CONTENT);
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setHomeContent(mergeHomeContent(data));
+        } else setHomeContent(INITIAL_CONTENT);
       } catch {
         if (!active) return;
         setHomeContent(INITIAL_CONTENT);
@@ -90,6 +91,7 @@ export default function OurStoryAdminPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(homeContent),
+        cache: 'no-store',
       });
 
       const data = await res.json().catch(() => null);
@@ -100,6 +102,10 @@ export default function OurStoryAdminPage() {
           message: data?.message || 'Could not save Our Story.',
         });
         return;
+      }
+
+      if (data && typeof data === 'object' && data !== null) {
+        setHomeContent(mergeHomeContent(data));
       }
 
       setModalMode('view');
@@ -136,6 +142,7 @@ export default function OurStoryAdminPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(next),
+        cache: 'no-store',
       });
 
       const data = await res.json().catch(() => null);
@@ -148,7 +155,11 @@ export default function OurStoryAdminPage() {
         return;
       }
 
-      setHomeContent(next);
+      if (data && typeof data === 'object' && data !== null) {
+        setHomeContent(mergeHomeContent(data));
+      } else {
+        setHomeContent(next);
+      }
       setModalMode('view');
       setIsModalOpen(false);
       setToast({

@@ -205,11 +205,12 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
     let active = true;
     async function load() {
       try {
-        const res = await fetch('/api/admin/services');
+        const res = await fetch('/api/admin/services', { cache: 'no-store' });
         const data = await res.json().catch(() => null);
         if (!active) return;
-        if (res.ok && data) setServicesContent(mergeServicesContent(data));
-        else setServicesContent(INITIAL_SERVICES_CONTENT);
+        if (res.ok && data && typeof data === 'object' && data !== null) {
+          setServicesContent(mergeServicesContent(data));
+        } else setServicesContent(INITIAL_SERVICES_CONTENT);
       } catch {
         if (!active) return;
         setServicesContent(INITIAL_SERVICES_CONTENT);
@@ -246,11 +247,15 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(servicesContent),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setToast({ type: 'error', message: data?.message || 'Could not save.' });
         return;
+      }
+      if (data && typeof data === 'object' && data !== null) {
+        setServicesContent(mergeServicesContent(data));
       }
       setModalMode('view');
       setIsModalOpen(false);
@@ -279,13 +284,18 @@ export function ServicesComponentCardPage(props: ServicesComponentCardPageProps)
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(next),
+        cache: 'no-store',
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setToast({ type: 'error', message: data?.message || 'Could not reset section.' });
         return;
       }
-      setServicesContent(next);
+      if (data && typeof data === 'object' && data !== null) {
+        setServicesContent(mergeServicesContent(data));
+      } else {
+        setServicesContent(next);
+      }
       setModalMode('view');
       setIsModalOpen(false);
       setToast({ type: 'success', message: deleteMessage });

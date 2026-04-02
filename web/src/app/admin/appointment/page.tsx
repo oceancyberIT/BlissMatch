@@ -93,6 +93,9 @@ export default function AdminAppointmentPage() {
         setMessage(data?.message ?? 'Could not save.');
         return;
       }
+      if (data && typeof data === 'object' && data !== null) {
+        setContent(mergeAppointment(data));
+      }
       setMessage('Appointment page saved.');
       setMode('view');
     } finally {
